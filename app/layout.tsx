@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import React, { FC, ReactNode } from 'react'
 
-// const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,8 +17,8 @@ type TProps = {
 const RootLayout: FC<TProps> = ({ children }) => {
   return (
     <html lang='en'>
-      {/* <body className={inter.className}>{children}</body> */}
-      <body className=''>{children}</body>
+      <body className={inter.className}>{children}</body>
+      {/* <body className=''>{children}</body> */}
     </html>
   )
 }
