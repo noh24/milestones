@@ -1,5 +1,5 @@
 import React from 'react'
-import StandardLayout from '@/app/layouts/standard/page'
+import StandardLayout from '@/app/layouts/standard/layout'
 import Link from 'next/link'
 
 const About = () => {
