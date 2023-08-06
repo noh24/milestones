@@ -3,16 +3,21 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const main = async () => {
-  // const allUsers = await prisma.user.findMany({
-  //   include: {
-  //     milestones: true,
-  //     profile: true,
-  //   }
-  // })
-
+  await prisma.user.delete({
+    where: {
+      id: 1
+    }
+  })
+  
+  const allUsers = await prisma.user.findMany({
+    include: {
+      milestones: true,
+      profile: true,
+    }
+  })
   const milestones = await prisma.milestone.findMany({})
 
-  // console.dir(allUsers, { depth: null })
+  console.dir(allUsers, { depth: null })
   console.dir(milestones, { depth: null })
 }
 
