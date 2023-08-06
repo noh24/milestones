@@ -3,11 +3,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const main = async () => {
-  await prisma.user.delete({
-    where: {
-      id: 1
-    }
-  })
+  await prisma.user.deleteMany({})
+  await prisma.profile.deleteMany({})
   
   const allUsers = await prisma.user.findMany({
     include: {
@@ -16,9 +13,11 @@ const main = async () => {
     }
   })
   const milestones = await prisma.milestone.findMany({})
+  const profiles = await prisma.profile.findMany({})
 
   console.dir(allUsers, { depth: null })
   console.dir(milestones, { depth: null })
+  console.dir(profiles, { depth: null })
 }
 
 main()
