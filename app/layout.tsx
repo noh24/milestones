@@ -1,7 +1,9 @@
 import './globals.css'
+import React, { FC, ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import React, { FC, ReactNode } from 'react'
+import { SessionProvider } from 'next-auth/react'
+import { Session } from 'next-auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,12 +14,15 @@ export const metadata: Metadata = {
 
 type TProps = {
   children: ReactNode
+  session: Session
 }
 
-const RootLayout: FC<TProps> = ({ children }) => {
+const RootLayout: FC<TProps> = ({ children, session }) => {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionProvider session={session}>{children}</SessionProvider>
+      </body>
     </html>
   )
 }
