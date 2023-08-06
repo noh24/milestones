@@ -16,8 +16,9 @@ model Milestone {
   updatedAt DateTime @updatedAt
   title String @db.VarChar(255)
   content String @db.MediumText
+  type String @db.VarChar(255)
   filePath String?
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int 
 }
 
@@ -34,6 +35,6 @@ model User {
 model Profile {
   id Int @id @default(autoincrement())
   profession String @db.VarChar(255)
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int @unique
 }
