@@ -19,7 +19,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     if (!validPassword) throw new Error('Invalid password!')
 
     res.status(200).json({ message: 'Login successful.' })
-    return user
   } catch (error) {
     console.error(error)
   }
