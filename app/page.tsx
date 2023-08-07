@@ -16,7 +16,7 @@ export default async function Home() {
 
 async function getSession() {
   const session = await getServerSession(authOptions)
-  console.log('asdasd', session)
+
   if (!session) {
     redirect('/login?callbackUrl=/')
   }
