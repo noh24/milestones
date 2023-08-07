@@ -1,26 +1,27 @@
-import React from 'react'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from './../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import { getProviders } from 'next-auth/react'
+import Providers from '../components/Providers'
 
 const Login = async () => {
-  await getSession()
+  const providers = await getSession()
 
-  return <div>Login</div>
+  return (
+    <>
+      <Providers providers={providers} />
+    </>
+  )
 }
-
-export default Login
 
 async function getSession() {
   const session = await getServerSession(authOptions)
 
   if (session) redirect('/')
 
-  const providers = getProviders()
-  console.log(providers)
+  const providers = await getProviders()
 
-  return {
-    props: { providers: providers ?? [] },
-  }
+  return providers ?? {}
 }
+
+export default Login
