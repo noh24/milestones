@@ -20,10 +20,4 @@ async function getSession() {
   if (!session) {
     redirect('/login?callbackUrl=/')
   }
-
-  return {
-    props: {
-      session,
-    },
-  }
 }
