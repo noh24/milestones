@@ -18,6 +18,6 @@ async function getSession() {
   const session = await getServerSession(authOptions)
 
   if (!session) {
-    redirect('/login?callbackUrl=/')
+    redirect('/login')
   }
 }
