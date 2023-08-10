@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import prisma from '@/db'
+import prisma from '@/app/db'
 import { NextApiResponse, NextApiRequest } from 'next/types'
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
