@@ -1,42 +1,86 @@
 'use client'
 
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from './../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
-import { getCsrfToken, getProviders, signIn, useSession } from 'next-auth/react'
-import OAuthProviders from '../components/OAuthProviders'
+import { getProviders, signIn, useSession } from 'next-auth/react'
+import React, { useCallback, useEffect, useState } from 'react'
 
+type UserData = {
+  email: string
+  password: string
+}
+
+const initialUserData: UserData = {
+  email: '',
+  password: '',
+}
 
 const Login = () => {
-  const data =  useSession()
+  const { data: session } = useSession()
+
+  if (session) {
+    redirect('/')
+  }
+
+  const [providers, setProviders] = useState<ProvidersType>(null)
+
+  useEffect(() => {
+    getProviders().then((providers) => setProviders(providers))
+  }, [])
+
+  const [userData, setUserData] = useState<UserData>(initialUserData)
+
+  const updateUserDataHandler = useCallback(
+    (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUserData({ ...userData, [type]: event.target.value })
+    },
+    [userData]
+  )
+
+  const formHandler = useCallback(
+    () => (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      signIn('credentials', {
+        email: userData.email,
+        password: userData.password,
+      })
+    },
+    [userData]
+  )
 
   return (
     <>
-      <form>
-        <input name='email' type='text' placeholder='Enter Email' />
-        <input name='password' type='password' placeholder='Enter Password' />
+      <form onSubmit={formHandler()}>
+        <input
+          name='email'
+          type='text'
+          placeholder='Enter Email'
+          value={userData.email}
+          onChange={updateUserDataHandler('email')}
+        />
+        <input
+          name='current-password'
+          type='password'
+          placeholder='Enter Password'
+          value={userData.password}
+          onChange={updateUserDataHandler('password')}
+        />
+        <button type='submit'>Sign in with Credentials</button>
       </form>
+      <div></div>
       <div>
-        {Object.values(providers)
-          .filter((provider) => provider.name !== 'Credentials')
-          .map((provider) => (
-            <div key={provider.name}>
-              <button onClick={() => signIn(provider.id)}>
-                Sign in with {provider.name}
-              </button>
-            </div>
-          ))}
+        {providers &&
+          Object.values(providers)
+            .filter((provider) => provider.name !== 'Credentials')
+            .map((provider) => (
+              <div key={provider.name}>
+                <button onClick={() => signIn(provider.id)}>
+                  Sign in with {provider.name}
+                </button>
+              </div>
+            ))}
       </div>
     </>
   )
-}
-const fetchProviders = async () => {
-  const providers = await getProviders()
-
-  return {
-    credentials: providers!['credentials'],
-    providers: providers
-  }
 }
 
 export default Login
