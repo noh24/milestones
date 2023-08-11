@@ -1,12 +1,17 @@
 import { Metadata } from 'next'
-import React from 'react'
+import React, { Suspense } from 'react'
+import Loading from './loading'
 
 export const metadata: Metadata = {
-  title: 'Login | Milestones'
+  title: 'Login | Milestones',
 }
 
 const LoginLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>
+  return (
+    <section>
+      <Suspense fallback={<Loading />}>{children}</Suspense>
+    </section>
+  )
 }
 
 export default LoginLayout

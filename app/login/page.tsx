@@ -39,6 +39,7 @@ const Login = () => {
   const formHandler = useCallback(
     () => (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      
       signIn('credentials', {
         email: userData.email,
         password: userData.password,
@@ -67,7 +68,9 @@ const Login = () => {
         />
         <button type='submit'>Sign in with Credentials</button>
       </form>
-      <div></div>
+      <div>
+        <p></p>
+      </div>
       <div>
         {providers &&
           Object.values(providers)
