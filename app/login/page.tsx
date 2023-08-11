@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type UserData = {
   email: string
@@ -16,18 +17,18 @@ const initialUserData: UserData = {
 
 const Login = () => {
   const { data: session } = useSession()
-
   if (session) {
     redirect('/')
   }
 
+  const router = useRouter()
   const [providers, setProviders] = useState<ProvidersType>(null)
+  const [userData, setUserData] = useState<UserData>(initialUserData)
+  const [loginError, setLoginError] = useState<boolean>(false)
 
   useEffect(() => {
     getProviders().then((providers) => setProviders(providers))
   }, [])
-
-  const [userData, setUserData] = useState<UserData>(initialUserData)
 
   const updateUserDataHandler = useCallback(
     (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,16 +38,23 @@ const Login = () => {
   )
 
   const formHandler = useCallback(
-    () => (event: React.FormEvent<HTMLFormElement>) => {
+    () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      
-      signIn('credentials', {
+
+      const result = await signIn('credentials', {
         email: userData.email,
         password: userData.password,
         callbackUrl: '/',
+        redirect: false,
       })
+
+      if (result?.error) {
+        setLoginError(true)
+      } else {
+        router.push(result?.url!)
+      }
     },
-    [userData]
+    [userData, router]
   )
 
   return (
@@ -69,7 +77,10 @@ const Login = () => {
         <button type='submit'>Sign in with Credentials</button>
       </form>
       <div>
-        <p></p>
+        <p className={loginError ? 'block' : 'hidden'}>
+          The password you have entered for your email is invalid or the email
+          you have entered could not be found.
+        </p>
       </div>
       <div>
         {providers &&
