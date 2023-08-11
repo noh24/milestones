@@ -1,8 +1,14 @@
-import { NextApiResponse, NextApiRequest } from 'next/types'
 import prisma from '@/app/db'
 import bcrypt from 'bcrypt'
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+type PostRequest = {
+  body: {
+    email: string
+    password: string
+  }
+}
+
+export async function POST(req: PostRequest) {
   const { email, password } = req.body
 
   try {
@@ -18,8 +24,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     if (!validPassword) throw new Error('Invalid password!')
 
-    res.status(200).json({ message: 'Login successful.' })
+    return user
   } catch (error) {
-    console.error(error)
+    console.error('Error: ', error)
+    return null
   }
 }

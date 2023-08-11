@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/app/db'
-import bcrypt from 'bcrypt'
+import { POST as login } from './../login/route'
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -20,24 +20,9 @@ export const authOptions = {
       },
       async authorize(credentials) {
         const { email, password } = credentials!
+        const res = login({ body: { email, password } })
 
-        try {
-          const user = await prisma.user.findFirst({
-            where: {
-              email,
-            }
-          })
-
-          if (!user) throw new Error('Invalid email!')
-
-          const validPassword = bcrypt.compareSync(password, user.password!)
-          if (!validPassword) throw new Error('Invalid password!')
-
-          return user
-        } catch (error) {
-          console.error('Error occured: ', error)
-          return null
-        }
+        return res
       },
     })
   ],
