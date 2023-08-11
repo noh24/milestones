@@ -42,6 +42,7 @@ const Login = () => {
       signIn('credentials', {
         email: userData.email,
         password: userData.password,
+        callbackUrl: '/',
       })
     },
     [userData]
