@@ -30,21 +30,25 @@ $ cd milestones
 ```
 $ npm install
 ```
-4. Set up a `.env file`:
+5. Set up a `.env file`:
+* Retreive your Google Client ID & Client Secret at [Google Cloud Platform APIs Dashboard](https://console.cloud.google.com/apis/dashboard)
+* Replace Database URL with your own database URI
 ```
 DATABASE_URL="[mysql]://[username]:[password].@localhost:3306/milestones"
+GOOGLE_CLIENT_ID=""[12345678910-asmfansodn2nf19cmoqiasjoinij12].apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="[JS9DJs-asd9NOIHN0-9dAIHOSDHSN]"
 ```
-5. Set up Prisma Database:
+6. Set up Prisma Database:
 ```
 $ prisma generate
 $ prisma migrate dev
 [optional] $ prisma db seed
 ```
-6. Start the development server:
+7. Start the development server:
 ```
 $ npm run dev
 ```
-7. Open your web browser to access the app at [http://localhost:3000](http://localhost:3000)
+8. Open your web browser to access the app at [http://localhost:3000](http://localhost:3000)
 
 ## Prisma Database CLI
 1. Create New Migrations:
