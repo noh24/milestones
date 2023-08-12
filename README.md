@@ -1,5 +1,5 @@
 #  Milestones
-Have you ever had those days when you doubt and ask yourself, "What have I accomplished up until now?"
+Have you ever had those days when you doubt yourself and ask, "What have I accomplished up until now?"
 
 Milestones is an app to help combat imposter syndome by storing and tracking all your wins. We are here to remind you that you're making progress by regularly updating you about your achievements. No matter how small or big, we believe in celebrating all our wins.
 
