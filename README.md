@@ -1,84 +1,79 @@
 #  Milestones
-Milestones is a great way to store and track your achievements and accomplishments. 
+Have you ever had those days when you doubt and ask yourself, "What have I accomplished up until now?"
 
-Perfect for those 1 on 1 meetings concerning your promotions and yearly evaluations.
-
-Look back on the year to see all that you've accomplished.
-
-Or look back and feel motivated to accomplish more.
-
+Milestones is an app to help combat imposter syndome by storing and tracking all your wins. We are here to remind you that you're making progress by regularly updating you about your achievements. No matter how small or big, we believe in celebrating all our wins.
 
 ## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will guide you through setting up the project on your local machine for development and testing purposes. For deployment information, refer to the deployment section.
 
 ### Pre-requisites
-What things you need to install the software and how to install them
-```
-Give examples
-```
-### Installing
+Before you begin, make sure you have the following installed:
 
-A step by step series of examples that tell you how to get a development env running
+* Node.js
+* npm (Node Package Manager)
+* Prisma CLI
+* Your preferred code editor
 
-Say what the step will be
+### Installation
 
+Follow these steps to get the development environment up and running:
+
+1. Clone the repository:
 ```
-Give the example
+$ git clone https://github.com/noh24/milestones.git
 ```
-
-And repeat
-
+2. Navigate to the project directory:
 ```
-until finished
+$ cd milestones
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
+3. Install the project dependencies:
+```
+$ npm install
+```
+4. Set up a `.env file`:
+```
+DATABASE_URL="[mysql]://[username]:[password].@localhost:3306/milestones"
+```
+5. Set up Prisma Database:
+```
+$ prisma generate
+$ prisma migrate dev
+[optional] $ prisma db seed
+```
+6. Start the development server:
+```
+$ npm run dev
+```
+7. Open your web browser to access the app at [http://localhost:3000](http://localhost:3000)
 
 ## Prisma Database CLI
+1. Create New Migrations:
 ```
-Create Migrations:
-$ npx prisma migrate dev --name [name-of-migration]
+$ npx prisma migrate dev --name [name-new-of-migration]
 ```
-## Running the tests
+## Running Tests
 
-Explain how to run the automated tests for this system
+Explain how to run automated tests for the system. Provide information on end-to-end tests and coding style tests if applicable.
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Provide additional notes about how to deploy the app on a live system.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* Prisma - ORM Database toolkit
+* Next.js 13 - React Framework for building full stack applications
+* NextAuth - Credentials / OAuth
+* Tailwind - Design library
+* MySQL - Relational Database
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Brian Noh** - *Initial work* - [github.com/noh24](https://github.com/noh24)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -88,6 +83,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Be one of the first to make contributions to our open-source project!
