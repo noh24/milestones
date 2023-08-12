@@ -1,10 +1,18 @@
 import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
-import { NextApiResponse, NextApiRequest } from 'next/types'
+import { NextResponse } from 'next/server'
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
+type SignUpPostRequest = {
+  body: {
+    name: string
+    email: string
+    password: string
+  }
+}
+
+export default async function POST(req: SignUpPostRequest) {
   const { name, email, password } = req.body
-  
+
   try {
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -23,8 +31,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     })
 
-    res.status(200).json({ message: 'User registered successfully.' })
+    NextResponse.json({ message: 'User registered successfully' }, { status: 200 })
   } catch (error) {
     console.error('Error occured: ', error)
+    NextResponse.json({ error: `${error}` }, { status: 400 })
   }
 }

@@ -1,14 +1,14 @@
 import prisma from '@/app/db'
 import bcrypt from 'bcrypt'
 
-type PostRequest = {
+type LoginPostRequest = {
   body: {
     email: string
     password: string
   }
 }
 
-export async function POST(req: PostRequest) {
+export async function POST(req: LoginPostRequest) {
   const { email, password } = req.body
 
   try {
