@@ -1,4 +1,4 @@
-import prisma from '@/app/db'
+import prisma from '@/db'
 import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
 
