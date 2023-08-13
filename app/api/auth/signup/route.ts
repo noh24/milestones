@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
-import { NextResponse } from 'next/server'
 
 type SignUpPostRequest = {
   body: {
@@ -10,7 +9,7 @@ type SignUpPostRequest = {
   }
 }
 
-export async function POST(req: SignUpPostRequest) {
+export async function POST(req: SignUpPostRequest): Promise<{ message?: string, error?: string }> {
   const { name, email, password } = req.body
 
   try {
@@ -31,9 +30,9 @@ export async function POST(req: SignUpPostRequest) {
       }
     })
 
-    NextResponse.json({ message: 'User registered successfully' }, { status: 200 })
+    return { message: 'User registered successfully' }
   } catch (error) {
     console.error('Error occured: ', error)
-    NextResponse.json({ error: `${error}` }, { status: 400 })
+    return { error: `${error}` }
   }
 }
