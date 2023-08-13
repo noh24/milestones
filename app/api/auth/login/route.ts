@@ -21,6 +21,6 @@ export async function POST(req: ExtendedRequest) {
     NextResponse.json({ response: user }, { status: 200 })
   } catch (error) {
     console.error('Error: ', error)
-    NextResponse.json({ response: null }, { status: 400 })
+    NextResponse.json({ response: null, error: error }, { status: 400 })
   }
 }
