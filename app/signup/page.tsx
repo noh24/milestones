@@ -80,17 +80,33 @@ const SignUp = () => {
           name='full-name'
           type='text'
           placeholder='Enter your full name'
+          required
+          value={userData.name}
+          onChange={updateUserDataHandler('name')}
         />
-        <input name='email' type='text' placeholder='Enter your email' />
+        <input
+          name='email'
+          type='text'
+          placeholder='Enter your email'
+          required
+          value={userData.email}
+          onChange={updateUserDataHandler('email')}
+        />
         <input
           name='current-password'
           type='password'
           placeholder='Enter your password'
+          required
+          value={userData.password}
+          onChange={updateUserDataHandler('password')}
         />
         <input
           name='confirm-password'
           type='password'
           placeholder='Re-enter your password'
+          required
+          value={userData.confirmPassword}
+          onChange={updateUserDataHandler('confirmPassword')}
         />
         <button type='submit'>Create account</button>
       </form>
