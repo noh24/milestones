@@ -1,9 +1,8 @@
 'use client'
 
-import React, { FormEventHandler, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { POST as signUp } from '../api/auth/signup/route'
 
 type UserData = {
   name: string
@@ -51,19 +50,25 @@ const SignUp = () => {
         return setError({ ...error, passwordError: true })
       }
 
-      const result = await signUp({
-        body: {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: userData.name,
           email: userData.email,
           password: userData.password,
-        },
+        }),
       })
 
-      if (result.error) {
+      const data = await response.json()
+
+      if (data.status !== 200) {
         return setError({ ...error, signUpError: true })
       }
 
-      setMessage(result.message!)
+      setMessage(data.message)
     },
     [userData, error]
   )
