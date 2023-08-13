@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type UserData = {
   email: string
@@ -81,6 +82,9 @@ const Login = () => {
           The password you have entered for your email is invalid or the email
           you have entered could not be found.
         </p>
+      </div>
+      <div>
+        <Link href={'/signup'}>Create an account</Link>
       </div>
       <div>
         {providers &&
