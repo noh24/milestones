@@ -3,17 +3,20 @@
 import React, { FormEventHandler, useCallback, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { POST as signUp } from '../api/auth/signup/route'
 
 type UserData = {
   name: string
   email: string
   password: string
+  confirmPassword: string
 }
 
-const initialUserData = {
+const initialUserData: UserData = {
   name: '',
   email: '',
   password: '',
+  confirmPassword: '',
 }
 
 const SignUp = () => {
@@ -25,6 +28,11 @@ const SignUp = () => {
   }
 
   const [userData, setUserData] = useState<UserData>(initialUserData)
+  const [error, setError] = useState<{
+    passwordError: boolean
+    signUpError: boolean
+  }>({ passwordError: false, signUpError: false })
+  const [message, setMessage] = useState<string>('')
 
   const updateUserDataHandler = useCallback(
     (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +44,28 @@ const SignUp = () => {
   const formHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+
+      const confirmedPassword = isConfirmedPassword(userData)
+
+      if (!confirmedPassword) {
+        return setError({ ...error, passwordError: true })
+      }
+
+      const result = await signUp({
+        body: {
+          name: userData.name,
+          email: userData.email,
+          password: userData.password,
+        },
+      })
+
+      if (result.error) {
+        return setError({ ...error, signUpError: true })
+      }
+
+      setMessage(result.message!)
     },
-    []
+    [userData, error]
   )
 
   return (
@@ -66,6 +94,10 @@ const SignUp = () => {
       </div>
     </>
   )
+}
+
+const isConfirmedPassword = (userData: UserData): boolean => {
+  return userData.password === userData.confirmPassword
 }
 
 export default SignUp
