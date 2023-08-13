@@ -2,11 +2,8 @@ import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: ExtendedRequest) {
-  const { name, email, password } = JSON.parse(req.body)
-  console.log(name)
-  console.log(email)
-  console.log(password)
+export async function POST(req: Request) {
+  const { name, email, password } = await req.json()
 
   try {
     const existingUser = await prisma.user.findFirst({
@@ -26,9 +23,9 @@ export async function POST(req: ExtendedRequest) {
       }
     })
 
-    NextResponse.json({ message: 'User registered successfully' }, { status: 200 })
+    return NextResponse.json({ message: 'User registered successfully' }, { status: 200 })
   } catch (error) {
     console.error('Error occured: ', error)
-    NextResponse.json({ message: `${error}` }, { status: 400 })
+    return NextResponse.json({ message: `${error}` }, { status: 400 })
   }
 }
