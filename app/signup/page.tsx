@@ -1,8 +1,20 @@
 'use client'
 
-import React from 'react'
+import React, { FormEventHandler, useCallback, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+
+type UserData = {
+  name: string
+  email: string
+  password: string
+}
+
+const initialUserData = {
+  name: '',
+  email: '',
+  password: '',
+}
 
 const SignUp = () => {
   const router = useRouter()
@@ -12,8 +24,21 @@ const SignUp = () => {
     router.push('/')
   }
 
-  
+  const [userData, setUserData] = useState<UserData>(initialUserData)
 
+  const updateUserDataHandler = useCallback(
+    (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUserData({ ...userData, [type]: event.target.value })
+    },
+    [userData]
+  )
+
+  const formHandler = useCallback(
+    () => async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+    },
+    []
+  )
 
   return (
     <>
