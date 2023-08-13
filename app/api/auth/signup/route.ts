@@ -2,14 +2,6 @@ import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
 import { NextResponse } from 'next/server'
 
-interface ExtendedRequest extends Request {
-  body: ReadableStream<Uint8Array> & {
-    name: string
-    email: string
-    password: string
-  }
-}
-
 export async function POST(req: ExtendedRequest) {
   const { name, email, password } = req.body
 
@@ -25,7 +17,7 @@ export async function POST(req: ExtendedRequest) {
     const hashedPassword = bcrypt.hashSync(password, 10)
     await prisma.user.create({
       data: {
-        name,
+        name: name!,
         email,
         password: hashedPassword
       }
