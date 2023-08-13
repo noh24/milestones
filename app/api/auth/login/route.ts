@@ -8,7 +8,7 @@ type LoginPostRequest = {
   }
 }
 
-export async function POST(req: LoginPostRequest) {
+export async function POST(req: LoginPostRequest): Promise<User | null> {
   const { email, password } = req.body
 
   try {
