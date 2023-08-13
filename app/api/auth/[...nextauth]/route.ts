@@ -3,7 +3,6 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/app/db'
-import { POST as login } from './../login/route'
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -20,9 +19,20 @@ export const authOptions = {
       },
       async authorize(credentials) {
         const { email, password } = credentials!
-        const res = login({ body: { email, password } })
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          })
+        })
 
-        return res
+        const data = await res.json()
+
+        return data.response
       },
     })
   ],
