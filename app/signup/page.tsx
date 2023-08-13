@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -32,50 +32,69 @@ const SignUp = () => {
     signUpError: boolean
   }>({ passwordError: false, signUpError: false })
   const [message, setMessage] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   const updateUserDataHandler = useCallback(
     (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserData({ ...userData, [type]: event.target.value })
+      setUserData((prevData) => ({ ...prevData, [type]: event.target.value }))
     },
-    [userData]
+    []
   )
+
+  useEffect(() => {
+    const confirmedPassword = isConfirmedPassword(userData)
+
+    if (!confirmedPassword) {
+      setError((prevState) => ({ ...prevState, passwordError: true }))
+    } else {
+      setError((prevState) => ({ ...prevState, passwordError: false }))
+    }
+  }, [userData])
 
   const formHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      setLoading(true)
+      console.log(userData)
 
-      const confirmedPassword = isConfirmedPassword(userData)
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+          }),
+        })
+        setLoading(false)
 
-      if (!confirmedPassword) {
-        return setError({ ...error, passwordError: true })
+        if (!response.ok) {
+          const data = await response.json()
+          throw new Error(`${data}`)
+        }
+
+        const data = await response.json()
+
+        setMessage(data.message)
+
+        if (data.status !== 200) {
+          return setError((prevState) => ({ ...prevState, signUpError: true }))
+        }
+
+        setTimeout(() => router.push('/login'), 3000)
+      } catch (error) {
+        setMessage(`${error}`)
       }
-
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: userData.name,
-          email: userData.email,
-          password: userData.password,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (data.status !== 200) {
-        return setError({ ...error, signUpError: true })
-      }
-
-      setMessage(data.message)
     },
-    [userData, error]
+    [userData, router]
   )
 
   return (
     <>
-      <form>
+      <form onSubmit={formHandler()}>
         <input
           name='full-name'
           type='text'
@@ -108,10 +127,15 @@ const SignUp = () => {
           value={userData.confirmPassword}
           onChange={updateUserDataHandler('confirmPassword')}
         />
-        <button type='submit'>Create account</button>
+        <button type='submit' disabled={error.passwordError || loading}>
+          Create account
+        </button>
       </form>
       <div>
-        <p></p>
+        <p className={message ? 'block' : 'hidden'}>{message}</p>
+        <p className={error.passwordError ? 'block' : 'hidden'}>
+          Passwords must match!
+        </p>
       </div>
     </>
   )

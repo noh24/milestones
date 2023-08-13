@@ -3,7 +3,10 @@ import prisma from '@/app/db'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: ExtendedRequest) {
-  const { name, email, password } = req.body
+  const { name, email, password } = JSON.parse(req.body)
+  console.log(name)
+  console.log(email)
+  console.log(password)
 
   try {
     const existingUser = await prisma.user.findFirst({
