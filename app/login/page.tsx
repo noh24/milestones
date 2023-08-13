@@ -1,6 +1,5 @@
 'use client'
 
-import { redirect } from 'next/navigation'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -17,12 +16,12 @@ const initialUserData: UserData = {
 }
 
 const Login = () => {
+  const router = useRouter()
   const { data: session } = useSession()
   if (session) {
-    redirect('/')
+    router.push('/')
   }
 
-  const router = useRouter()
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
   const [loginError, setLoginError] = useState<boolean>(false)
