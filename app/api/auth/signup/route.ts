@@ -10,7 +10,7 @@ type SignUpPostRequest = {
   }
 }
 
-export default async function POST(req: SignUpPostRequest) {
+export async function POST(req: SignUpPostRequest) {
   const { name, email, password } = req.body
 
   try {
