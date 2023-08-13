@@ -55,7 +55,8 @@ const SignUp = () => {
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       setLoading(true)
-      console.log(userData)
+      setError((prevState) => ({...prevState, signUpError: false}))
+      setMessage('')
 
       try {
         const response = await fetch('/api/auth/signup', {
@@ -70,13 +71,10 @@ const SignUp = () => {
           }),
         })
         setLoading(false)
-
-        if (!response.ok) {
-          const data = await response.json()
-          throw new Error(`${data}`)
-        }
-
+        
         const data = await response.json()
+
+        if (!response.ok) throw new Error(data.message)
 
         setMessage(data.message)
 
