@@ -25,6 +25,8 @@ const Login = () => {
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
   const [loginError, setLoginError] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>('')
 
   useEffect(() => {
     getProviders().then((providers) => setProviders(providers))
@@ -40,6 +42,8 @@ const Login = () => {
   const formHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      setLoading((prevState) => !prevState)
+      setMessage('')
 
       const result = await signIn('credentials', {
         email: userData.email,
@@ -48,8 +52,14 @@ const Login = () => {
         redirect: false,
       })
 
-      if (result?.error) {
+      setLoading((prevState) => !prevState)
+
+      if (result!.error) {
         setLoginError(true)
+        console.log(result)
+        setMessage(
+          'The password you have entered for your email is invalid or the email you have entered could not be found.'
+        )
       } else {
         router.push(result?.url!)
       }
@@ -74,13 +84,13 @@ const Login = () => {
           value={userData.password}
           onChange={updateUserDataHandler('password')}
         />
-        <button type='submit'>Sign in with Credentials</button>
+        <button type='submit' disabled={loading}>
+          Sign in with Credentials
+        </button>
       </form>
       <div>
-        <p className={loginError ? 'block' : 'hidden'}>
-          The password you have entered for your email is invalid or the email
-          you have entered could not be found.
-        </p>
+        <p className={loginError ? 'block' : 'hidden'}></p>
+        <p>{message}</p>
       </div>
       <div>
         <Link href={'/signup'}>Create an account</Link>
