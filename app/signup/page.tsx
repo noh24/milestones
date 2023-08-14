@@ -54,8 +54,8 @@ const SignUp = () => {
   const formHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      setLoading(true)
-      setError((prevState) => ({...prevState, signUpError: false}))
+      setLoading((prevState) => !prevState)
+      setError((prevState) => ({ ...prevState, signUpError: false }))
       setMessage('')
 
       try {
@@ -70,8 +70,8 @@ const SignUp = () => {
             password: userData.password,
           }),
         })
-        setLoading(false)
-        
+        setLoading((prevState) => !prevState)
+
         const data = await response.json()
 
         if (!response.ok) throw new Error(data.message)
