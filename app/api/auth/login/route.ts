@@ -2,8 +2,8 @@ import prisma from '@/db'
 import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: ExtendedRequest) {
-  const { email, password } = req.body
+export async function POST(req: Request) {
+  const { email, password } = await req.json()
 
   try {
     const user = await prisma.user.findFirst({
@@ -18,9 +18,9 @@ export async function POST(req: ExtendedRequest) {
 
     if (!validPassword) throw new Error('Invalid password!')
 
-    NextResponse.json({ response: user }, { status: 200 })
+    return NextResponse.json({ response: user, message: 'Login was successful' }, { status: 200 })
   } catch (error) {
-    console.error('Error: ', error)
-    NextResponse.json({ response: null, error: error }, { status: 400 })
+    console.error('Error: ===== ', error)
+    return NextResponse.json({ response: null, message: error }, { status: 400 })
   }
 }
