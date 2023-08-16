@@ -3,6 +3,7 @@ import React, { FC, ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Provider from './components/Provider'
+import { Session } from 'next-auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,13 +14,14 @@ export const metadata: Metadata = {
 
 type TProps = {
   children: ReactNode
+  session: Session
 }
 
-const RootLayout: FC<TProps> = ({ children }) => {
+const RootLayout: FC<TProps> = ({ children, session }) => {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <Provider>{children}</Provider>
+        <Provider session={session}>{children}</Provider>
       </body>
     </html>
   )
