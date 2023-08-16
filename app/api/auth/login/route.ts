@@ -12,15 +12,15 @@ export async function POST(req: Request) {
       }
     })
 
-    if (!user) throw new Error('Invalid email!')
+    if (!user) { throw new Error('Invalid email!') }
 
     const validPassword = bcrypt.compareSync(password, user.password!)
 
-    if (!validPassword) throw new Error('Invalid password!')
+    if (!validPassword) { throw new Error('Invalid password!') }
 
     return NextResponse.json({ response: user, message: 'Login was successful' }, { status: 200 })
   } catch (error) {
     console.error('Login Route', error)
-    return NextResponse.json({ response: null, message: error }, { status: 400 })
+    return NextResponse.json({ response: null, message: `${error}` }, { status: 400 })
   }
 }
