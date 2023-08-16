@@ -20,7 +20,6 @@ const Login = () => {
 
   // Session
   const { data: session, status } = useSession()
-  console.log(`this is in login page, session: ${session}, status: ${status}`)
 
   useEffect(() => {
     if (status === 'authenticated') {
