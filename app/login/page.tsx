@@ -17,6 +17,8 @@ const initialUserData: UserData = {
 
 const Login = () => {
   const router = useRouter()
+
+  // Session
   const { data: session, status } = useSession()
   console.log(`this is in login page, session: ${session}, status: ${status}`)
 
@@ -25,6 +27,7 @@ const Login = () => {
       router.push('/')
     }
   }, [router, status])
+  // /Session 
 
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
@@ -57,9 +60,6 @@ const Login = () => {
       })
 
       setLoading((prevState) => !prevState)
-
-      console.log('error', result?.error)
-      console.log('url', result?.url)
 
       if (result?.error) {
         setLoginError(true)
