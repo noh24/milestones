@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ response: user, message: 'Login was successful' }, { status: 200 })
   } catch (error) {
-    console.error('Error: ===== ', error)
+    console.error('Login Route', error)
     return NextResponse.json({ response: null, message: error }, { status: 400 })
   }
 }
