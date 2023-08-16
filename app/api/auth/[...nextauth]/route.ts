@@ -6,6 +6,7 @@ import prisma from '@/db'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
+  secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -31,13 +32,30 @@ export const authOptions: NextAuthOptions = {
         const data = await response.json()
 
         if (data.response) {
-          return data
+          return data.response
         } else {
           throw new Error(data.message)
         }
       },
     })
   ],
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.id = user.id
+  //     }
+  //     return token
+  //   },
+  //   async session({ session, token, user }) {
+  //     if (session.user) {
+  //       session.user.id = token.id as string
+  //       // session.user.name = `${token.email}`
+  //       // session.user.email = user.email as string
+  //       // session.user.image = user.image as string
+  //     }
+  //     return session
+  //   }
+  // },
   pages: {
     signIn: '/login'
   }
