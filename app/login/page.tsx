@@ -17,10 +17,14 @@ const initialUserData: UserData = {
 
 const Login = () => {
   const router = useRouter()
-  const { data: session } = useSession()
-  if (session) {
-    router.push('/')
-  }
+  const { data: session, status } = useSession()
+  console.log(`this is in login page, session: ${session}, status: ${status}`)
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/')
+    }
+  }, [router, status])
 
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
@@ -54,12 +58,12 @@ const Login = () => {
 
       setLoading((prevState) => !prevState)
 
-      if (result!.error) {
+      console.log('error', result?.error)
+      console.log('url', result?.url)
+
+      if (result?.error) {
         setLoginError(true)
-        console.log(result)
-        setMessage(
-          'The password you have entered for your email is invalid or the email you have entered could not be found.'
-        )
+        setMessage('The password or email you have entered is invalid.')
       } else {
         router.push(result?.url!)
       }
