@@ -82,7 +82,7 @@ const SignUp = () => {
           return setError((prevState) => ({ ...prevState, signUpError: true }))
         }
 
-        setTimeout(() => router.push('/login'), 3000)
+        setTimeout(() => router.push('/signIn'), 3000)
       } catch (error) {
         setMessage(`${error}`)
       }

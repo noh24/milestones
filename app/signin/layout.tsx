@@ -3,10 +3,10 @@ import React, { Suspense } from 'react'
 import Loading from '../loading'
 
 export const metadata: Metadata = {
-  title: 'Login | Milestones',
+  title: 'Sign In | Milestones',
 }
 
-const LoginLayout = ({ children }: { children: React.ReactNode }) => {
+const SignInLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section>
       <Suspense fallback={<Loading />}>{children}</Suspense>
@@ -14,4 +14,4 @@ const LoginLayout = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default LoginLayout
+export default SignInLayout

@@ -15,7 +15,7 @@ const initialUserData: UserData = {
   password: '',
 }
 
-const Login = () => {
+const SignIn = () => {
   const router = useRouter()
 
   // Session
@@ -30,7 +30,7 @@ const Login = () => {
 
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
-  const [loginError, setLoginError] = useState<boolean>(false)
+  const [signInError, setSignInError] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
 
@@ -61,7 +61,7 @@ const Login = () => {
       setLoading((prevState) => !prevState)
 
       if (result?.error) {
-        setLoginError(true)
+        setSignInError(true)
         setMessage('The password or email you have entered is invalid.')
       } else {
         router.push(result?.url!)
@@ -92,7 +92,7 @@ const Login = () => {
         </button>
       </form>
       <div>
-        <p className={loginError ? 'block' : 'hidden'}></p>
+        <p className={signInError ? 'block' : 'hidden'}></p>
         <p>{message}</p>
       </div>
       <div>
@@ -114,4 +114,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignIn
