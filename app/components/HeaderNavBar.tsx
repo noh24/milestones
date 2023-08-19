@@ -1,8 +1,8 @@
 import Link from "next/link"
-import React from "react";
+import React, { FC } from "react";
 import SignOutButton from "./SignOutButton"
 
-const HeaderNavBar = () => {
+const HeaderNavBar: FC = () => {
   return <nav>
     <Link href='/'>Home</Link>
     <Link href='/get-started'>Get Started</Link>
