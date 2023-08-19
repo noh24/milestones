@@ -22,10 +22,12 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <header>
-          <HeaderNavBar/>
-        </header>
-        <Provider session={session}>{children}</Provider>
+        <Provider session={session}>
+          <header>
+            <HeaderNavBar />
+          </header>
+          {children}
+        </Provider>
       </body>
     </html>
   )
