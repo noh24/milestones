@@ -23,9 +23,7 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
     <html lang='en'>
       <body className={inter.className}>
         <Provider session={session}>
-          <header>
-            <HeaderNavBar />
-          </header>
+          <HeaderNavBar />
           {children}
         </Provider>
       </body>
