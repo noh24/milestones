@@ -1,15 +1,25 @@
 import Link from 'next/link'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from './api/auth/[...nextauth]/route'
-import { redirect } from 'next/navigation'
 
 export default async function Home() {
-  await getSession()
+  const session = await getSession()
+  console.log(session)
 
-  return (
+  return session ? (
+    <></>
+  ) : (
     <>
-      <Link href='/about'>About</Link>
-      <div className='text-5xl'>Home Page</div>
+      <div>Milestones</div>
+      <p>
+        Milestones is an app to help combat imposter syndome by storing and
+        tracking all your wins. We are here to remind you that you&apos;re
+        making progress by regularly updating you about your achievements. No
+        matter how small or big, we believe in celebrating all our wins.
+      </p>
+    <Link href='/get-started'>Get Started</Link>\
+    <p>WIP Notes: Put screenshots of Milestones being used</p>
+    <p>Examples: Screenshots of milestones and the reminder feature</p>
     </>
   )
 }
@@ -17,7 +27,5 @@ export default async function Home() {
 async function getSession() {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
-    redirect('/signin')
-  }
+  return session
 }
