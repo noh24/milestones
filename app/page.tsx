@@ -4,13 +4,13 @@ import { authOptions } from './api/auth/[...nextauth]/route'
 
 export default async function Home() {
   const session = await getSession()
-  console.log(session)
 
   return session ? (
-    <></>
+    <>
+      <Link href='/milestone'>Add Milestones</Link>
+    </>
   ) : (
     <>
-      <div>Milestones</div>
       <p>
         Milestones is an app to help combat imposter syndome by storing and
         tracking all your wins. We are here to remind you that you&apos;re
