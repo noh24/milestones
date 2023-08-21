@@ -2,7 +2,7 @@
 
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 type UserData = {
@@ -17,16 +17,16 @@ const initialUserData: UserData = {
 
 const SignIn = () => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') ?? ''
 
   // Session
-  const { data: session, status } = useSession()
+  const { status } = useSession()
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/')
-    }
-  }, [router, status])
-  // /Session 
+    if (status === 'authenticated') router.push(`/${redirect}`)
+  }, [router, status, redirect])
+  // /Session
 
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
@@ -64,10 +64,10 @@ const SignIn = () => {
         setSignInError(true)
         setMessage('The password or email you have entered is invalid.')
       } else {
-        router.push(result?.url!)
+        router.push(`${result?.url!}/${redirect}`)
       }
     },
-    [userData, router]
+    [userData, router, redirect]
   )
 
   return (
