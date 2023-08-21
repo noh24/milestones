@@ -21,7 +21,7 @@ const initialMilestoneData = {
 
 const Milestone: FC = () => {
   const { data: session } = useSession()
-  if (!session) redirect('/signin')
+  if (!session) redirect('/signin?redirect=milestone')
 
   const [milestoneData, setMilestoneData] =
     useState<MilestoneData>(initialMilestoneData)
@@ -50,7 +50,7 @@ const Milestone: FC = () => {
     () => (event: React.ChangeEvent<HTMLInputElement>) =>
       setMilestoneData((prevState) => ({
         ...prevState,
-        document: event.target.files,
+        document: event.target.files![0],
       })),
     []
   )
