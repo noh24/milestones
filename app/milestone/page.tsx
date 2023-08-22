@@ -53,20 +53,27 @@ const Milestone: FC = () => {
     []
   )
 
+  const submitHandler = useCallback(
+    () => async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+    }, []
+  )
+
   return (
     <>
-      <div>Add Milestones</div>
-      <form>
+      <form onSubmit={submitHandler()}>
         <input
           name='title'
           type='text'
           placeholder='Title'
+          required
           value={milestoneData.title}
           onChange={updateMilestoneDataHandler('title')}
         />
         <textarea
           name='content'
           placeholder='Enter milestone details'
+          required
           value={milestoneData.content}
           onChange={updateMilestoneDataHandler('content')}
         />
@@ -74,6 +81,8 @@ const Milestone: FC = () => {
           <input
             name='type'
             type='radio'
+            required
+            checked
             value='professional'
             onChange={updateMilestoneDataHandler('type')}
           />
@@ -89,7 +98,7 @@ const Milestone: FC = () => {
           Personal
         </label>
         <label>
-          Upload image or file:
+          Upload an image or file:
           <input
             name='document'
             type='file'
@@ -97,6 +106,7 @@ const Milestone: FC = () => {
             onChange={updateMilestoneDocumentHandler()}
           />
         </label>
+        <button type='submit'>Add Milestone</button>
       </form>
     </>
   )
