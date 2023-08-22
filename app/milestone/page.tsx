@@ -4,13 +4,13 @@ import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { useState, useCallback } from 'react'
-import Image from 'next/image'
 
 type MilestoneData = {
   title: string
   content: string
   type: string
-  document?: any
+  document?: File
+  fileUrl?: string
 }
 
 const initialMilestoneData = {
@@ -25,15 +25,13 @@ const Milestone: FC = () => {
 
   const [milestoneData, setMilestoneData] =
     useState<MilestoneData>(initialMilestoneData)
-  const [preview, setPreview] = useState<string>('')
 
   useEffect(() => console.log(milestoneData), [milestoneData])
 
   useEffect(() => {
     if (milestoneData.document && milestoneData.document.length != 0) {
-      console.log(milestoneData.document[0])
-      const fileURL = URL.createObjectURL(milestoneData.document[0])
-      setPreview(() => fileURL)
+      const fileUrl = URL.createObjectURL(milestoneData.document)
+      setMilestoneData((prevState) => ({ ...prevState, fileUrl: fileUrl }))
     }
   }, [milestoneData.document])
 
@@ -99,13 +97,6 @@ const Milestone: FC = () => {
             onChange={updateMilestoneDocumentHandler()}
           />
         </label>
-        <div>
-          {preview ? (
-            <Image src={preview} alt='' width={300} height={500} />
-          ) : (
-            <div></div>
-          )}
-        </div>
       </form>
     </>
   )
