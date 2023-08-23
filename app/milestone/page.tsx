@@ -9,6 +9,7 @@ type MilestoneData = {
   title: string
   content: string
   type: string
+  date: string
   document?: File
   fileUrl?: string
 }
@@ -17,6 +18,7 @@ const initialMilestoneData = {
   title: '',
   content: '',
   type: '',
+  date: '',
 }
 
 const Milestone: FC = () => {
@@ -56,7 +58,8 @@ const Milestone: FC = () => {
   const submitHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-    }, []
+    },
+    []
   )
 
   return (
@@ -70,9 +73,19 @@ const Milestone: FC = () => {
           value={milestoneData.title}
           onChange={updateMilestoneDataHandler('title')}
         />
+        <label>
+          Select Date:
+          <input
+            name='date'
+            type='date'
+            required
+            value={milestoneData.date}
+            onChange={updateMilestoneDataHandler('date')}
+          />
+        </label>
         <textarea
           name='content'
-          placeholder='Enter milestone details'
+          placeholder='Enter details'
           required
           value={milestoneData.content}
           onChange={updateMilestoneDataHandler('content')}
@@ -102,7 +115,7 @@ const Milestone: FC = () => {
           <input
             name='document'
             type='file'
-            accept='.doc,.docx,.pdf,image/*'
+            accept='.doc,.docx,.pdf,.jpeg,.png'
             onChange={updateMilestoneDocumentHandler()}
           />
         </label>
