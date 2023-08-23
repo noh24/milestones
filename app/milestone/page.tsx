@@ -11,7 +11,7 @@ type MilestoneData = {
   type: string
   date: string
   document?: File
-  fileUrl?: string
+  // fileUrl?: string
 }
 
 const initialMilestoneData = {
@@ -23,6 +23,7 @@ const initialMilestoneData = {
 
 const Milestone: FC = () => {
   const { data: session } = useSession()
+  console.log(session)
   if (!session) redirect('/signin?redirect=milestone')
 
   const [milestoneData, setMilestoneData] =
@@ -30,12 +31,12 @@ const Milestone: FC = () => {
 
   useEffect(() => console.log(milestoneData), [milestoneData])
 
-  useEffect(() => {
-    if (milestoneData.document && milestoneData.document.length != 0) {
-      const fileUrl = URL.createObjectURL(milestoneData.document)
-      setMilestoneData((prevState) => ({ ...prevState, fileUrl: fileUrl }))
-    }
-  }, [milestoneData.document])
+  // useEffect(() => {
+  //   if (milestoneData.document && milestoneData.document.length != 0) {
+  //     const fileUrl = URL.createObjectURL(milestoneData.document)
+  //     setMilestoneData((prevState) => ({ ...prevState, fileUrl: fileUrl }))
+  //   }
+  // }, [milestoneData.document])
 
   const updateMilestoneDataHandler = useCallback(
     (type: keyof MilestoneData) =>
