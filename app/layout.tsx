@@ -2,9 +2,9 @@ import './globals.css'
 import React, { FC, ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Provider from './components/Provider'
+import Provider from '../components/Provider'
 import { Session } from 'next-auth'
-import HeaderNavBar from './components/HeaderNavBar'
+import HeaderNavBar from '../components/HeaderNavBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
