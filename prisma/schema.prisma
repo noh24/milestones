@@ -11,19 +11,20 @@ datasource db {
 }
 
 model Account {
-  id                String @id @default(cuid())
+  id                String  @id @default(cuid())
   type              String
   provider          String
   providerAccountId String
-  refresh_token String? @db.Text()
-  access_token  String? @db.Text()
-  expires_at    Int?
-  token_type    String?
-  scope         String?
-  id_token      String? @db.Text()
-  session_state String?
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  refresh_token     String? @db.Text()
+  access_token      String? @db.Text()
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text()
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+
   @@unique([provider, providerAccountId])
 }
 
@@ -31,46 +32,48 @@ model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   expires      DateTime
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 }
 
 model User {
-  id      String  @id @default(cuid())
-  name    String  @db.VarChar(255)
-  email   String  @unique
-  isAdmin Boolean @default(false)
+  id            String      @id @default(cuid())
+  name          String      @db.VarChar(255)
+  email         String      @unique
+  isAdmin       Boolean     @default(false)
   password      String?
   emailVerified DateTime?
   image         String?
-  milestones Milestone[]
-  profile    Profile?
-  accounts   Account[]
-  sessions   Session[]
+  milestones    Milestone[]
+  profile       Profile?
+  accounts      Account[]
+  sessions      Session[]
 }
 
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
 }
 
 model Milestone {
   id        String   @id @default(cuid())
+  date      DateTime @db.Date
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String   @db.MediumText
   type      String   @db.VarChar(255) //professional or personal
-  document String?
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  document  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 }
 
 model Profile {
   id         Int    @id @default(autoincrement())
   profession String @db.VarChar(255)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String @unique
 }
