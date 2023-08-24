@@ -74,9 +74,9 @@ const SignUp = () => {
 
         const data = await response.json()
 
-        if (!response.ok) throw new Error(data.message)
+        if (!response.ok) throw new Error(data.error)
 
-        setMessage(data.message)
+        setMessage(data.success)
 
         if (data.status !== 200) {
           return setError((prevState) => ({ ...prevState, signUpError: true }))
