@@ -4,17 +4,14 @@ import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { useState, useCallback } from 'react'
+import Helper from '@/lib/helper'
 
-type MilestoneData = {
-  title: string
-  content: string
-  type: string
-  date: string
-  document?: File
-  // fileUrl?: string
-}
+// clean up component
+// rid of useeffect console.log
+// test out form submit handler
+// create loading , error, message state
 
-const initialMilestoneData = {
+const initialMilestoneData: MilestoneData = {
   title: '',
   content: '',
   type: '',
@@ -30,13 +27,6 @@ const Milestones: FC = () => {
     useState<MilestoneData>(initialMilestoneData)
 
   useEffect(() => console.log(milestoneData), [milestoneData])
-
-  // useEffect(() => {
-  //   if (milestoneData.document && milestoneData.document.length != 0) {
-  //     const fileUrl = URL.createObjectURL(milestoneData.document)
-  //     setMilestoneData((prevState) => ({ ...prevState, fileUrl: fileUrl }))
-  //   }
-  // }, [milestoneData.document])
 
   const updateMilestoneDataHandler = useCallback(
     (type: keyof MilestoneData) =>
@@ -59,10 +49,32 @@ const Milestones: FC = () => {
   const submitHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      
-      const data = await fetch('/api/milestone')
+
+      try {
+        const { document } = milestoneData
+        if (document) {
+          const isValid = Helper.validateType(document.type)
+          if (!isValid)
+            throw new Error('Document type is not acceptable MIME type.')
+        }
+
+        const response = await fetch('/api/milestones', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(milestoneData),
+        })
+
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error)
+
+        setTimeout(() => redirect('/milestones'), 3000)
+      } catch (err) {
+        console.log(err)
+      }
     },
-    []
+    [milestoneData]
   )
 
   return (
