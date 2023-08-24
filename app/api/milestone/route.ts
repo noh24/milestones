@@ -1,16 +1,16 @@
 import prisma from "@/db"
-import { validateType } from "@/lib/helper"
+import Helper from "@/lib/helper"
 import { NextResponse } from 'next/server'
+import { writeFile } from 'fs/promises'
 
 export async function GET(req: Request) {
+
+}
+
+export async function POST(req: Request) {
   const { title, content, type, date, document, userEmail } = await req.json()
 
   try {
-    if (document) {
-      const isValid = validateType(document.type)
-      if (!isValid) throw new Error('Document type is not acceptable MIME type.')
-    }
-
     const user = await prisma.user.findFirst({
       where: {
         email: userEmail
@@ -19,7 +19,18 @@ export async function GET(req: Request) {
 
     if (!user) throw new Error('There is no user associated with email provided.')
 
-    // figure out how to save it into local file (use multer maybe?)
+    let documentPath: string | null = null
+
+    if (document) {
+      const isValid = Helper.validateType(document.type)
+      if (!isValid) throw new Error('Document type is not acceptable MIME type.')
+
+      const arrayBuffer = new ArrayBuffer(document)
+      const buffer = Buffer.from(arrayBuffer)
+
+      documentPath = Helper.generateUploadPath() + String(document.type)
+      await writeFile(documentPath, buffer)
+    }
 
     const newMilestone = await prisma.milestone.create({
       data: {
@@ -28,6 +39,7 @@ export async function GET(req: Request) {
         type,
         date,
         userId: user.id,
+        document: documentPath
       }
     })
 
@@ -36,10 +48,4 @@ export async function GET(req: Request) {
     console.log(err)
     return NextResponse.json({ message: `${err}` }, { status: 400 })
   }
-
 }
-
-// receive the reqest header
-// deconstruct it
-// if a document file exist > validate type > if false, throw error
-// 
