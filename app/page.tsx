@@ -7,7 +7,7 @@ export default async function Home() {
 
   return session ? (
     <>
-      <Link href='/milestone'>Add Milestones</Link>
+      <Link href='/milestones/add'>Add Milestones</Link>
     </>
   ) : (
     <>

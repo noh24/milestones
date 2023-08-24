@@ -21,10 +21,10 @@ const initialMilestoneData = {
   date: '',
 }
 
-const Milestone: FC = () => {
+const Milestones: FC = () => {
   const { data: session } = useSession()
   console.log(session)
-  if (!session) redirect('/signin?redirect=milestone')
+  if (!session) redirect('/signin?redirect=milestones/add')
 
   const [milestoneData, setMilestoneData] =
     useState<MilestoneData>(initialMilestoneData)
@@ -59,6 +59,8 @@ const Milestone: FC = () => {
   const submitHandler = useCallback(
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      
+      const data = await fetch('/api/milestone')
     },
     []
   )
@@ -126,4 +128,4 @@ const Milestone: FC = () => {
   )
 }
 
-export default Milestone
+export default Milestones
