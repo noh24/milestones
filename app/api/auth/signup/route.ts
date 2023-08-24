@@ -23,9 +23,9 @@ export async function POST(req: Request) {
       }
     })
 
-    return NextResponse.json({ message: 'User registered successfully' }, { status: 200 })
+    return NextResponse.json({ success: 'User registered successfully' }, { status: 200 })
   } catch (error) {
     console.error('Error occured: ', error)
-    return NextResponse.json({ message: `${error}` }, { status: 400 })
+    return NextResponse.json({ error: `${error}` }, { status: 400 })
   }
 }
