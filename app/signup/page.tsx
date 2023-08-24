@@ -3,13 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-
-type UserData = {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import Helper from '@/lib/helper'
 
 const initialUserData: UserData = {
   name: '',
@@ -27,10 +21,7 @@ const SignUp = () => {
   }
 
   const [userData, setUserData] = useState<UserData>(initialUserData)
-  const [error, setError] = useState<{
-    passwordError: boolean
-    signUpError: boolean
-  }>({ passwordError: false, signUpError: false })
+  const [error, setError] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -42,12 +33,10 @@ const SignUp = () => {
   )
 
   useEffect(() => {
-    const confirmedPassword = isConfirmedPassword(userData)
-
-    if (!confirmedPassword) {
-      setError((prevState) => ({ ...prevState, passwordError: true }))
+    if (Helper.confirmPassword(userData)) {
+      setError((prevState) => !prevState)
     } else {
-      setError((prevState) => ({ ...prevState, passwordError: false }))
+      setError((prevState) => !prevState)
     }
   }, [userData])
 
@@ -55,7 +44,6 @@ const SignUp = () => {
     () => async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       setLoading((prevState) => !prevState)
-      setError((prevState) => ({ ...prevState, signUpError: false }))
       setMessage('')
 
       try {
@@ -77,10 +65,6 @@ const SignUp = () => {
         if (!response.ok) throw new Error(data.error)
 
         setMessage(data.success)
-
-        if (data.status !== 200) {
-          return setError((prevState) => ({ ...prevState, signUpError: true }))
-        }
 
         setTimeout(() => router.push('/signIn'), 3000)
       } catch (error) {
@@ -125,22 +109,16 @@ const SignUp = () => {
           value={userData.confirmPassword}
           onChange={updateUserDataHandler('confirmPassword')}
         />
-        <button type='submit' disabled={error.passwordError || loading}>
+        <button type='submit' disabled={error || loading}>
           Create account
         </button>
       </form>
       <div>
         <p className={message ? 'block' : 'hidden'}>{message}</p>
-        <p className={error.passwordError ? 'block' : 'hidden'}>
-          Passwords must match!
-        </p>
+        <p className={error ? 'block' : 'hidden'}>Passwords must match!</p>
       </div>
     </>
   )
-}
-
-const isConfirmedPassword = (userData: UserData): boolean => {
-  return userData.password === userData.confirmPassword
 }
 
 export default SignUp
