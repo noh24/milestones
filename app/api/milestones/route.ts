@@ -8,7 +8,13 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { title, content, type, date, document, userEmail } = await req.json()
+  const formData = await req.formData()
+  const title = formData.get('title') as string
+  const content = formData.get('content') as string
+  const type = formData.get('type') as string
+  const date = new Date(formData.get('date') as string).toISOString()
+  const userEmail = formData.get('userEmail') as string
+  const document: File | null = formData.get('document') as File
 
   try {
     const user = await prisma.user.findFirst({
@@ -22,13 +28,13 @@ export async function POST(req: Request) {
     let documentPath: string | null = null
 
     if (document) {
-      const isValid = Helper.validateType(document.type)
+      const isValid = Helper.validateType(document?.type)
       if (!isValid) throw new Error('Document type is not acceptable MIME type.')
 
-      const arrayBuffer = new ArrayBuffer(document)
+      const arrayBuffer = await document.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
-      documentPath = Helper.generateUploadPath() + String(document.type)
+      documentPath = Helper.generateUploadPath() + Helper.generateFileExtension(document.type)
       await writeFile(documentPath, buffer)
     }
 
@@ -45,7 +51,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: 'Successfully created a milestone', data: newMilestone }, { status: 200 })
   } catch (err) {
-    console.log(err)
+    console.log('Milestone Add Route', err)
     return NextResponse.json({ error: `${err}` }, { status: 400 })
   }
 }
