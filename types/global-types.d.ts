@@ -13,5 +13,5 @@ type MilestoneData = {
   content: string
   type: string
   date: string
-  document?: File
+  document: File | Null
 }
