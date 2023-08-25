@@ -15,14 +15,26 @@ export default class Helper {
       'application/pdf',
       'image/jpeg',
       'image/png',
+      'image/jpg',
     ]
     return mimeTypes.includes(lowerCaseType)
   }
 
+  static generateFileExtension(type: string): string {
+    const mimeTypes = {
+      'application/msword': '.doc',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+      'application/pdf': '.pdf',
+      'image/jpeg': '.jpg',
+      'image/png': '.png',
+      'image/jpg': '.jpg'
+    }
+
+    return mimeTypes[type as keyof typeof mimeTypes]
+  }
+
   static generateUploadPath = (): string => {
     const randomId = crypto.randomUUID()
-    const year = new Date().getFullYear()
-    const month = new Date().getMonth()
-    return path.join(__dirname, '..', '..', '..', 'uploads', String(year), String(month), randomId)
+    return path.join(__dirname, '..', '..', '..', '..', '..', 'uploads', randomId)
   }
 }
