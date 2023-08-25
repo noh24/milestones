@@ -5,13 +5,6 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Helper from '@/lib/helper'
 
-const initialUserData: UserData = {
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-}
-
 const SignUp = () => {
   const router = useRouter()
 
@@ -20,7 +13,12 @@ const SignUp = () => {
     router.push('/')
   }
 
-  const [userData, setUserData] = useState<UserData>(initialUserData)
+  const [userData, setUserData] = useState<UserData>({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
   const [error, setError] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
