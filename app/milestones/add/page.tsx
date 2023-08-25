@@ -2,31 +2,26 @@
 
 import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useState, useCallback } from 'react'
 import Helper from '@/lib/helper'
 
-// clean up component
-// rid of useeffect console.log
-// test out form submit handler
-// create loading , error, message state
+const AddMilestones: FC = () => {
+  const { data: session, status } = useSession()
+  console.log('milestone add session', session)
+  if (status !== 'authenticated') redirect('/signin?redirect=milestones/add')
+  
+  const router = useRouter()
 
-const initialMilestoneData: MilestoneData = {
-  title: '',
-  content: '',
-  type: '',
-  date: '',
-}
+  const [milestoneData, setMilestoneData] = useState<MilestoneData>({
+    title: '',
+    content: '',
+    type: '',
+    date: '',
+    document: null,
+  })
 
-const Milestones: FC = () => {
-  const { data: session } = useSession()
-  console.log(session)
-  if (!session) redirect('/signin?redirect=milestones/add')
-
-  const [milestoneData, setMilestoneData] =
-    useState<MilestoneData>(initialMilestoneData)
-
-  useEffect(() => console.log(milestoneData), [milestoneData])
+  useEffect(() => console.log('milestone data', milestoneData), [milestoneData])
 
   const updateMilestoneDataHandler = useCallback(
     (type: keyof MilestoneData) =>
@@ -51,30 +46,33 @@ const Milestones: FC = () => {
       event.preventDefault()
 
       try {
-        const { document } = milestoneData
-        if (document) {
-          const isValid = Helper.validateType(document.type)
+        const formData = new FormData()
+        formData.set('title', milestoneData.title)
+        formData.set('content', milestoneData.content)
+        formData.set('type', milestoneData.type)
+        formData.set('date', milestoneData.date)
+        formData.set('userEmail', session.user?.email!)
+
+        if (milestoneData.document) {
+          const isValid = Helper.validateType(milestoneData.document.type)
           if (!isValid)
             throw new Error('Document type is not acceptable MIME type.')
+          formData.set('document', milestoneData.document)
         }
 
         const response = await fetch('/api/milestones', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(milestoneData),
+          body: formData,
         })
 
         const data = await response.json()
         if (!response.ok) throw new Error(data.error)
-
-        setTimeout(() => redirect('/milestones'), 3000)
+        if (response.ok) setTimeout(() => router.push('/milestones'), 3000)
       } catch (err) {
-        console.log(err)
+        console.log('client component milestones error', err)
       }
     },
-    [milestoneData]
+    [milestoneData, session.user, router]
   )
 
   return (
@@ -110,7 +108,6 @@ const Milestones: FC = () => {
             name='type'
             type='radio'
             required
-            checked
             value='professional'
             onChange={updateMilestoneDataHandler('type')}
           />
@@ -130,7 +127,7 @@ const Milestones: FC = () => {
           <input
             name='document'
             type='file'
-            accept='.doc,.docx,.pdf,.jpeg,.png'
+            accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
             onChange={updateMilestoneDocumentHandler()}
           />
         </label>
@@ -140,4 +137,4 @@ const Milestones: FC = () => {
   )
 }
 
-export default Milestones
+export default AddMilestones
