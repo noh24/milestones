@@ -7,11 +7,11 @@ import Helper from '@/lib/helper'
 
 const SignUp = () => {
   const router = useRouter()
+  const { data: session, status } = useSession()
 
-  const { data: session } = useSession()
-  if (session) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (status === 'authenticated') router.push('/')
+  }, [status, router])
 
   const [userData, setUserData] = useState<UserData>({
     name: '',
@@ -19,6 +19,7 @@ const SignUp = () => {
     password: '',
     confirmPassword: '',
   })
+
   const [error, setError] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)

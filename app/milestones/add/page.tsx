@@ -9,8 +9,11 @@ import Helper from '@/lib/helper'
 const AddMilestones: FC = () => {
   const { data: session, status } = useSession()
   console.log('milestone add session', session)
-  if (status !== 'authenticated') redirect('/signin?redirect=milestones/add')
-  
+
+  useEffect(() => {
+    if (status !== 'authenticated') redirect('/signin?redirect=milestones/add')
+  }, [status])
+
   const router = useRouter()
 
   const [milestoneData, setMilestoneData] = useState<MilestoneData>({
@@ -51,7 +54,7 @@ const AddMilestones: FC = () => {
         formData.set('content', milestoneData.content)
         formData.set('type', milestoneData.type)
         formData.set('date', milestoneData.date)
-        formData.set('userEmail', session.user?.email!)
+        formData.set('userEmail', session?.user?.email!)
 
         if (milestoneData.document) {
           const isValid = Helper.validateType(milestoneData.document.type)
@@ -72,7 +75,7 @@ const AddMilestones: FC = () => {
         console.log('client component milestones error', err)
       }
     },
-    [milestoneData, session.user, router]
+    [milestoneData, session?.user, router]
   )
 
   return (

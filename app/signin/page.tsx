@@ -20,13 +20,10 @@ const SignIn = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? ''
 
-  // Session
   const { status } = useSession()
-
   useEffect(() => {
     if (status === 'authenticated') router.push(`/${redirect}`)
   }, [router, status, redirect])
-  // /Session
 
   const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserData>(initialUserData)
