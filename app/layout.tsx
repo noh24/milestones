@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google'
 import SessionProvider from '@/components/SessionProvider'
 import { Session } from 'next-auth'
 import HeaderNavBar from '../components/HeaderNavBar'
+import QueryClientProvider from '@/components/QueryClientProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,10 +23,12 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          <HeaderNavBar />
-          {children}
-        </SessionProvider>
+        <QueryClientProvider>
+          <SessionProvider session={session}>
+            <HeaderNavBar />
+            {children}
+          </SessionProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
