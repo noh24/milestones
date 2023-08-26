@@ -2,7 +2,7 @@ import './globals.css'
 import React, { FC, ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Provider from '../components/Provider'
+import SessionProvider from '@/components/SessionProvider'
 import { Session } from 'next-auth'
 import HeaderNavBar from '../components/HeaderNavBar'
 
@@ -22,10 +22,10 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <Provider session={session}>
+        <SessionProvider session={session}>
           <HeaderNavBar />
           {children}
-        </Provider>
+        </SessionProvider>
       </body>
     </html>
   )
