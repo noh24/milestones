@@ -3,7 +3,7 @@ import React, { Suspense } from 'react'
 import Loading from '@/app/loading'
 
 export const metadata: Metadata = {
-  title: 'Sign In - Milestones',
+  title: 'Getting Started - Milestones',
 }
 
 const SignInLayout = ({ children }: { children: React.ReactNode }) => {

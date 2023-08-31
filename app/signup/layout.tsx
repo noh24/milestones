@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react'
 import { Metadata } from 'next'
-import Loading from '../loading'
+import Loading from '@/app/loading'
 
 export const metadata: Metadata = {
-  title: 'Sign Up | Milestones',
+  title: 'Sign Up - Milestones',
 }
 
 const SignUpLayout = ({ children }: { children: React.ReactNode }) => {
