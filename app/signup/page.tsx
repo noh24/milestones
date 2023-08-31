@@ -13,7 +13,7 @@ const SignUp = () => {
     if (status === 'authenticated') router.push('/')
   }, [status, router])
 
-  const [userData, setUserData] = useState<UserData>({
+  const [userData, setUserData] = useState<UserSignUpData>({
     name: '',
     email: '',
     password: '',
@@ -25,7 +25,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const updateUserDataHandler = useCallback(
-    (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (type: keyof UserSignUpData) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserData((prevData) => ({ ...prevData, [type]: event.target.value }))
     },
     []
