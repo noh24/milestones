@@ -3,6 +3,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/db'
+import type { User } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -19,7 +20,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const { email, password } = credentials as { email: string; password: string }
 
-        const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/signin`, {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/signin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -30,12 +31,13 @@ export const authOptions: NextAuthOptions = {
           })
         })
 
-        const data = await response.json()
+        const { success, data, err }: { success: boolean, data: User | null, err: null | string } = await res.json()
+        console.log(data)
 
-        if (data.response) {
-          return data.response
+        if (success) {
+          return data
         } else {
-          throw new Error(data.message)
+          throw new Error(err!)
         }
       },
     }),
