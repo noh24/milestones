@@ -5,16 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-type UserData = {
-  email: string
-  password: string
-}
-
-const initialUserData: UserData = {
-  email: '',
-  password: '',
-}
-
 const SignIn = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -26,7 +16,10 @@ const SignIn = () => {
   }, [router, status, redirect])
 
   const [providers, setProviders] = useState<ProvidersType>(null)
-  const [userData, setUserData] = useState<UserData>(initialUserData)
+  const [userData, setUserData] = useState<UserSignInData>({
+    email: '',
+    password: '',
+  })
   const [signInError, setSignInError] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
@@ -36,7 +29,7 @@ const SignIn = () => {
   }, [])
 
   const updateUserDataHandler = useCallback(
-    (type: keyof UserData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (type: keyof UserSignInData) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserData({ ...userData, [type]: event.target.value })
     },
     [userData]
