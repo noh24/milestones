@@ -20,7 +20,7 @@ const getSession = async () => {
 }
 
 const getMilestones = async (email: string) => {
-  const res = await fetch('http://localhost:3000/api/milestones')
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/milestones`)
 
   return res.json()
 }
