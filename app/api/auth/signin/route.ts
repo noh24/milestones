@@ -18,9 +18,9 @@ export async function POST(req: Request) {
 
     if (!validPassword) { throw new Error('Invalid password!') }
 
-    return NextResponse.json({ response: user, message: 'Sign in was successful' }, { status: 200 })
-  } catch (error) {
-    console.error('Sign In Route', error)
-    return NextResponse.json({ response: null, message: `${error}` }, { status: 400 })
+    return NextResponse.json({ success: true, data: user, error: null }, { status: 200 })
+  } catch (err) {
+    console.error('Sign In Route', err)
+    return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
   }
 }
