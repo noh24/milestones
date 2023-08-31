@@ -9,6 +9,9 @@ export async function POST(req: Request) {
     const existingUser = await prisma.user.findFirst({
       where: {
         email
+      },
+      select: {
+        email: true
       }
     })
 
@@ -23,9 +26,9 @@ export async function POST(req: Request) {
       }
     })
 
-    return NextResponse.json({ success: 'User registered successfully' }, { status: 200 })
-  } catch (error) {
-    console.error('Error occured: ', error)
-    return NextResponse.json({ error: `${error}` }, { status: 400 })
+    return NextResponse.json({ success: true, data: null, error: null }, { status: 200 })
+  } catch (err) {
+    console.error('Sign Up Route: ', err)
+    return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
   }
 }
