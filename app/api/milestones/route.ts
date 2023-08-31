@@ -21,7 +21,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, data: milestones, error: null }, { status: 200 })
   } catch (err) {
-    console.log('Milestones Get Error: ', err)
+    console.log('Milestones Get Route: ', err)
     return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
   }
 }
