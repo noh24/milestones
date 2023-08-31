@@ -1,11 +1,16 @@
 // Next Auth Providers
 type ProvidersType = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null
 
-type UserData = {
+type UserSignUpData = {
   name: string
   email: string
   password: string
   confirmPassword: string
+}
+
+type UserSignInData = {
+  email: string
+  password: string
 }
 
 type MilestoneData = {
