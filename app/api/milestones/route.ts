@@ -11,7 +11,14 @@ export async function GET() {
     const session = await getServerSession(authOptions)
     if (!session) throw new Error('You must login')
 
-    const user = await prisma.user.findFirstOrThrow({ where: { email: String(session.user?.email) }, select: { id: true } })
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        email: String(session.user?.email)
+      },
+      select: {
+        id: true
+      }
+    })
 
     const milestones = await prisma.milestone.findMany({
       where: {
@@ -39,7 +46,14 @@ export async function POST(req: Request) {
   }
 
   try {
-    const user = await prisma.user.findFirstOrThrow({ where: { email: userEmail }, select: { id: true } })
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        email: userEmail
+      },
+      select: {
+        id: true
+      }
+    })
 
     let documentPath: string | null = null
 
