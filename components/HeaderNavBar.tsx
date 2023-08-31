@@ -21,6 +21,9 @@ const HeaderNavBar: FC = () => {
             <Link href='/get-started'>Get Started</Link>
           </li>
           <li>
+            <Link href='/milestones'>Milestones</Link>
+          </li>
+          <li>
             <SignOutButton />
           </li>
         </ul>
