@@ -5,15 +5,13 @@ import { writeFile } from 'fs/promises'
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
+// Get
 export async function GET(req: Request) {
   try {
-    // const data = await req.json() 
-    // not sending any data yet
-
     const session = await getServerSession(authOptions)
     if (!session) throw new Error('You must login')
 
-    const user = await prisma.user.findFirstOrThrow({ select: { id: true } })
+    const user = await prisma.user.findFirstOrThrow({ where: { email: String(session.user?.email) }, select: { id: true } })
 
     const milestones = await prisma.milestone.findMany({
       where: {
@@ -28,6 +26,8 @@ export async function GET(req: Request) {
   }
 }
 
+
+// Post
 export async function POST(req: Request) {
   const formData = await req.formData()
   const title = formData.get('title') as string
@@ -38,13 +38,7 @@ export async function POST(req: Request) {
   const document: File | null = formData.get('document') as File
 
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email: userEmail
-      }
-    })
-
-    if (!user) throw new Error('There is no user associated with email provided.')
+    const user = await prisma.user.findFirstOrThrow({ where: { email: userEmail }, select: { id: true } })
 
     let documentPath: string | null = null
 
