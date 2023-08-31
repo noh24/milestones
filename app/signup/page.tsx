@@ -65,7 +65,7 @@ const SignUp = () => {
 
         setMessage(data.success)
 
-        setTimeout(() => router.push('/signIn'), 3000)
+        setTimeout(() => router.push('/signin'), 3000)
       } catch (error) {
         setMessage(`${error}`)
       }
