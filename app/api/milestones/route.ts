@@ -2,36 +2,6 @@ import prisma from "@/db"
 import Helper from "@/lib/helper"
 import { NextResponse } from 'next/server'
 import { writeFile } from 'fs/promises'
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-
-// Get
-export async function GET() {
-  try {
-    const session = await getServerSession(authOptions)
-    if (!session) throw new Error('You must login')
-
-    const user = await prisma.user.findFirstOrThrow({
-      where: {
-        email: String(session.user?.email)
-      },
-      select: {
-        id: true
-      }
-    })
-
-    const milestones = await prisma.milestone.findMany({
-      where: {
-        userId: user!.id
-      }
-    })
-
-    return NextResponse.json({ success: true, data: milestones, error: null }, { status: 200 })
-  } catch (err) {
-    console.log('Milestones Get Route: ', err)
-    return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
-  }
-}
 
 // Post
 export async function POST(req: Request) {
