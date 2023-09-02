@@ -20,3 +20,9 @@ type MilestoneData = {
   date: string
   document: File | Null
 }
+
+interface SignUpAPIResponse {
+  success: boolean
+  data: string | null
+  error: string | null
+}
