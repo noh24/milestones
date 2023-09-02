@@ -3,10 +3,6 @@ import crypto from 'crypto'
 
 export default class Helper {
 
-  static confirmPassword(userData: UserData): boolean {
-    return userData.password === userData.confirmPassword
-  }
-
   static validateType(type: string): boolean {
     const lowerCaseType = type.toLowerCase()
     const mimeTypes = [
