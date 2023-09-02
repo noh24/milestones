@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Helper from '@/lib/helper'
 
 const SignUp = () => {
   const { status } = useSession()
@@ -69,7 +70,7 @@ const SignUp = () => {
         loading: false,
         success: false,
         error: true,
-        message: String(err),
+        message: Helper.sanitizeErrorMessage(String(err)),
       })
     }
   }

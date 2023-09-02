@@ -2,6 +2,11 @@ import path from 'path'
 import crypto from 'crypto'
 
 export default class Helper {
+  
+  static sanitizeErrorMessage(error: string): string {
+    if (error.length <= 'error:'.length) return error
+    return error.split(' ').filter((e) => e.toLowerCase() !== 'error:').join(' ');
+  }
 
   static validateType(type: string): boolean {
     const lowerCaseType = type.toLowerCase()
