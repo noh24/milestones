@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import prisma from '@/db'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse<SignUpAPIResponse>> {
   const { name, email, password } = await req.json()
 
   try {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       }
     })
 
-    return NextResponse.json({ success: true, data: null, error: null }, { status: 200 })
+    return NextResponse.json({ success: true, data: 'Successfully registered user.', error: null }, { status: 200 })
   } catch (err) {
     console.error('Sign Up Route: ', err)
     return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
