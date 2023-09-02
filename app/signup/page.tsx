@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Helper from '@/lib/helper'
 
 const SignUp = () => {
   const { status } = useSession()
@@ -28,40 +27,50 @@ const SignUp = () => {
   })
 
   useEffect(() => {
-    setLocalState((prevState) => ({
-      ...prevState,
+    setLocalState({
+      loading: false,
+      success: false,
       error: userData.password !== userData.confirmPassword,
-    }))
-  }, [userData])
+      message: 'Passwords must match!',
+    })
+  }, [userData.password, userData.confirmPassword])
 
-  const formHandler = () => async (event: React.FormEvent<HTMLFormElement>) => {
+  const formHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setLoading((prevState) => !prevState)
-    setMessage('')
+    setLocalState({
+      loading: true,
+      success: false,
+      error: false,
+      message: '',
+    })
 
     try {
-      const response = await fetch('/api/auth/signup', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: userData.name,
-          email: userData.email,
-          password: userData.password,
-        }),
+        body: JSON.stringify(userData),
       })
-      setLoading((prevState) => !prevState)
 
-      const data = await response.json()
+      const data: SignUpAPIResponse = await res.json()
+      if (!res.ok) throw new Error(data.error!)
 
-      if (!response.ok) throw new Error(data.error)
-
-      setMessage(data.success)
+      setLocalState({
+        loading: false,
+        success: true,
+        error: false,
+        message: data.data!,
+      })
 
       setTimeout(() => router.push('/signin'), 3000)
-    } catch (error) {
-      setMessage(`${error}`)
+    } catch (err) {
+      setLocalState({
+        loading: false,
+        success: false,
+        error: true,
+        message: String(err),
+      })
     }
   }
 
@@ -120,18 +129,17 @@ const SignUp = () => {
             }))
           }
         />
-        <button type='submit' disabled={localState.error || localState.loading}>
+        <button
+          type='submit'
+          disabled={localState.loading || localState.success}
+        >
           Create account
         </button>
       </form>
-      <div>
-        <p className={localState.message ? 'block' : 'hidden'}>
-          {localState.message}
-        </p>
-        <p className={localState.error ? 'block' : 'hidden'}>
-          Passwords must match!
-        </p>
-      </div>
+      <p>
+        {localState.message && localState.success ? localState.message : null}
+        {localState.message && localState.error ? localState.message : null}
+      </p>
     </>
   )
 }
