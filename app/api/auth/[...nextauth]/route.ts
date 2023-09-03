@@ -31,13 +31,11 @@ export const authOptions: NextAuthOptions = {
           })
         })
 
-        const { success, data, err }: { success: boolean, data: User | null, err: null | string } = await res.json()
-        console.log(data)
-
+        const { success, data }: { success: boolean, data: User | null, err: null | string } = await res.json()
         if (success) {
           return data
         } else {
-          throw new Error(err!)
+          return null
         }
       },
     }),
