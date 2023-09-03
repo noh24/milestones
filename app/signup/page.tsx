@@ -20,6 +20,12 @@ const SignUp = () => {
     confirmPassword: '',
   })
 
+  const updateUserData =
+    (type: keyof UserSignUpData) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUserData((prevState) => ({ ...prevState, [type]: e.target.value }))
+    }
+
   const mutation = useMutation({
     mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -37,8 +43,6 @@ const SignUp = () => {
     },
   })
 
-  useEffect(() => console.log(mutation), [mutation])
-
   return (
     <>
       <form onSubmit={mutation.mutate}>
@@ -48,12 +52,7 @@ const SignUp = () => {
           placeholder='Enter your name'
           required
           value={userData.name}
-          onChange={(e) =>
-            setUserData((prevState) => ({
-              ...prevState,
-              name: e.target.value,
-            }))
-          }
+          onChange={updateUserData('name')}
         />
         <input
           name='email'
@@ -61,12 +60,7 @@ const SignUp = () => {
           placeholder='Enter your email'
           required
           value={userData.email}
-          onChange={(e) =>
-            setUserData((prevState) => ({
-              ...prevState,
-              email: e.target.value,
-            }))
-          }
+          onChange={updateUserData('email')}
         />
         <input
           name='password'
@@ -74,12 +68,7 @@ const SignUp = () => {
           placeholder='Enter your password'
           required
           value={userData.password}
-          onChange={(e) =>
-            setUserData((prevState) => ({
-              ...prevState,
-              password: e.target.value,
-            }))
-          }
+          onChange={updateUserData('password')}
         />
         <input
           name='confirmPassword'
@@ -87,12 +76,7 @@ const SignUp = () => {
           placeholder='Re-enter your password'
           required
           value={userData.confirmPassword}
-          onChange={(e) =>
-            setUserData((prevState) => ({
-              ...prevState,
-              confirmPassword: e.target.value,
-            }))
-          }
+          onChange={updateUserData('confirmPassword')}
         />
         <button
           type='submit'
