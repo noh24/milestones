@@ -1,37 +1,35 @@
 'use client'
 
-import { getProviders, signIn, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useQuery } from '@tanstack/react-query'
+import OAuthProviders from './OAuthProviders'
 
 const SignIn = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') ?? ''
-
+  const redirect = useSearchParams().get('redirect') ?? null
   const { status } = useSession()
+
   useEffect(() => {
     if (status === 'authenticated') router.push(`/${redirect}`)
   }, [router, status, redirect])
 
-  const [providers, setProviders] = useState<ProvidersType>(null)
   const [userData, setUserData] = useState<UserSignInData>({
     email: '',
     password: '',
   })
+
   const [signInError, setSignInError] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
 
-  useEffect(() => {
-    getProviders().then((providers) => setProviders(providers))
-  }, [])
-
   const updateUserDataHandler = useCallback(
-    (type: keyof UserSignInData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserData({ ...userData, [type]: event.target.value })
-    },
+    (type: keyof UserSignInData) =>
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData({ ...userData, [type]: event.target.value })
+      },
     [userData]
   )
 
@@ -89,16 +87,7 @@ const SignIn = () => {
         <Link href={'/signup'}>Create an account</Link>
       </div>
       <div>
-        {providers &&
-          Object.values(providers)
-            .filter((provider) => provider.name !== 'Credentials')
-            .map((provider) => (
-              <div key={provider.name}>
-                <button onClick={() => signIn(provider.id)}>
-                  Sign in with {provider.name}
-                </button>
-              </div>
-            ))}
+        <OAuthProviders />
       </div>
     </>
   )
