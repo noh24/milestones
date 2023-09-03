@@ -27,8 +27,7 @@ const SignUp = () => {
     }
 
   const mutation = useMutation({
-    mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+    mutationFn: async () => {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -43,9 +42,14 @@ const SignUp = () => {
     },
   })
 
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    mutation.mutate()
+  }
+
   return (
     <>
-      <form onSubmit={mutation.mutate}>
+      <form onSubmit={onSubmit}>
         <input
           name='name'
           type='text'
