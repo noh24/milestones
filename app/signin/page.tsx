@@ -4,12 +4,12 @@ import { signIn, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import OAuthProviders from './OAuthProviders'
 
 const SignIn = () => {
   const router = useRouter()
-  const redirect = useSearchParams().get('redirect') ?? null
+  const redirect = useSearchParams().get('redirect') ?? ''
   const { status } = useSession()
 
   useEffect(() => {
@@ -53,6 +53,15 @@ const SignIn = () => {
     }
   }
 
+  const query = useMutation({
+    mutationFn: () => {
+      //fill in
+    },
+  })
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  }
   return (
     <>
       <form onSubmit={formHandler}>
