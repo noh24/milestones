@@ -6,6 +6,7 @@ import SessionProvider from '@/components/SessionProvider'
 import { Session } from 'next-auth'
 import HeaderNavBar from '../components/HeaderNavBar'
 import QueryClientProvider from '@/components/QueryClientProvider'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +28,7 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
           <SessionProvider session={session}>
             <HeaderNavBar />
             {children}
+            <ReactQueryDevtools initialIsOpen={false} />
           </SessionProvider>
         </QueryClientProvider>
       </body>
