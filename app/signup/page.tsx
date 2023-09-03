@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Helper from '@/lib/helper'
+import { useMutation } from '@tanstack/react-query'
 
 const SignUp = () => {
   const { status } = useSession()
@@ -20,32 +20,9 @@ const SignUp = () => {
     confirmPassword: '',
   })
 
-  const [localState, setLocalState] = useState({
-    loading: false,
-    success: false,
-    error: false,
-    message: '',
-  })
-
-  useEffect(() => {
-    setLocalState({
-      loading: false,
-      success: false,
-      error: userData.password !== userData.confirmPassword,
-      message: 'Passwords must match!',
-    })
-  }, [userData.password, userData.confirmPassword])
-
-  const formHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setLocalState({
-      loading: true,
-      success: false,
-      error: false,
-      message: '',
-    })
-
-    try {
+  const mutation = useMutation({
+    mutationFn: async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -53,31 +30,18 @@ const SignUp = () => {
         },
         body: JSON.stringify(userData),
       })
-
       const data: SignUpAPIResponse = await res.json()
       if (!res.ok) throw new Error(data.error!)
-
-      setLocalState({
-        loading: false,
-        success: true,
-        error: false,
-        message: data.data!,
-      })
-
       setTimeout(() => router.push('/signin'), 3000)
-    } catch (err) {
-      setLocalState({
-        loading: false,
-        success: false,
-        error: true,
-        message: Helper.sanitizeErrorMessage(String(err)),
-      })
-    }
-  }
+      return data
+    },
+  })
+
+  useEffect(() => console.log(mutation), [mutation])
 
   return (
     <>
-      <form onSubmit={formHandler}>
+      <form onSubmit={mutation.mutate}>
         <input
           name='name'
           type='text'
@@ -132,14 +96,14 @@ const SignUp = () => {
         />
         <button
           type='submit'
-          disabled={localState.loading || localState.success}
+          disabled={mutation.isLoading || mutation.isSuccess}
         >
-          Create account
+          Create Account
         </button>
       </form>
       <p>
-        {localState.message && localState.success ? localState.message : null}
-        {localState.message && localState.error ? localState.message : null}
+        {mutation.isSuccess ? mutation.data.data : null}
+        {mutation.isError ? (mutation.error as Error).message : null}
       </p>
     </>
   )
