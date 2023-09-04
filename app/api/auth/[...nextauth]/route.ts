@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/db'
 import type { User } from '@prisma/client'
+import Helper from '@/lib/helper'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -31,11 +32,11 @@ export const authOptions: NextAuthOptions = {
           })
         })
 
-        const { success, data }: { success: boolean, data: User | null, err: null | string } = await res.json()
-        if (success) {
-          return data
+        const { data, error }: { success: boolean, data: User | null, error: null | string } = await res.json()
+        if (error) {
+          throw new Error(Helper.sanitizeErrorMessage(error))
         } else {
-          return null
+          return data
         }
       },
     }),
