@@ -1,20 +1,21 @@
 'use client'
 
-import { signIn, useSession } from 'next-auth/react'
-import React, { useEffect, useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import OAuthProviders from './OAuthProviders'
+import { signInWithProviders, getAllProviders } from './lib'
+import Loading from '../loading'
 
 const SignIn = () => {
   const { status } = useSession()
   const router = useRouter()
   const redirect = useSearchParams().get('redirect') ?? ''
 
-  // useEffect(() => {
-  //   if (status === 'authenticated') router.push(`/${redirect}`)
-  // }, [router, status, redirect])
+  useEffect(() => {
+    if (status === 'authenticated') router.push(`/${redirect}`)
+  }, [status, router, redirect])
 
   const [userData, setUserData] = useState<UserSignInData>({
     email: '',
@@ -27,35 +28,26 @@ const SignIn = () => {
       setUserData({ ...userData, [type]: event.target.value })
     }
 
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const res = await signIn('credentials', {
-        email: userData.email,
-        password: userData.password,
-        callbackUrl: '/',
-        redirect: false,
-      })
-      if (res?.error) {
-        throw new Error('You have entered the wrong email or password.')
-      }
-    },
+  const providers = useQuery({
+    queryKey: ['providers'],
+    queryFn: getAllProviders,
   })
+  
+  const mutation = useMutation(signInWithProviders)
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    mutation.mutate()
+  const onSignIn = (providerId: string) => {
+    mutation.mutate({ providerId, userData })
   }
 
-  const countRef = useRef(0)
-  useEffect(() => {
-    countRef.current++
-    console.log(countRef, mutation)
-  }, [mutation])
-  
-  if (mutation.isLoading) return (<div>Attemping to sign in...</div>)
+  if (providers.isLoading) return <Loading />
+  if (mutation.isLoading) return <div>Attemping to sign in...</div>
+  if (mutation.isSuccess) return <div>Successful sign in. Redirecting...</div>
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <div>
+        <Link href={'/signup'}>Create an account</Link>
+      </div>
+      <form>
         <input
           name='email'
           type='text'
@@ -70,21 +62,23 @@ const SignIn = () => {
           value={userData.password}
           onChange={updateUserData('password')}
         />
-        <button
-          type='submit'
-          disabled={mutation.isLoading || mutation.isSuccess}
-        >
-          Sign in with Credentials
-        </button>
       </form>
       <div>
         <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
       </div>
       <div>
-        <Link href={'/signup'}>Create an account</Link>
-      </div>
-      <div>
-        <OAuthProviders />
+        {providers.data &&
+          providers.data.map((provider) => (
+            <div key={provider.name}>
+              <button
+                disabled={mutation.isLoading || mutation.isSuccess}
+                onClick={() => onSignIn(provider.id)}
+              >
+                Sign in with {provider.name}
+              </button>
+            </div>
+          ))}
+        <p>{providers.error ? (providers.error as Error).message : null}</p>
       </div>
     </>
   )
