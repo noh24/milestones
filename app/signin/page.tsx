@@ -12,18 +12,14 @@ const SignIn = () => {
   const router = useRouter()
   const redirect = useSearchParams().get('redirect') ?? ''
 
-  useEffect(() => {
-    if (status === 'authenticated') router.push(`/${redirect}`)
-  }, [router, status, redirect])
+  // useEffect(() => {
+  //   if (status === 'authenticated') router.push(`/${redirect}`)
+  // }, [router, status, redirect])
 
   const [userData, setUserData] = useState<UserSignInData>({
     email: '',
     password: '',
   })
-
-  const [signInError, setSignInError] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>('')
 
   const updateUserData =
     (type: keyof UserSignInData) =>
@@ -39,11 +35,8 @@ const SignIn = () => {
         callbackUrl: '/',
         redirect: false,
       })
-      console.log('signIn res: ', res)
       if (res?.error) {
-        throw new Error(String(res?.error))
-      } else {
-        router.push(`${res?.url}/${redirect}`)
+        throw new Error('You have entered the wrong email or password.')
       }
     },
   })
@@ -58,7 +51,8 @@ const SignIn = () => {
     countRef.current++
     console.log(countRef, mutation)
   }, [mutation])
-
+  
+  if (mutation.isLoading) return (<div>Attemping to sign in...</div>)
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -76,13 +70,15 @@ const SignIn = () => {
           value={userData.password}
           onChange={updateUserData('password')}
         />
-        <button type='submit' disabled={loading}>
+        <button
+          type='submit'
+          disabled={mutation.isLoading || mutation.isSuccess}
+        >
           Sign in with Credentials
         </button>
       </form>
       <div>
-        <p className={signInError ? 'block' : 'hidden'}></p>
-        <p>{message}</p>
+        <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
       </div>
       <div>
         <Link href={'/signup'}>Create an account</Link>
