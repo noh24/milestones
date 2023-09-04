@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { getProviders, signIn } from 'next-auth/react'
-import Loading from '@/app/loading'
 
 const useQueryProviders = () => {
   const providers = useQuery({
@@ -15,22 +14,6 @@ const useQueryProviders = () => {
   })
 
   return providers
-
-
-  // if (providers.isLoading) return <Loading />
-  // return (
-  //   <>
-  //     {providers.data &&
-  //       providers.data.map((provider) => (
-  //         <div key={provider.name}>
-  //           <button onClick={() => signIn(provider.id)}>
-  //             Sign in with {provider.name}
-  //           </button>
-  //         </div>
-  //       ))}
-  //     <p>{providers.error ? (providers.error as Error).message : null}</p>
-  //   </>
-  // )
 }
 
 export default useQueryProviders
