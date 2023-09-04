@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
 
         const { data, error }: { success: boolean, data: User | null, error: null | string } = await res.json()
         if (error) {
-          throw new Error(Helper.sanitizeErrorMessage(error))
+          return null
         } else {
           return data
         }
