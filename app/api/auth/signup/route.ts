@@ -3,7 +3,7 @@ import prisma from '@/db'
 import { NextResponse } from 'next/server'
 import Helper from '@/lib/helper'
 
-export async function POST(req: Request): Promise<NextResponse<SignUpAPIResponse>> {
+export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse>> {
   const { name, email, password, confirmPassword } = await req.json()
 
   try {
