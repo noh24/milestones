@@ -35,7 +35,7 @@ const SignUp = () => {
         },
         body: JSON.stringify(userData),
       })
-      const data: SignUpAPIResponse = await res.json()
+      const data: SignUpApiResponse = await res.json()
       if (!res.ok) throw new Error(data.error!)
       setTimeout(() => router.push('/signin'), 3000)
       return data
