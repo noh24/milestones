@@ -38,7 +38,7 @@ export async function POST(req: Request): Promise<NextResponse<MilestoneApiRespo
       await writeFile(documentPath, buffer)
     }
 
-    const newMilestone = await prisma.milestone.create({
+    await prisma.milestone.create({
       data: {
         ...formData,
         userId: user.id,
@@ -46,7 +46,7 @@ export async function POST(req: Request): Promise<NextResponse<MilestoneApiRespo
       }
     })
 
-    return NextResponse.json({ success: true, data: newMilestone, error: null }, { status: 200 })
+    return NextResponse.json({ success: true, data: 'Successfully added milestone!', error: null }, { status: 200 })
   } catch (err) {
     console.log('Milestone Add Route', err)
     return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
