@@ -3,7 +3,7 @@
 import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Helper from '@/lib/helper'
 
 const AddMilestones: FC = () => {
@@ -23,68 +23,62 @@ const AddMilestones: FC = () => {
     document: null,
   })
 
-  const updateMilestoneDataHandler = useCallback(
+  const onUpdateMilestoneData =
     (type: keyof MilestoneData) =>
-      (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-        setMilestoneData((prevState) => ({
-          ...prevState,
-          [type]: event.target.value,
-        })),
-    []
-  )
-  const updateMilestoneDocumentHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setMilestoneData((prevState) => ({
+        ...prevState,
+        [type]: event.target.value,
+      }))
+
+  const onUpdateMilestoneDocument =
     () => (event: React.ChangeEvent<HTMLInputElement>) =>
       setMilestoneData((prevState) => ({
         ...prevState,
         document: event.target.files![0],
-      })),
-    []
-  )
+      }))
 
-  const submitHandler = useCallback(
-    () => async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-      try {
-        const formData = new FormData()
-        formData.set('title', milestoneData.title)
-        formData.set('content', milestoneData.content)
-        formData.set('type', milestoneData.type)
-        formData.set('date', milestoneData.date)
-        formData.set('userEmail', session?.user?.email!)
+    try {
+      const formData = new FormData()
+      formData.set('title', milestoneData.title)
+      formData.set('content', milestoneData.content)
+      formData.set('type', milestoneData.type)
+      formData.set('date', milestoneData.date)
+      formData.set('userEmail', session?.user?.email!)
 
-        if (milestoneData.document) {
-          const isValid = Helper.validateType(milestoneData.document.type)
-          if (!isValid)
-            throw new Error('Document type is not acceptable MIME type.')
-          formData.set('document', milestoneData.document)
-        }
-
-        const response = await fetch('/api/milestones', {
-          method: 'POST',
-          body: formData,
-        })
-
-        const data = await response.json()
-        if (!response.ok) throw new Error(data.error)
-        if (response.ok) setTimeout(() => router.push('/milestones'), 3000)
-      } catch (err) {
-        console.log('client component milestones error', err)
+      if (milestoneData.document) {
+        const isValid = Helper.validateType(milestoneData.document.type)
+        if (!isValid)
+          throw new Error('Document type is not acceptable MIME type.')
+        formData.set('document', milestoneData.document)
       }
-    },
-    [milestoneData, session?.user, router]
-  )
+
+      const response = await fetch('/api/milestones', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
+      if (response.ok) setTimeout(() => router.push('/milestones'), 3000)
+    } catch (err) {
+      console.log('client component milestones error', err)
+    }
+  }
 
   return (
     <>
-      <form onSubmit={submitHandler()}>
+      <form onSubmit={submitHandler}>
         <input
           name='title'
           type='text'
           placeholder='Title'
           required
           value={milestoneData.title}
-          onChange={updateMilestoneDataHandler('title')}
+          onChange={onUpdateMilestoneData('title')}
         />
         <label>
           Select Date:
@@ -93,7 +87,7 @@ const AddMilestones: FC = () => {
             type='date'
             required
             value={milestoneData.date}
-            onChange={updateMilestoneDataHandler('date')}
+            onChange={onUpdateMilestoneData('date')}
           />
         </label>
         <textarea
@@ -101,7 +95,7 @@ const AddMilestones: FC = () => {
           placeholder='Enter details'
           required
           value={milestoneData.content}
-          onChange={updateMilestoneDataHandler('content')}
+          onChange={onUpdateMilestoneData('content')}
         />
         <label>
           <input
@@ -109,7 +103,7 @@ const AddMilestones: FC = () => {
             type='radio'
             required
             value='professional'
-            onChange={updateMilestoneDataHandler('type')}
+            onChange={onUpdateMilestoneData('type')}
           />
           Professional
         </label>
@@ -118,7 +112,7 @@ const AddMilestones: FC = () => {
             name='type'
             type='radio'
             value='personal'
-            onChange={updateMilestoneDataHandler('type')}
+            onChange={onUpdateMilestoneData('type')}
           />
           Personal
         </label>
@@ -128,7 +122,7 @@ const AddMilestones: FC = () => {
             name='document'
             type='file'
             accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
-            onChange={updateMilestoneDocumentHandler()}
+            onChange={onUpdateMilestoneDocument()}
           />
         </label>
         <button type='submit'>Add Milestone</button>
