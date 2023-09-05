@@ -113,6 +113,10 @@ const AddMilestones: FC = () => {
           Add Milestone
         </button>
       </form>
+      <p>
+        {mutation.isSuccess ? mutation.data : null}
+        {mutation.isError ? (mutation.error as Error).message : null}
+      </p>
     </>
   )
 }
