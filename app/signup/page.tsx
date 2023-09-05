@@ -35,8 +35,8 @@ const SignUp = () => {
         },
         body: JSON.stringify(userData),
       })
-      const data: SignUpApiResponse = await res.json()
-      if (!res.ok) throw new Error(data.error!)
+      const { success, data, error }: SignUpApiResponse = await res.json()
+      if (!res.ok) throw new Error(error!)
       setTimeout(() => router.push('/signin'), 3000)
       return data
     },
@@ -90,7 +90,7 @@ const SignUp = () => {
         </button>
       </form>
       <p>
-        {mutation.isSuccess ? mutation.data.data : null}
+        {mutation.isSuccess ? mutation.data : null}
         {mutation.isError ? (mutation.error as Error).message : null}
       </p>
     </>
