@@ -22,7 +22,7 @@ const AddMilestones: FC = () => {
     content: '',
     type: '',
     date: '',
-    document: null,
+    document: '',
     userEmail: session?.user?.email!,
   })
 
