@@ -3,19 +3,19 @@ import Helper from "@/lib/helper"
 import { NextResponse } from 'next/server'
 import { writeFile } from 'fs/promises'
 
-// Post
 export async function POST(req: Request): Promise<NextResponse<MilestoneApiResponse>> {
-  const res = await req.formData()
-  const userEmail = res.get('userEmail') as string
-  const formData = {
-    title: res.get('title') as string,
-    content: res.get('content') as string,
-    type: res.get('type') as string,
-    date: new Date(res.get('date') as string).toISOString(),
-    document: res.get('document') as File | null,
-  }
-
   try {
+    const res = await req.formData()
+
+    const formData = {
+      title: res.get('title') as string,
+      content: res.get('content') as string,
+      type: res.get('type') as string,
+      date: new Date(res.get('date') as string).toISOString(),
+      document: res.get('document') as Blob | null,
+    }
+    const userEmail = res.get('userEmail') as string
+
     const user = await prisma.user.findFirstOrThrow({
       where: {
         email: userEmail
@@ -25,11 +25,16 @@ export async function POST(req: Request): Promise<NextResponse<MilestoneApiRespo
       }
     })
 
-    let documentPath: string | null = null
+    let documentPath: string = ''
 
     if (formData.document) {
-      const isValid = Helper.validateType(formData.document?.type)
-      if (!isValid) throw new Error('Document type is not acceptable MIME type.')
+      if (!Helper.validateType(formData.document?.type)) {
+        throw new Error('Document type is not acceptable MIME type.')
+      }
+
+      if (Helper.validateDocumentSize(formData.document?.size)) {
+        throw new Error('File is too large. Maximum file size is 5MB.')
+      }
 
       const arrayBuffer = await formData.document.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
