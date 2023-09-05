@@ -9,7 +9,7 @@ export const getAllProviders = async () => {
 export const signInWithProviders = async ({
   providerId, userData
 }: {
-  providerId?: string
+  providerId: string
   userData: UserSignInData
 }) => {
   if (providerId === 'credentials') {
