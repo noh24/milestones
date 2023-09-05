@@ -19,6 +19,7 @@ type MilestoneData = {
   type: string
   date: string
   document: File | Null
+  userEmail: string
 }
 
 interface SignUpAPIResponse {
