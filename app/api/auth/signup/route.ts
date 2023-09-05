@@ -4,9 +4,9 @@ import { NextResponse } from 'next/server'
 import Helper from '@/_utils/helper'
 
 export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse>> {
-  const { name, email, password, confirmPassword } = await req.json()
-
   try {
+    const { name, email, password, confirmPassword } = await req.json()
+
     if (password !== confirmPassword) throw new Error('Passwords must match!')
 
     const existingUser = await prisma.user.findFirst({
