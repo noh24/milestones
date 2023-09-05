@@ -24,20 +24,9 @@ interface SignUpApiResponse {
   data: string | null
   error: string | null
 }
-type Milestone = {
-  id: string
-  date: Date
-  createdAt: Date
-  updatedAt: Date
-  title: string
-  content: string
-  type: string
-  document: string | null
-  userId: string
-}
 
 interface MilestoneApiResponse {
   success: boolean
-  data: Milestone | null
+  data: string | null
   error: string | null
 }
