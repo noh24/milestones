@@ -2,19 +2,18 @@
 
 import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState, useCallback } from 'react'
 import Helper from '@/lib/helper'
 
 const AddMilestones: FC = () => {
   const { data: session, status } = useSession()
-  console.log('milestone add session', session)
+  const router = useRouter()
 
   useEffect(() => {
-    if (status !== 'authenticated') redirect('/signin?redirect=milestones/add')
-  }, [status])
-
-  const router = useRouter()
+    if (status !== 'authenticated')
+      router.push('/signin?redirect=milestones/add')
+  }, [status, router])
 
   const [milestoneData, setMilestoneData] = useState<MilestoneData>({
     title: '',
