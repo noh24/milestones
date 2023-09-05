@@ -15,7 +15,7 @@ type MilestoneData = {
   content: string
   type: string
   date: string
-  document: File | Null
+  document: File | null
   userEmail: string
 }
 
