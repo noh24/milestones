@@ -98,7 +98,7 @@ const AddMilestones: FC = () => {
           Personal
         </label>
         <label>
-          Upload an image or file:
+          Upload an image or file (Maximum file size: 5MB):
           <input
             name='document'
             type='file'
