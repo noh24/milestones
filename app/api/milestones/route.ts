@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { writeFile } from 'fs/promises'
 
 // Post
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse<MilestoneApiResponse>> {
   const res = await req.formData()
   const userEmail = res.get('userEmail') as string
   const formData = {
