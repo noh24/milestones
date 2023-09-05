@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { email, password } = await req.json()
-
   try {
+    const { email, password } = await req.json()
+
     const user = await prisma.user.findFirst({
       where: {
         email
