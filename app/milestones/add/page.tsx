@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { createMilestone } from './lib'
+import { createMilestone } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
 

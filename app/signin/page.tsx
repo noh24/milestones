@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { signInWithProviders, getAllProviders } from './lib'
+import { signInWithProviders, getAllProviders } from './_utils'
 import Loading from '../loading'
 
 const SignIn = () => {

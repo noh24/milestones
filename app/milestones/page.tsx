@@ -4,7 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import type { Session } from 'next-auth'
 import type { Milestone } from '@prisma/client'
-import prisma from '@/db'
+import prisma from '@/prisma/db'
 
 const Milestones: FC = async () => {
   const data = await getMilestones()

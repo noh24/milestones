@@ -2,9 +2,9 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import prisma from '@/db'
+import prisma from '@/prisma/db'
 import type { User } from '@prisma/client'
-import Helper from '@/lib/helper'
+import Helper from '@/_utils/helper'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },

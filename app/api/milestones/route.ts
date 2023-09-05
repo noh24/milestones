@@ -1,5 +1,5 @@
-import prisma from "@/db"
-import Helper from "@/lib/helper"
+import prisma from "@/prisma/db"
+import Helper from "@/_utils/helper"
 import { NextResponse } from 'next/server'
 import { writeFile } from 'fs/promises'
 
