@@ -21,8 +21,8 @@ export default class Helper {
     return mimeTypes.includes(lowerCaseType)
   }
 
-  static validateFileSize(fileSize: number): boolean {
-    return fileSize <= 5 * 1024 * 1024 //max 5mb * 1024 kilobyte in mb * 1024 byte in kilobyte
+  static validateDocumentSize(documentSize: number): boolean {
+    return documentSize <= 5 * 1024 * 1024 //max 5mb * 1024 kilobyte in mb * 1024 byte in kilobyte
   }
 
   static generateFileExtension(type: string): string {
