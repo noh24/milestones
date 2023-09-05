@@ -8,20 +8,12 @@ export const createMilestone = async ({
   milestoneData: MilestoneData
   router: AppRouterInstance
 }) => {
-  if (milestoneData.document.type) {
-    if (!Helper.validateType(milestoneData.document.type)) {
-      throw new Error(
-        "Submitted document's type is not an acceptable MIME type. "
-      )
-    }
-  }
-
   const formData = new FormData()
   Object.entries(milestoneData).forEach((keyValuePair) => {
     formData.set(keyValuePair[0], keyValuePair[1])
   })
 
-  const res = await fetch('api/milestones', {
+  const res = await fetch('/api/milestones', {
     method: 'POST',
     body: formData,
   })
@@ -29,7 +21,7 @@ export const createMilestone = async ({
   const { success, data, error }: MilestoneApiResponse = await res.json()
 
   if (!res.ok) {
-    throw new Error(error!)
+    throw new Error(Helper.sanitizeErrorMessage(error!))
   } else {
     setTimeout(() => router.push('/milestones'), 3000)
     return data
