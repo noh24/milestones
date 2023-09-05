@@ -23,8 +23,6 @@ const AddMilestones: FC = () => {
     document: null,
   })
 
-  useEffect(() => console.log('milestone data', milestoneData), [milestoneData])
-
   const updateMilestoneDataHandler = useCallback(
     (type: keyof MilestoneData) =>
       (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
