@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createMilestone } from './lib'
 import { useMutation } from '@tanstack/react-query'
+import Loading from '@/app/loading'
 
 const AddMilestones: FC = () => {
   const { data: session, status } = useSession()
@@ -48,6 +49,7 @@ const AddMilestones: FC = () => {
     mutation.mutate({ milestoneData, router })
   }
 
+  if (mutation.isLoading) return <Loading />
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -104,7 +106,12 @@ const AddMilestones: FC = () => {
             onChange={onUpdateMilestoneDocument}
           />
         </label>
-        <button type='submit'>Add Milestone</button>
+        <button
+          type='submit'
+          disabled={mutation.isLoading || mutation.isSuccess}
+        >
+          Add Milestone
+        </button>
       </form>
     </>
   )
