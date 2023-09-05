@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Helper from '@/lib/helper'
+import { useMutation } from '@tanstack/react-query'
 
 const AddMilestones: FC = () => {
   const { data: session, status } = useSession()
@@ -21,6 +22,7 @@ const AddMilestones: FC = () => {
     type: '',
     date: '',
     document: null,
+    userEmail: session?.user?.email!,
   })
 
   const onUpdateMilestoneData =
@@ -38,40 +40,49 @@ const AddMilestones: FC = () => {
         document: event.target.files![0],
       }))
 
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    try {
-      const formData = new FormData()
-      formData.set('title', milestoneData.title)
-      formData.set('content', milestoneData.content)
-      formData.set('type', milestoneData.type)
-      formData.set('date', milestoneData.date)
-      formData.set('userEmail', session?.user?.email!)
-
-      if (milestoneData.document) {
-        const isValid = Helper.validateType(milestoneData.document.type)
-        if (!isValid)
-          throw new Error('Document type is not acceptable MIME type.')
-        formData.set('document', milestoneData.document)
+  const createMilestone = async ({
+    milestoneData,
+  }: {
+    milestoneData: MilestoneData
+  }) => {
+    if (milestoneData.document.type) {
+      if (!Helper.validateType(milestoneData.document.type)) {
+        throw new Error(
+          "Submitted document's type is not an acceptable MIME type. "
+        )
       }
-
-      const response = await fetch('/api/milestones', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error)
-      if (response.ok) setTimeout(() => router.push('/milestones'), 3000)
-    } catch (err) {
-      console.log('client component milestones error', err)
     }
+
+    const formData = new FormData()
+    Object.entries(milestoneData).forEach((keyValuePair) => {
+      formData.set(keyValuePair[0], keyValuePair[1])
+    })
+
+    const res = await fetch('api/milestones', {
+      method: 'POST',
+      body: formData,
+    })
+
+    const { success, data, error }: MilestoneApiResponse = await res.json()
+
+    if (!res.ok) {
+      throw new Error(error!)
+    } else {
+      setTimeout(() => router.push('/milestones'), 3000)
+      return data
+    }
+  }
+
+  const mutation = useMutation(createMilestone)
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    mutation.mutate({ milestoneData })
   }
 
   return (
     <>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={onSubmit}>
         <input
           name='title'
           type='text'
