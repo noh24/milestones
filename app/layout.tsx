@@ -1,5 +1,5 @@
 import './globals.css'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import SessionProvider from '@/components/SessionProvider'
@@ -7,6 +7,7 @@ import { Session } from 'next-auth'
 import HeaderNavBar from '../components/HeaderNavBar'
 import QueryClientProvider from '@/components/QueryClientProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import Loading from './loading'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +28,7 @@ const RootLayout: FC<TProps> = ({ children, session }) => {
         <QueryClientProvider>
           <SessionProvider session={session}>
             <HeaderNavBar />
-            {children}
+            <Suspense fallback={<Loading />}>{children}</Suspense>
             <ReactQueryDevtools initialIsOpen={false} />
           </SessionProvider>
         </QueryClientProvider>
