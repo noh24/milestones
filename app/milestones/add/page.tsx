@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import Helper from '@/lib/helper'
+import { createMilestone } from './lib'
 import { useMutation } from '@tanstack/react-query'
 
 const AddMilestones: FC = () => {
@@ -33,51 +33,19 @@ const AddMilestones: FC = () => {
         [type]: event.target.value,
       }))
 
-  const onUpdateMilestoneDocument =
-    () => (event: React.ChangeEvent<HTMLInputElement>) =>
-      setMilestoneData((prevState) => ({
-        ...prevState,
-        document: event.target.files![0],
-      }))
-
-  const createMilestone = async ({
-    milestoneData,
-  }: {
-    milestoneData: MilestoneData
-  }) => {
-    if (milestoneData.document.type) {
-      if (!Helper.validateType(milestoneData.document.type)) {
-        throw new Error(
-          "Submitted document's type is not an acceptable MIME type. "
-        )
-      }
-    }
-
-    const formData = new FormData()
-    Object.entries(milestoneData).forEach((keyValuePair) => {
-      formData.set(keyValuePair[0], keyValuePair[1])
-    })
-
-    const res = await fetch('api/milestones', {
-      method: 'POST',
-      body: formData,
-    })
-
-    const { success, data, error }: MilestoneApiResponse = await res.json()
-
-    if (!res.ok) {
-      throw new Error(error!)
-    } else {
-      setTimeout(() => router.push('/milestones'), 3000)
-      return data
-    }
-  }
+  const onUpdateMilestoneDocument = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) =>
+    setMilestoneData((prevState) => ({
+      ...prevState,
+      document: event.target.files![0],
+    }))
 
   const mutation = useMutation(createMilestone)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate({ milestoneData })
+    mutation.mutate({ milestoneData, router })
   }
 
   return (
@@ -133,7 +101,7 @@ const AddMilestones: FC = () => {
             name='document'
             type='file'
             accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
-            onChange={onUpdateMilestoneDocument()}
+            onChange={onUpdateMilestoneDocument}
           />
         </label>
         <button type='submit'>Add Milestone</button>
