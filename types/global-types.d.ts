@@ -19,9 +19,25 @@ type MilestoneData = {
   userEmail: string
 }
 
+type User = {
+  id: string
+  name: string
+  email: string
+  isAdmin: boolean
+  password: string | null
+  emailVerified: Date | null
+  image: string | null
+}
+
 interface SignUpApiResponse {
   success: boolean
   data: string | null
+  error: string | null
+}
+
+interface SignInApiResponse {
+  success: boolean
+  data: User | null
   error: string | null
 }
 

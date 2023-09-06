@@ -3,8 +3,6 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/prisma/db'
-import type { User } from '@prisma/client'
-import Helper from '@/_utils/helper'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -32,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           })
         })
 
-        const { data, error }: { success: boolean, data: User | null, error: null | string } = await res.json()
+        const { data, error }: SignInApiResponse = await res.json()
         if (error) {
           return null
         } else {
