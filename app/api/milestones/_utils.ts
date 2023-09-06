@@ -9,7 +9,7 @@ export const parseFormData = (formData: FormData) => ({
   content: formData.get('content') as string,
   type: formData.get('type') as string,
   date: new Date(formData.get('date') as string).toISOString(),
-  document: formData.get('document') as File | null
+  document: formData.get('document') as File | string
 })
 
 export const uploadDocumentHandler = async (document: File): Promise<string> => {
