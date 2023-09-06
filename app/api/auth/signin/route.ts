@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json()
+    const { email, password }: UserSignInData = await req.json()
 
     const user = await prisma.user.findFirst({
       where: {
