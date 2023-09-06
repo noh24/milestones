@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt'
 import prisma from '@/prisma/db'
 import { NextResponse } from 'next/server'
-import Helper from '@/_utils/helper'
 
 export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse>> {
   try {
@@ -32,6 +31,6 @@ export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse
     return NextResponse.json({ success: true, data: 'User has been successfully registered!', error: null }, { status: 200 })
   } catch (err) {
     console.error('Sign Up Route: ', err)
-    return NextResponse.json({ success: false, data: null, error: Helper.sanitizeErrorMessage(String(err)) }, { status: 400 })
+    return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
   }
 }
