@@ -41,7 +41,7 @@ interface SignInApiResponse {
   error: string | null
 }
 
-interface MilestoneApiResponse {
+interface CreateMilestoneApiResponse {
   success: boolean
   data: string | null
   error: string | null

@@ -18,7 +18,7 @@ export const createMilestone = async ({
     body: formData,
   })
 
-  const { success, data, error }: MilestoneApiResponse = await res.json()
+  const { success, data, error }: CreateMilestoneApiResponse = await res.json()
 
   if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))
