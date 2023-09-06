@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import type { Session } from 'next-auth'
 import prisma from '@/prisma/db'
 import Helper from '@/_utils/helper'
+import Link from 'next/link'
 
 const Milestones: FC = async () => {
   const { success, data, error } = await getMilestones()
@@ -12,10 +13,13 @@ const Milestones: FC = async () => {
   if (error) return <div>{String(error)}</div>
   if (success && data!.length === 0) {
     return (
-      <div>
-        There are no milestones associated to this account. Please add your
-        first milestone!
-      </div>
+      <>
+        <div>
+          There are no milestones associated to this account. Please add your
+          first milestone!
+        </div>
+        <Link href='/milestones/add'>Add Milestones</Link>
+      </>
     )
   }
   return (
