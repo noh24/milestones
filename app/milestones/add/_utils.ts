@@ -5,7 +5,7 @@ export const createMilestone = async ({
   milestoneData,
   router
 }: {
-  milestoneData: MilestoneData
+  milestoneData: MilestoneFormData
   router: AppRouterInstance
 }) => {
   const formData = new FormData()

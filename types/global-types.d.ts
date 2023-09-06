@@ -10,7 +10,7 @@ type UserSignInData = {
   password: string
 }
 
-type MilestoneData = {
+type MilestoneFormData = {
   title: string
   content: string
   type: string

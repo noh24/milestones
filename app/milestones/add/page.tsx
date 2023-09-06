@@ -17,7 +17,7 @@ const AddMilestones: FC = () => {
       router.push('/signin?redirect=milestones/add')
   }, [status, router])
 
-  const [milestoneData, setMilestoneData] = useState<MilestoneData>({
+  const [milestoneData, setMilestoneData] = useState<MilestoneFormData>({
     title: '',
     content: '',
     type: '',
@@ -27,7 +27,7 @@ const AddMilestones: FC = () => {
   })
 
   const onUpdateMilestoneData =
-    (type: keyof MilestoneData) =>
+    (type: keyof MilestoneFormData) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setMilestoneData((prevState) => ({
         ...prevState,
