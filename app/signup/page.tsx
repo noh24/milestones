@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '../loading'
-import { signUpUser } from './lib'
+import { signUpUser } from './_utils'
 
 const SignUp = () => {
   const { status } = useSession()
