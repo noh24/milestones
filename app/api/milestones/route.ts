@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     let documentPath: string = ''
 
-    if (milestoneData.document) {
+    if (milestoneData.document instanceof File) {
       documentPath = await uploadDocumentHandler(milestoneData.document)
     }
 
