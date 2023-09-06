@@ -29,7 +29,7 @@ export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse
       }
     })
 
-    return NextResponse.json({ success: true, data: 'Successfully registered user.', error: null }, { status: 200 })
+    return NextResponse.json({ success: true, data: 'User has been successfully registered!', error: null }, { status: 200 })
   } catch (err) {
     console.error('Sign Up Route: ', err)
     return NextResponse.json({ success: false, data: null, error: Helper.sanitizeErrorMessage(String(err)) }, { status: 400 })
