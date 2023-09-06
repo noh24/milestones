@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '../loading'
+import { signUpUser } from './lib'
 
 const SignUp = () => {
   const { status } = useSession()
@@ -27,25 +28,11 @@ const SignUp = () => {
       setUserData((prevState) => ({ ...prevState, [type]: e.target.value }))
     }
 
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      })
-      const { success, data, error }: SignUpApiResponse = await res.json()
-      if (!res.ok) throw new Error(error!)
-      setTimeout(() => router.push('/signin'), 3000)
-      return data
-    },
-  })
+  const mutation = useMutation(signUpUser)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate()
+    mutation.mutate({ userData, router })
   }
 
   if (mutation.isLoading) return <Loading />
