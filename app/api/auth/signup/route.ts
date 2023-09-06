@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, confirmPassword } = await req.json()
+    const { name, email, password, confirmPassword }: UserSignUpData = await req.json()
 
     if (password !== confirmPassword) throw new Error('Passwords must match!')
 
