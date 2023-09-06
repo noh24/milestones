@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import prisma from '@/prisma/db'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: Request): Promise<NextResponse<SignUpApiResponse>> {
+export async function POST(req: Request) {
   try {
     const { name, email, password, confirmPassword } = await req.json()
 

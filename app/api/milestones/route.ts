@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { parseFormData, uploadDocumentHandler } from "./_utils"
 
 
-export async function POST(req: Request): Promise<NextResponse<MilestoneApiResponse>> {
+export async function POST(req: Request) {
   try {
     const formData = await req.formData()
     const userEmail = formData.get('userEmail') as string
