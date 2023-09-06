@@ -32,7 +32,7 @@ const SignIn = () => {
     queryKey: ['providers'],
     queryFn: getAllProviders,
   })
-  
+
   const mutation = useMutation(signInWithProviders)
 
   const onSignIn = (providerId: string) => {
@@ -41,7 +41,8 @@ const SignIn = () => {
 
   if (providers.isLoading) return <Loading />
   if (mutation.isLoading) return <div>Attemping to sign in...</div>
-  if (mutation.isSuccess) return <div>Successful sign in. Redirecting...</div>
+  if (mutation.isSuccess)
+    return <div>Sign in was successful. Redirecting now!</div>
   return (
     <>
       <div>

@@ -50,6 +50,7 @@ const AddMilestones: FC = () => {
   }
 
   if (mutation.isLoading) return <Loading />
+  if (mutation.isSuccess) return <div>{mutation.data}</div>
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -116,10 +117,7 @@ const AddMilestones: FC = () => {
           Add Milestone
         </button>
       </form>
-      <p>
-        {mutation.isSuccess ? mutation.data : null}
-        {mutation.isError ? (mutation.error as Error).message : null}
-      </p>
+      <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
     </>
   )
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
+import Loading from '../loading'
 
 const SignUp = () => {
   const { status } = useSession()
@@ -47,6 +48,8 @@ const SignUp = () => {
     mutation.mutate()
   }
 
+  if (mutation.isLoading) return <Loading />
+  if (mutation.isSuccess) return <div>{mutation.data}</div>
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -89,10 +92,7 @@ const SignUp = () => {
           Create Account
         </button>
       </form>
-      <p>
-        {mutation.isSuccess ? mutation.data : null}
-        {mutation.isError ? (mutation.error as Error).message : null}
-      </p>
+      <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
     </>
   )
 }
