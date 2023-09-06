@@ -15,7 +15,7 @@ type MilestoneData = {
   content: string
   type: string
   date: string
-  document: Blob | string
+  document: File | string
   userEmail: string
 }
 
