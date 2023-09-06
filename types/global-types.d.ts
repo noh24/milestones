@@ -29,20 +29,38 @@ type User = {
   image: string | null
 }
 
-interface SignUpApiResponse {
+type SignUpApiResponse = {
   success: boolean
   data: string | null
   error: string | null
 }
 
-interface SignInApiResponse {
+type SignInApiResponse = {
   success: boolean
   data: User | null
   error: string | null
 }
 
-interface CreateMilestoneApiResponse {
+type CreateMilestoneApiResponse = {
   success: boolean
   data: string | null
   error: string | null
+}
+
+type Milestone = {
+  id: string
+  date: Date
+  createdAt: Date
+  updatedAt: Date
+  title: string
+  content: string
+  type: string
+  document: string | null
+  userId: string
+}
+
+type GetMilestoneApiResponse = {
+  success: boolean
+  data: Milestone[] | null
+  error: null | string
 }
