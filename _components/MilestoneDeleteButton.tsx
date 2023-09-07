@@ -24,6 +24,9 @@ const deleteMilestoneAndDocument = async ({
 }: MilestoneDeleteData) => {
   const res = await fetch('/api/milestone', {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ id, documentPath }),
   })
 
