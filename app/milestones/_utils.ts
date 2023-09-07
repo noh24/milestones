@@ -1,4 +1,3 @@
-// import { Session } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
