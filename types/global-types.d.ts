@@ -64,3 +64,9 @@ type GetMilestoneApiResponse = {
   data: Milestone[] | null
   error: null | string
 }
+
+type DeleteMilestoneApiResponse = {
+  success: boolean
+  data: string | null
+  error: null | string
+}
