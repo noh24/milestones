@@ -1,7 +1,7 @@
 import Helper from "@/_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
-export const createMilestone = async ({
+export const createMilestoneAndRevalidate = async ({
   milestoneData,
   router
 }: {
@@ -24,6 +24,7 @@ export const createMilestone = async ({
     throw new Error(Helper.sanitizeErrorMessage(error!))
   } else {
     setTimeout(() => router.push('/milestones'), 3000)
+    await fetch('/api/revalidate?path=milestones')
     return data
   }
 }

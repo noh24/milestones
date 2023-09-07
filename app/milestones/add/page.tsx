@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { createMilestone } from './_utils'
+import { createMilestoneAndRevalidate } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
 
@@ -42,7 +42,7 @@ const AddMilestones: FC = () => {
       document: event.target.files![0],
     }))
 
-  const mutation = useMutation(createMilestone)
+  const mutation = useMutation(createMilestoneAndRevalidate)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
