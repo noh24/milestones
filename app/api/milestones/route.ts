@@ -2,7 +2,6 @@ import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
 import { parseFormData, uploadDocumentHandler } from "./_utils"
 
-
 export async function POST(req: Request) {
   try {
     const formData = await req.formData()
@@ -38,4 +37,8 @@ export async function POST(req: Request) {
     console.log('Milestone Add Route', err)
     return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 400 })
   }
+}
+
+export async function DELETE(req: Request) {
+  const { id, documentPath }: MilestoneDeleteData = await req.json()
 }
