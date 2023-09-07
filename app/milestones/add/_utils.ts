@@ -9,6 +9,7 @@ export const createMilestoneAndRevalidate = async ({
   router: AppRouterInstance
 }) => {
   const formData = new FormData()
+  
   Object.entries(milestoneData).forEach((keyValuePair) => {
     formData.set(keyValuePair[0], keyValuePair[1])
   })
@@ -20,11 +21,15 @@ export const createMilestoneAndRevalidate = async ({
 
   const { success, data, error }: CreateMilestoneApiResponse = await res.json()
 
-  if (!res.ok) {
-    throw new Error(Helper.sanitizeErrorMessage(error!))
-  } else {
+  if (res.ok) {
     setTimeout(() => router.push('/milestones'), 3000)
-    await fetch('/api/revalidate?path=milestones')
+
+    await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+      method: 'POST'
+    })
+
     return data
+  } else {
+    throw new Error(Helper.sanitizeErrorMessage(error!))
   }
 }
