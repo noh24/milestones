@@ -19,7 +19,7 @@ type MilestoneFormData = {
   userEmail: string
 }
 
-type DeleteMilestoneData = {
+type MilestoneDeleteData = {
   id: string
   documentPath: string | null
 }
