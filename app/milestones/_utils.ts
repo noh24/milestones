@@ -5,14 +5,25 @@ import type { Session } from 'next-auth'
 import prisma from "@/prisma/db"
 import Helper from "@/_utils/helper"
 
+export const deleteMilestoneAndDocument = async ({
+  id,
+  documentPath,
+}: MilestoneDeleteData) => {
+  const res = await fetch('/api/milestone', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id, documentPath }),
+  })
 
-const getSession = async (): Promise<Session> => {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    redirect('/signin?redirect=milestones')
+  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
+
+  if (res.ok) {
+    return data
+  } else {
+    throw new Error(error!)
   }
-
-  return session
 }
 
 export const getMilestones = async (): Promise<GetMilestoneApiResponse> => {
@@ -46,4 +57,13 @@ export const getMilestones = async (): Promise<GetMilestoneApiResponse> => {
       error: Helper.sanitizeErrorMessage(String(err)),
     }
   }
+}
+
+const getSession = async (): Promise<Session> => {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    redirect('/signin?redirect=milestones')
+  }
+
+  return session
 }

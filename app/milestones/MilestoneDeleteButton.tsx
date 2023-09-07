@@ -2,6 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query'
 import React, { FC } from 'react'
+import { deleteMilestoneAndDocument } from './_utils'
 
 const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({
   id,
@@ -9,32 +10,11 @@ const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({
 }) => {
   const mutation = useMutation(deleteMilestoneAndDocument)
 
-  const deleteMilestone = () => {
+  const onClickDelete = () => {
     mutation.mutate({ id, documentPath })
   }
 
-  return <button onClick={deleteMilestone}>Delete</button>
+  return <button onClick={onClickDelete}>Delete</button>
 }
 
 export default MilestoneDeleteButton
-
-const deleteMilestoneAndDocument = async ({
-  id,
-  documentPath,
-}: MilestoneDeleteData) => {
-  const res = await fetch('/api/milestone', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id, documentPath }),
-  })
-
-  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
-
-  if (res.ok) {
-    return data
-  } else {
-    throw new Error(error!)
-  }
-}
