@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Link from 'next/link'
 import { getMilestones } from './_utils'
-import DeleteMilestoneButton from '@/_components/DeleteMilestoneButton'
+import MilestoneDeleteButton from '@/_components/MilestoneDeleteButton'
 
 const Milestones: FC = async () => {
   const { success, data, error } = await getMilestones()
@@ -28,7 +28,7 @@ const Milestones: FC = async () => {
               <p>{type}</p>
               <p>{content}</p>
               <p>{date.toDateString()}</p>
-              <DeleteMilestoneButton id={id} documentPath={document} />
+              <MilestoneDeleteButton id={id} documentPath={document} />
             </Link>
           </div>
         ))}
