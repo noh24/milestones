@@ -24,6 +24,9 @@ const HeaderNavBar: FC = () => {
             <Link href='/milestones'>Milestones</Link>
           </li>
           <li>
+            <Link href='/milestones/add'>Add Milestones</Link>
+          </li>
+          <li>
             <SignOutButton />
           </li>
         </ul>
