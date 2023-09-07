@@ -21,8 +21,8 @@ export async function POST(req: Request) {
 
     let documentPath: string = ''
 
-    if (milestoneData.document instanceof File) {
-      documentPath = await uploadDocumentHandler(milestoneData.document)
+    if (milestoneData.document) {
+      documentPath = await uploadDocumentHandler(milestoneData.document as unknown as File)
     }
 
     await prisma.milestone.create({
