@@ -35,14 +35,26 @@ $ cd milestones
 $ npm install
 ```
 5. Set up a `.env file`:
+#### Google Client
 * Retreive your Google Client ID & Client Secret at [Google Cloud Platform APIs Dashboard](https://console.cloud.google.com/apis/dashboard)
-* Replace Database URL with your own database URI
+#### Database Url
+* Replace Database Url with your own database URI.
+#### Next Auth Url
+* Replace with your domain.
+#### Secret Tokens
+* Replace with a random set of text of your own choide.
 ```
-DATABASE_URL="[mysql]://[username]:[password].@localhost:3306/milestones"
-GOOGLE_CLIENT_ID=""[12345678910-asmfansodn2nf19cmoqiasjoinij12].apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="[JS9DJs-asd9NOIHN0-9dAIHOSDHSN]"
+GOOGLE_CLIENT_ID="12345678910-asmfansodn2nf19cmoqiasjoinij12.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="JS9DJs-asd9NOIHN0-9dAIHOSDHSN"
+DATABASE_URL="mysql://username:password.@localhost:3306/milestones"
+
+NEXTAUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_NEXTAUTH_URL="http://localhost:3000"
+
+AUTH_SECRET="thisisjustarandomsecretcodeofyourchoice"
+NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN="anotherrandomsecretcodeofyourchoice"
 ```
-6. Set up Prisma Database:
+6. Set up Prisma ORM:
 ```
 $ prisma generate
 $ prisma migrate dev
@@ -52,9 +64,10 @@ $ prisma migrate dev
 ```
 $ npm run dev
 ```
-8. Open your web browser to access the app at [http://localhost:3000](http://localhost:3000)
+8. Open your web browser to access the app at [http://localhost:3000](http://localhost:3000):
 
-## Prisma Database CLI
+### Prisma Database CLI
+
 1. Create New Migrations:
 ```
 $ npx prisma migrate dev --name [name-new-of-migration]
