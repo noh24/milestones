@@ -9,7 +9,7 @@ export const createMilestoneAndRevalidate = async ({
   router: AppRouterInstance
 }) => {
   const formData = new FormData()
-  
+
   Object.entries(milestoneData).forEach((keyValuePair) => {
     formData.set(keyValuePair[0], keyValuePair[1])
   })
