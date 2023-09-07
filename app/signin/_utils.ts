@@ -1,4 +1,5 @@
 import { getProviders, signIn } from 'next-auth/react'
+import type { ClientSafeProvider } from 'next-auth/react'
 
 export const getAllProviders = async () => {
   const providers = await getProviders()
@@ -7,24 +8,28 @@ export const getAllProviders = async () => {
 }
 
 export const signInWithProviders = async ({
-  providerId, userData
+  provider, userData
 }: {
-  providerId: string
+  provider: ClientSafeProvider
   userData: UserSignInData
 }) => {
-  if (providerId === 'credentials') {
-    const res = await signIn(providerId, {
+  if (provider.id === 'credentials') {
+    const res = await signIn(provider.id, {
       email: userData.email,
       password: userData.password,
       callbackUrl: '/',
       redirect: false,
     })
 
-    if (res?.error)
+    if (res?.error) {
       throw new Error('You have entered the wrong email or password.')
+    }
 
   } else {
-    const res = await signIn(providerId, {})
-    if (res?.error) throw new Error()
+    const res = await signIn(provider.id, {})
+
+    if (res?.error) {
+      throw new Error(`Sign in with ${provider.name} failed`)
+    }
   }
 }

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { signInWithProviders, getAllProviders } from './_utils'
 import Loading from '../loading'
+import type { ClientSafeProvider } from 'next-auth/react'
 
 const SignIn = () => {
   const { status } = useSession()
@@ -35,8 +36,8 @@ const SignIn = () => {
 
   const mutation = useMutation(signInWithProviders)
 
-  const onSignIn = (providerId: string) => {
-    mutation.mutate({ providerId, userData })
+  const onSignIn = (provider: ClientSafeProvider) => {
+    mutation.mutate({ provider, userData })
   }
 
   if (providers.isLoading) return <Loading />
@@ -73,7 +74,7 @@ const SignIn = () => {
             <div key={provider.name}>
               <button
                 disabled={mutation.isLoading || mutation.isSuccess}
-                onClick={() => onSignIn(provider.id)}
+                onClick={() => onSignIn(provider)}
               >
                 Sign in with {provider.name}
               </button>
