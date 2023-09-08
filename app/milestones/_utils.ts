@@ -20,6 +20,8 @@ export const deleteMilestoneAndDocument = async ({
   const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
 
   if (res.ok) {
+    // todo: call revalidate api - pass in path, secret validation token
+    // todo: redirect back to milestones page
     return data
   } else {
     throw new Error(error!)
