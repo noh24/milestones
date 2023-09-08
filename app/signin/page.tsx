@@ -40,10 +40,22 @@ const SignIn = () => {
     mutation.mutate({ provider, userData })
   }
 
-  if (providers.isLoading) return <Loading />
-  if (mutation.isLoading) return <div>Attemping to sign in...</div>
-  if (mutation.isSuccess)
+  if (providers.isLoading) {
+    return <Loading />
+  }
+
+  if (mutation.isLoading) {
+    return <div>Attemping to sign in...</div>
+  }
+
+  if (mutation.isSuccess && mutation.data === 'Google') {
+    return <div>Redirecting to Google...</div>
+  }
+
+  if (mutation.isSuccess) {
     return <div>Sign in was successful. Redirecting now!</div>
+  }
+
   return (
     <>
       <div>
