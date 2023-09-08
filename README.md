@@ -46,7 +46,7 @@ $ npm install
 ```
 GOOGLE_CLIENT_ID="12345678910-asmfansodn2nf19cmoqiasjoinij12.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="JS9DJs-asd9NOIHN0-9dAIHOSDHSN"
-DATABASE_URL="mysql://username:password.@localhost:3000/milestones"
+DATABASE_URL="mysql://username:password@localhost:3000/milestones"
 
 NEXTAUTH_URL="http://localhost:3000"
 NEXT_PUBLIC_NEXTAUTH_URL="http://localhost:3000"
