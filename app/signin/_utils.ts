@@ -28,8 +28,15 @@ export const signInWithProviders = async ({
   } else {
     const res = await signIn(provider.id, {})
 
+    // nextAuth res object returns ok: true / status: 200 - no matter what!! 
+    // hotfix: use error or url for conditionals
+
     if (res?.error) {
       throw new Error(`Sign in with ${provider.name} failed`)
+    }
+
+    if (!res?.error) {
+      return provider.name
     }
   }
 }
