@@ -24,7 +24,10 @@ export const uploadDocumentHandler = async (document: File): Promise<string> => 
   const arrayBuffer = await document.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
-  const documentPath = generateDocumentPath(document)
+  const uploadsDirectoryPath = generateUploadsDirectoryPath()
+  ensureUploadsDirectoryExistsSync(uploadsDirectoryPath)
+  const documentPath = path.join(uploadsDirectoryPath, generateRandomFileName(document))
+
   await writeFile(documentPath, buffer)
   return documentPath
 }
@@ -49,6 +52,16 @@ const convertByteToMb = (documentSize: number): string => {
   return (documentSize / 1024 / 1024).toFixed(2)
 }
 
+const generateUploadsDirectoryPath = (): string => {
+  return path.join(__dirname, '..', '..', '..', '..', '..', 'uploads')
+}
+
+// if /uploads directory doesn't exist or is not a directory, create it
+const ensureUploadsDirectoryExistsSync = (uploadPath: string): void => {
+  if (!fs.existsSync(uploadPath) || !fs.statSync(uploadPath).isDirectory()) {
+    fs.mkdirSync(uploadPath)
+  }
+}
 const generateRandomFileName = (document: File): string => {
   const mimeTypes = {
     'application/msword': '.doc',
@@ -62,18 +75,12 @@ const generateRandomFileName = (document: File): string => {
   return `${document.name}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
 }
 
-const generateDocumentPath = (document: File): string => {
-  const uploadPath = path.join(__dirname, '..', '..', '..', '..', '..', 'uploads')
-  ensureUploadsDirectoryExists(uploadPath)
-  return path.join(uploadPath, generateRandomFileName(document))
-}
-
-// if /uploads directory doesn't exist or is not a directory, create it
-const ensureUploadsDirectoryExists = (uploadPath: string): void => {
-  if (!fs.existsSync(uploadPath) || !fs.statSync(uploadPath).isDirectory()) {
-    fs.mkdirSync(uploadPath)
+const deleteMilestoneDocumentSync = (documentPath: string) => {
+  if (fs.existsSync(documentPath)) {
+    
   }
 }
-
-
-
+// todo: create function to delete document associated to milestone
+// fs.existsSync - check if it exists
+// figure out how to delete
+// return true on success or throw error
