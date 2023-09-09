@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id, documentPath }: MilestoneDeleteData = await req.json()
+    const { id, absoluteDocumentPath }: MilestoneDeleteData = await req.json()
 
     // this will throw an exception if it fails - don't need to throw on yourself
     await prisma.milestone.delete({
@@ -50,7 +50,7 @@ export async function DELETE(req: Request) {
       }
     })
 
-    if (documentPath) {
+    if (absoluteDocumentPath) {
       
     }
 

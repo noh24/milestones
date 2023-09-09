@@ -5,12 +5,12 @@ import React, { FC } from 'react'
 
 const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({
   id,
-  documentPath,
+  absoluteDocumentPath,
 }) => {
   const mutation = useMutation(deleteMilestoneAndDocument)
 
   const onClickDelete = () => {
-    mutation.mutate({ id, documentPath })
+    mutation.mutate({ id, absoluteDocumentPath })
   }
 
   return <button onClick={onClickDelete}>Delete</button>
@@ -20,14 +20,14 @@ export default MilestoneDeleteButton
 
 export const deleteMilestoneAndDocument = async ({
   id,
-  documentPath,
+  absoluteDocumentPath,
 }: MilestoneDeleteData) => {
   const res = await fetch('/api/milestone', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id, documentPath }),
+    body: JSON.stringify({ id, absoluteDocumentPath }),
   })
 
   const { success, data, error }: DeleteMilestoneApiResponse = await res.json()

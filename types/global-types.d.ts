@@ -21,7 +21,7 @@ type MilestoneFormData = {
 
 type MilestoneDeleteData = {
   id: string
-  documentPath: string | null
+  absoluteDocumentPath: string | null
 }
 
 type User = {

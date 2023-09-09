@@ -28,7 +28,7 @@ const Milestones: FC = async () => {
               <p>{type}</p>
               <p>{content}</p>
               <p>{date.toDateString()}</p>
-              <MilestoneDeleteButton id={id} documentPath={document} />
+              <MilestoneDeleteButton id={id} absoluteDocumentPath={document} />
             </Link>
           </div>
         ))}

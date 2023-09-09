@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
 
-
 export const parseFormData = (formData: FormData) => ({
   title: formData.get('title') as string,
   content: formData.get('content') as string,
@@ -75,8 +74,8 @@ const generateRandomFileName = (document: File): string => {
   return `${document.name}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
 }
 
-const deleteMilestoneDocumentSync = (documentPath: string) => {
-  if (fs.existsSync(documentPath)) {
+const deleteMilestoneDocumentSync = (absoluteDocumentPath: string) => {
+  if (fs.existsSync(absoluteDocumentPath)) {
     
   }
 }
