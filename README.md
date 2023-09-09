@@ -1,12 +1,12 @@
 # Milestones
 
-Ever experienced those moments that leave you pondering, "What have I really accomplished?" 
+Ever experienced those moments that leave you pondering, "What have I really accomplished?"
 
 We all have those days. But here's the thing: we need to be kinder to ourselves.  
-Self-doubt and imposter syndrome can creep in, but that's where Milestones comes in.  
+Self-doubt and imposter syndrome can creep in, but that's where Milestones comes in.
 
 Milestones is a platform where all your victories are captured, celebrated and cherished.  
-Archive your achievements, recommendations, awards and even those invaluable kudos.  
+Archive your achievements, recommendations, awards and even those invaluable kudos.
 
 This app will serve as a reminder that you've achieved a lot and should be proud.  
 PS: This is your secret weapon to showcase your value when the next promotion or bi-annual review meetings roll around.
