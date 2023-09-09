@@ -3,6 +3,12 @@ import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
 
+export const deleteMilestoneDocumentSync = (absoluteDocumentPath: string): void => {
+  if (fs.existsSync(absoluteDocumentPath)) {
+    fs.unlinkSync(absoluteDocumentPath)
+  }
+}
+
 export const parseFormData = (formData: FormData) => ({
   title: formData.get('title') as string,
   content: formData.get('content') as string,
@@ -74,12 +80,3 @@ const generateRandomFileName = (document: File): string => {
   return `${document.name}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
 }
 
-const deleteMilestoneDocumentSync = (absoluteDocumentPath: string) => {
-  if (fs.existsSync(absoluteDocumentPath)) {
-    
-  }
-}
-// todo: create function to delete document associated to milestone
-// fs.existsSync - check if it exists
-// figure out how to delete
-// return true on success or throw error
