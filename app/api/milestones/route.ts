@@ -1,6 +1,6 @@
 import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
-import { parseFormData, uploadDocumentHandler } from "./_utils"
+import { deleteMilestoneDocumentSync, parseFormData, uploadDocumentHandler } from "./_utils"
 
 export async function POST(req: Request) {
   try {
@@ -41,17 +41,20 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id, absoluteDocumentPath }: MilestoneDeleteData = await req.json()
+    const { id }: MilestoneDeleteData = await req.json()
 
     // this will throw an exception if it fails - don't need to throw on yourself
-    await prisma.milestone.delete({
+    const { document } = await prisma.milestone.delete({
       where: {
         id,
-      }
+      },
+      select: {
+        document: true
+      },
     })
 
-    if (absoluteDocumentPath) {
-      
+    if (document) {
+      deleteMilestoneDocumentSync(document)
     }
 
     return NextResponse.json({ success: true, data: 'Successfully deleted milestone!', error: null }, { status: 200 })

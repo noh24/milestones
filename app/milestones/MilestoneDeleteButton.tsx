@@ -3,14 +3,11 @@
 import { useMutation } from '@tanstack/react-query'
 import React, { FC } from 'react'
 
-const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({
-  id,
-  absoluteDocumentPath,
-}) => {
+const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({ id }) => {
   const mutation = useMutation(deleteMilestoneAndDocument)
 
   const onClickDelete = () => {
-    mutation.mutate({ id, absoluteDocumentPath })
+    mutation.mutate({ id })
   }
 
   return <button onClick={onClickDelete}>Delete</button>
@@ -20,14 +17,13 @@ export default MilestoneDeleteButton
 
 export const deleteMilestoneAndDocument = async ({
   id,
-  absoluteDocumentPath,
 }: MilestoneDeleteData) => {
   const res = await fetch('/api/milestone', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id, absoluteDocumentPath }),
+    body: JSON.stringify({ id }),
   })
 
   const { success, data, error }: DeleteMilestoneApiResponse = await res.json()

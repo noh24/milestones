@@ -21,14 +21,14 @@ const Milestones: FC = async () => {
   return (
     <>
       <div>
-        {data!.map(({ id, title, content, type, date, document }) => (
+        {data!.map(({ id, title, content, type, date }) => (
           <div key={id}>
             <Link href={`/milestones/${id}`}>
               <h2>{title}</h2>
               <p>{type}</p>
               <p>{content}</p>
               <p>{date.toDateString()}</p>
-              <MilestoneDeleteButton id={id} absoluteDocumentPath={document} />
+              <MilestoneDeleteButton id={id} />
             </Link>
           </div>
         ))}
