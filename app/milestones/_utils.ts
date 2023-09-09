@@ -5,28 +5,6 @@ import type { Session } from 'next-auth'
 import prisma from "@/prisma/db"
 import Helper from "@/_utils/helper"
 
-export const deleteMilestoneAndDocument = async ({
-  id,
-  documentPath,
-}: MilestoneDeleteData) => {
-  const res = await fetch('/api/milestone', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id, documentPath }),
-  })
-
-  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
-
-  if (res.ok) {
-    // todo: call revalidate api - pass in path, secret validation token
-    // todo: redirect back to milestones page
-    return data
-  } else {
-    throw new Error(error!)
-  }
-}
 
 export const getMilestones = async (): Promise<GetMilestoneApiResponse> => {
   const session = await getSession()
