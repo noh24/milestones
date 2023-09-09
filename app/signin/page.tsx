@@ -49,7 +49,7 @@ const SignIn = () => {
   }
 
   if (mutation.isSuccess && mutation.data === 'Google') {
-    return <div>Redirecting to Google...</div>
+    return <div>Signing in with Google...</div>
   }
 
   if (mutation.isSuccess) {
