@@ -27,7 +27,7 @@ const Milestones: FC = async () => {
               <h2>{title}</h2>
               <p>{type}</p>
               <p>{content}</p>
-              <p>{date.toDateString()}</p>
+              <p>{new Date(date).toDateString()}</p>
             </Link>
             <MilestoneDeleteButton id={id} />
           </div>
