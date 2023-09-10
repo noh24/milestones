@@ -1,6 +1,6 @@
 import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
-import { deleteMilestoneDocumentSync, parseFormData, uploadDocumentHandler } from "./_utils"
+import { deleteMilestoneDocumentAsync, parseFormData, uploadDocumentHandler } from "./_utils"
 
 export async function POST(req: Request) {
   try {
@@ -54,7 +54,7 @@ export async function DELETE(req: Request) {
     })
 
     if (document) {
-      deleteMilestoneDocumentSync(document)
+      deleteMilestoneDocumentAsync(document)
     }
 
     return NextResponse.json({ success: true, data: 'Successfully deleted milestone!', error: null }, { status: 200 })
