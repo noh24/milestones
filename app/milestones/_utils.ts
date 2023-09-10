@@ -1,49 +1,33 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "../api/auth/[...nextauth]/route"
-import { redirect } from "next/navigation"
-import type { Session } from 'next-auth'
-import prisma from "@/prisma/db"
 import Helper from "@/_utils/helper"
-
+import { headers } from 'next/headers'
 
 export const getMilestones = async (): Promise<GetMilestoneApiResponse> => {
-  const session = await getSession()
   try {
-    const user = await prisma.user.findFirstOrThrow({
-      where: {
-        email: session.user?.email!,
-      },
-      select: {
-        id: true,
-      },
+    const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
+      method: 'GET',
+      headers: headers(),
+      cache: 'no-store',
     })
 
-    const milestones = await prisma.milestone.findMany({
-      where: {
-        userId: user.id,
-      },
-    })
+    const { success, data, error }: GetMilestoneApiResponse = await res.json()
 
-    return {
-      success: true,
-      data: milestones,
-      error: null,
+    if (res.ok) {
+      return {
+        success,
+        data,
+        error
+      }
+    } else {
+      throw Error(String(error))
     }
+
   } catch (err) {
-    console.log('milestones page user:', err)
+    console.error('Milestone Route getMilestones Error: ', err)
+
     return {
       success: false,
       data: null,
-      error: Helper.sanitizeErrorMessage(String(err)),
+      error: Helper.sanitizeErrorMessage(String(err))
     }
   }
-}
-
-const getSession = async (): Promise<Session> => {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    redirect('/signin?redirect=milestones')
-  }
-
-  return session
 }
