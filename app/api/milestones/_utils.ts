@@ -3,9 +3,16 @@ import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
 
-export const deleteMilestoneDocumentSync = (absoluteDocumentPath: string): void => {
-  if (fs.existsSync(absoluteDocumentPath)) {
-    fs.unlinkSync(absoluteDocumentPath)
+export const deleteMilestoneDocumentAsync = async (absoluteDocumentPath: string): Promise<void> => {
+  try {
+    await fs.promises.access(absoluteDocumentPath, fs.constants.F_OK)
+
+    await fs.promises.unlink(absoluteDocumentPath)
+
+  } catch (err) {
+    console.log('deleteMilestoneDocumentAsync Error: ', err)
+
+    throw new Error(String(err))
   }
 }
 
@@ -30,7 +37,7 @@ export const uploadDocumentHandler = async (document: File): Promise<string> => 
   const buffer = Buffer.from(arrayBuffer)
 
   const uploadsDirectoryPath = generateUploadsDirectoryPath()
-  ensureUploadsDirectoryExistsSync(uploadsDirectoryPath)
+  ensureUploadsDirectoryExistsAsync(uploadsDirectoryPath)
   const documentPath = path.join(uploadsDirectoryPath, generateRandomFileName(document))
 
   await writeFile(documentPath, buffer)
@@ -62,11 +69,17 @@ const generateUploadsDirectoryPath = (): string => {
 }
 
 // if /uploads directory doesn't exist or is not a directory, create it
-const ensureUploadsDirectoryExistsSync = (uploadPath: string): void => {
-  if (!fs.existsSync(uploadPath) || !fs.statSync(uploadPath).isDirectory()) {
-    fs.mkdirSync(uploadPath)
+const ensureUploadsDirectoryExistsAsync = async (uploadPath: string): Promise<void> => {
+  try {
+    await fs.promises.mkdir(uploadPath, { recursive: true })
+
+  } catch (err) {
+    console.log('Ensure Uploads Directory Exists Error:', err)
+
+    throw new Error(String(err))
   }
 }
+
 const generateRandomFileName = (document: File): string => {
   const mimeTypes = {
     'application/msword': '.doc',
