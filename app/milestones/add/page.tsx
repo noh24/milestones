@@ -8,7 +8,7 @@ import { createMilestoneAndRevalidate } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
 
-const AddMilestones = () => {
+const MilestoneAddForm = () => {
   const { data: session, status } = useSession()
   const router = useRouter()
 
@@ -122,4 +122,4 @@ const AddMilestones = () => {
   )
 }
 
-export default AddMilestones
+export default MilestoneAddForm
