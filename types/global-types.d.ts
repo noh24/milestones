@@ -19,10 +19,6 @@ type MilestoneFormData = {
   userEmail: string
 }
 
-type MilestoneDeleteData = {
-  id: string
-}
-
 type User = {
   id: string
   name: string
