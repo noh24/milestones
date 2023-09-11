@@ -22,7 +22,10 @@ export const createMilestoneAndRevalidate = async ({
   const { success, data, error }: CreateMilestoneApiResponse = await res.json()
 
   if (res.ok) {
-    setTimeout(() => router.push('/milestones'), 3000)
+    setTimeout(() => {
+      router.prefetch('/milestones')
+      router.push('/milestones')
+    }, 1500)
 
     await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
       method: 'POST'
