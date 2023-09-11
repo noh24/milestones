@@ -107,7 +107,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id }: MilestoneDeleteData = await req.json()
+    const { id }: { id: string } = await req.json()
 
     // this will throw an exception if it fails 
     // don't need to throw on yourself

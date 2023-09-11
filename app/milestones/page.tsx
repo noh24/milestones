@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { getMilestones } from './_utils'
 import MilestoneDeleteButton from '@/app/milestones/MilestoneDeleteButton'
 
-const Milestones: FC = async () => {
+const Milestones = async () => {
   const { success, data, error } = await getMilestones()
 
   if (error) return <div>{String(error)}</div>

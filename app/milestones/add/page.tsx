@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -8,7 +8,7 @@ import { createMilestoneAndRevalidate } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
 
-const AddMilestones: FC = () => {
+const AddMilestones = () => {
   const { data: session, status } = useSession()
   const router = useRouter()
 

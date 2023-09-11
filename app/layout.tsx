@@ -1,5 +1,5 @@
 import './globals.css'
-import React, { FC, ReactNode, Suspense } from 'react'
+import React, { ReactNode, Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import SessionProvider from '@/_providers/SessionProvider'
@@ -21,7 +21,7 @@ type TProps = {
   session: Session
 }
 
-const RootLayout: FC<TProps> = ({ children, session }) => {
+const RootLayout = ({ children, session }: TProps) => {
   return (
     <html lang='en'>
       <body className={inter.className}>

@@ -1,7 +1,7 @@
 'use client'
 
 import { SessionProvider as Provider } from 'next-auth/react'
-import { ReactNode, FC } from 'react'
+import { ReactNode } from 'react'
 import { Session } from 'next-auth'
 
 type TProps = {
@@ -9,7 +9,7 @@ type TProps = {
   session: Session
 }
 
-const SessionProvider: FC<TProps> = ({ children, session }) => {
+const SessionProvider = ({ children, session }: TProps) => {
   return <Provider session={session}>{children}</Provider>
 }
 

@@ -2,9 +2,9 @@
 
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import React, { FC } from 'react'
+import React from 'react'
 
-const SignOutButton: FC = () => {
+const SignOutButton = () => {
   const { data: session } = useSession()
   const router = useRouter()
 

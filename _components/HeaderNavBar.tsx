@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import React, { FC } from 'react'
+import React from 'react'
 import SignOutButton from './SignOutButton'
 import Image from 'next/image'
 
-const HeaderNavBar: FC = () => {
+const HeaderNavBar = () => {
   return (
     <header>
       <nav>

@@ -2,9 +2,13 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { FC } from 'react'
+import React from 'react'
 
-const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({ id }) => {
+type TProps = {
+  id: string
+}
+
+const MilestoneDeleteButton = ({ id }: TProps) => {
   const router = useRouter()
 
   const mutation = useMutation(deleteMilestoneAndDocument)
@@ -22,9 +26,7 @@ const MilestoneDeleteButton: FC<MilestoneDeleteData> = ({ id }) => {
 
 export default MilestoneDeleteButton
 
-export const deleteMilestoneAndDocument = async ({
-  id,
-}: MilestoneDeleteData) => {
+export const deleteMilestoneAndDocument = async ({ id }: { id: string }) => {
   const res = await fetch('/api/milestones', {
     method: 'DELETE',
     headers: {
