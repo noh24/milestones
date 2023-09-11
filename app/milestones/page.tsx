@@ -30,6 +30,14 @@ const Milestones = async () => {
               <p>{new Date(date).toDateString()}</p>
             </Link>
             <MilestoneDeleteButton id={id} />
+            <Link
+              href={{
+                pathname: '/milestones/edit',
+                query: { id },
+              }}
+            >
+              Update
+            </Link>
           </div>
         ))}
       </div>
