@@ -6,7 +6,6 @@ export const getMilestones = async (): Promise<GetMilestoneApiResponse> => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
       method: 'GET',
       headers: headers(),
-      cache: 'no-store',
     })
 
     const { success, data, error }: GetMilestoneApiResponse = await res.json()
