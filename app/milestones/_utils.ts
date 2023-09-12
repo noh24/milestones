@@ -1,32 +1,17 @@
-import Helper from "@/_utils/helper"
-import { headers } from 'next/headers'
+export const deleteMilestoneAndDocument = async ({ id }: { id: string }) => {
+  const res = await fetch('/api/milestones', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id }),
+  })
 
-export const getAllMilestones = async (): Promise<GetMilestoneApiResponse> => {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
-      method: 'GET',
-      headers: headers(),
-    })
+  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
 
-    const { success, data, error }: GetMilestoneApiResponse = await res.json()
-
-    if (res.ok) {
-      return {
-        success,
-        data,
-        error
-      }
-    } else {
-      throw Error(String(error))
-    }
-
-  } catch (err) {
-    console.error('Milestone Route getMilestones Error: ', err)
-
-    return {
-      success: false,
-      data: null,
-      error: Helper.sanitizeErrorMessage(String(err))
-    }
+  if (res.ok) {
+    return data
+  } else {
+    throw new Error(error!)
   }
 }

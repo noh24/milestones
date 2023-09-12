@@ -3,6 +3,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { deleteMilestoneAndDocument } from './_utils'
 
 type TProps = {
   id: string
@@ -25,21 +26,3 @@ const MilestoneDeleteButton = ({ id }: TProps) => {
 }
 
 export default MilestoneDeleteButton
-
-export const deleteMilestoneAndDocument = async ({ id }: { id: string }) => {
-  const res = await fetch('/api/milestones', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id }),
-  })
-
-  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
-
-  if (res.ok) {
-    return data
-  } else {
-    throw new Error(error!)
-  }
-}
