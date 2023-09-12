@@ -30,7 +30,7 @@ export default function SignInForm({ providers }: TProps) {
   const mutation = useMutation(signInWithProviders)
 
   const onSignIn = (provider: ClientSafeProvider) => {
-    mutation.mutate({ provider, userData })
+    mutation.mutate({ provider, userData, router, redirect })
   }
 
   if (mutation.isLoading) {
@@ -42,7 +42,6 @@ export default function SignInForm({ providers }: TProps) {
   }
 
   if (mutation.isSuccess) {
-    setTimeout(() => router.push(`/${redirect}`), 1500)
     return <div>Sign in was successful. Redirecting now!</div>
   }
 
