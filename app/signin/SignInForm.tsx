@@ -1,14 +1,17 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
-import { getAllProviders, signInWithProviders } from './_utils'
+import { signInWithProviders } from './_utils'
 import { ClientSafeProvider } from 'next-auth/react'
-import Loading from '../loading'
 import Link from 'next/link'
 
-export default function SignInForm() {
+type TProps = {
+  providers: ClientSafeProvider[]
+}
+
+export default function SignInForm({ providers }: TProps) {
   const router = useRouter()
 
   const redirect = useSearchParams().get('redirect') ?? ''
@@ -24,19 +27,10 @@ export default function SignInForm() {
       setUserData({ ...userData, [type]: event.target.value })
     }
 
-  const providers = useQuery({
-    queryKey: ['providers'],
-    queryFn: getAllProviders,
-  })
-
   const mutation = useMutation(signInWithProviders)
 
   const onSignIn = (provider: ClientSafeProvider) => {
     mutation.mutate({ provider, userData })
-  }
-
-  if (providers.isLoading) {
-    return <Loading />
   }
 
   if (mutation.isLoading) {
@@ -48,7 +42,7 @@ export default function SignInForm() {
   }
 
   if (mutation.isSuccess) {
-    router.push(`/${redirect}`)
+    setTimeout(() => router.push(`/${redirect}`), 1500)
     return <div>Sign in was successful. Redirecting now!</div>
   }
 
@@ -77,18 +71,16 @@ export default function SignInForm() {
         <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
       </div>
       <div>
-        {providers.data &&
-          providers.data.map((provider) => (
-            <div key={provider.name}>
-              <button
-                disabled={mutation.isLoading || mutation.isSuccess}
-                onClick={() => onSignIn(provider)}
-              >
-                Sign in with {provider.name}
-              </button>
-            </div>
-          ))}
-        <p>{providers.error ? (providers.error as Error).message : null}</p>
+        {providers.map((provider) => (
+          <div key={provider.name}>
+            <button
+              disabled={mutation.isLoading || mutation.isSuccess}
+              onClick={() => onSignIn(provider)}
+            >
+              Sign in with {provider.name}
+            </button>
+          </div>
+        ))}
       </div>
     </>
   )
