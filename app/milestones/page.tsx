@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 }
 
 export default async function Milestones() {
-  const { success, data, error } = await getAllMilestones()
+  const data = await getAllMilestones()
 
-  if (error) return <div>{String(error)}</div>
-  if (success && data!.length === 0) {
+  if (data?.error) return <div>{String(data.error)}</div>
+  if (data?.success && data?.data!.length === 0) {
     return (
       <>
         <Link href='/milestones/add'>Add Milestones</Link>
@@ -26,7 +26,7 @@ export default async function Milestones() {
   return (
     <>
       <div>
-        {data!.map(({ id, title, content, type, date }) => (
+        {data?.data!.map(({ id, title, content, type, date }) => (
           <div key={id}>
             <Link href={`/milestones/${id}`}>
               <h2>{title}</h2>
