@@ -7,6 +7,6 @@ export const metadata: Metadata = {
 }
 
 export default async function SignUp() {
-  await CustomSession.getSessionOrRedirect()
+  await CustomSession.getSessionAndRedirectIfSession()
   return <SignUpForm />
 }
