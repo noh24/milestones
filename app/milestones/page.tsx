@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { getAllMilestones } from './_utils'
+import { getAllMilestones } from './_server_utils'
 import MilestoneDeleteButton from '@/app/milestones/MilestoneDeleteButton'
 import { Metadata } from 'next'
 
