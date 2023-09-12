@@ -3,7 +3,11 @@ import type { ClientSafeProvider } from 'next-auth/react'
 
 export const getAllProviders = async () => {
   const providers = await getProviders()
-  if (!providers) throw new Error()
+
+  if (!providers) {
+    throw new Error()
+  }
+
   return Object.values(providers).sort((a, b) => a.name < b.name ? -1 : 0)
 }
 
@@ -30,7 +34,7 @@ export const signInWithProviders = async ({
       } else {
         return true
       }
-      
+
     default:
       const res = await signIn(provider.id)
 
