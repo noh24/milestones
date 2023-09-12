@@ -1,32 +1,31 @@
 import Helper from "@/_utils/helper"
 import { headers } from 'next/headers'
+import { redirect } from "next/navigation"
 
-export const getAllMilestones = async (): Promise<GetMilestoneApiResponse> => {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
-      method: 'GET',
-      headers: headers(),
-    })
+export const getAllMilestones = async (): Promise<GetMilestoneApiResponse | undefined> => {
 
-    const { success, data, error }: GetMilestoneApiResponse = await res.json()
+  const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
+    method: 'GET',
+    headers: headers(),
+    cache: 'no-cache'
+  })
 
-    if (res.ok) {
+  const { success, data, error }: GetMilestoneApiResponse = await res.json()
+
+  switch (res.status) {
+    case 401:
+      redirect('/signin?redirect=milestones')
+    case 400:
+      return {
+        success: false,
+        data: null,
+        error: Helper.sanitizeErrorMessage(String(error))
+      }
+    case 200:
       return {
         success,
         data,
         error
       }
-    } else {
-      throw Error(String(error))
-    }
-
-  } catch (err) {
-    console.error('Milestone Route getMilestones Error: ', err)
-
-    return {
-      success: false,
-      data: null,
-      error: Helper.sanitizeErrorMessage(String(err))
-    }
   }
 }
