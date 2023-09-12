@@ -1,5 +1,6 @@
 import { getProviders, signIn } from 'next-auth/react'
 import type { ClientSafeProvider } from 'next-auth/react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
 
 export const getAllProviders = async () => {
   const providers = await getProviders()
@@ -12,10 +13,12 @@ export const getAllProviders = async () => {
 }
 
 export const signInWithProviders = async ({
-  provider, userData
+  provider, userData, router, redirect
 }: {
   provider: ClientSafeProvider
   userData: UserSignInData
+  router: AppRouterInstance
+  redirect: string
 }) => {
   // nextAuth res object returns ok: true / status: 200 - no matter what!! 
   // hotfix: use error or url for conditionals
@@ -32,15 +35,24 @@ export const signInWithProviders = async ({
       if (credentialsRes?.error) {
         throw new Error('You have entered the wrong email or password.')
       } else {
+        setTimeout(() => {
+          router.prefetch('/milestones')
+          router.push(`/${redirect}`)
+        }, 1500)
+
+        await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+          method: 'POST'
+        })
         return true
       }
 
     default:
-      const res = await signIn(provider.id)
+      const res = await signIn(provider.id, {
+        callbackUrl: `/${redirect}`
+      })
 
       if (res?.error) {
-        throw new Error(`Sign in with ${provider.name} failed.
-        `)
+        throw new Error(`Sign in with ${provider.name} failed.`)
       } else {
         return provider.name
       }
