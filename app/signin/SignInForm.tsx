@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { getAllProviders, signInWithProviders } from './_utils'
 import { ClientSafeProvider } from 'next-auth/react'
 import Loading from '../loading'
@@ -30,7 +30,6 @@ export default function SignInForm() {
   })
 
   const mutation = useMutation(signInWithProviders)
-  useEffect(() => console.log(mutation), [mutation])
 
   const onSignIn = (provider: ClientSafeProvider) => {
     mutation.mutate({ provider, userData })
