@@ -13,30 +13,32 @@ export const signInWithProviders = async ({
   provider: ClientSafeProvider
   userData: UserSignInData
 }) => {
-  if (provider.id === 'credentials') {
-    const res = await signIn(provider.id, {
-      email: userData.email,
-      password: userData.password,
-      callbackUrl: '/',
-      redirect: false,
-    })
+  // nextAuth res object returns ok: true / status: 200 - no matter what!! 
+  // hotfix: use error or url for conditionals
 
-    if (res?.error) {
-      throw new Error('You have entered the wrong email or password.')
-    }
+  switch (provider.id) {
+    case 'credentials':
+      const credentialsRes = await signIn(provider.id, {
+        email: userData.email,
+        password: userData.password,
+        callbackUrl: '/',
+        redirect: false,
+      })
 
-  } else {
-    const res = await signIn(provider.id, {})
+      if (credentialsRes?.error) {
+        throw new Error('You have entered the wrong email or password.')
+      } else {
+        return true
+      }
+      
+    default:
+      const res = await signIn(provider.id)
 
-    // nextAuth res object returns ok: true / status: 200 - no matter what!! 
-    // hotfix: use error or url for conditionals
-
-    if (res?.error) {
-      throw new Error(`Sign in with ${provider.name} failed`)
-    }
-
-    if (!res?.error) {
-      return provider.name
-    }
+      if (res?.error) {
+        throw new Error(`Sign in with ${provider.name} failed.
+        `)
+      } else {
+        return provider.name
+      }
   }
 }
