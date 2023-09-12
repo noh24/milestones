@@ -1,10 +1,15 @@
 import React from 'react'
 import Link from 'next/link'
-import { getMilestones } from './_utils'
+import { getAllMilestones } from './_utils'
 import MilestoneDeleteButton from '@/app/milestones/MilestoneDeleteButton'
+import { Metadata } from 'next'
 
-const Milestones = async () => {
-  const { success, data, error } = await getMilestones()
+export const metadata: Metadata = {
+  title: 'All Milestones - Milestones',
+}
+
+export default async function Milestones() {
+  const { success, data, error } = await getAllMilestones()
 
   if (error) return <div>{String(error)}</div>
   if (success && data!.length === 0) {
@@ -44,5 +49,3 @@ const Milestones = async () => {
     </>
   )
 }
-
-export default Milestones
