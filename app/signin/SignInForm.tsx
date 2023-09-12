@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllProviders, signInWithProviders } from './_utils'
 import { ClientSafeProvider } from 'next-auth/react'
 import Loading from '../loading'
@@ -30,10 +30,10 @@ export default function SignInForm() {
   })
 
   const mutation = useMutation(signInWithProviders)
+  useEffect(() => console.log(mutation), [mutation])
 
   const onSignIn = (provider: ClientSafeProvider) => {
     mutation.mutate({ provider, userData })
-    router.push(`/${redirect}`)
   }
 
   if (providers.isLoading) {
@@ -49,6 +49,7 @@ export default function SignInForm() {
   }
 
   if (mutation.isSuccess) {
+    router.push(`/${redirect}`)
     return <div>Sign in was successful. Redirecting now!</div>
   }
 
