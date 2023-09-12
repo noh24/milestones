@@ -6,7 +6,6 @@ import SessionProvider from '@/_providers/SessionProvider'
 import { Session } from 'next-auth'
 import HeaderNavBar from '../_components/HeaderNavBar'
 import QueryClientProvider from '@/_providers/QueryClientProvider'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Loading from './loading'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -29,7 +28,6 @@ const RootLayout = ({ children, session }: TProps) => {
           <SessionProvider session={session}>
             <HeaderNavBar />
             <Suspense fallback={<Loading />}>{children}</Suspense>
-            <ReactQueryDevtools initialIsOpen={false} />
           </SessionProvider>
         </QueryClientProvider>
       </body>
