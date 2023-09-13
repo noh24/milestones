@@ -3,7 +3,7 @@
 import Loading from '@/app/loading'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { createMilestoneAndRevalidate } from '../../add/_utils'
 
@@ -12,9 +12,10 @@ const MilestoneEditForm = () => {
 
   const router = useRouter()
 
-  const id = useSearchParams().get('id')
+  const { id } = useParams()
 
   useEffect(() => {
+    console.log(id)
     if (status !== 'authenticated')
       router.push(`/signin?redirect=milestones/edit?id=${id}`)
   }, [status, router, id])
@@ -26,9 +27,8 @@ const MilestoneEditForm = () => {
       const res = await fetch(`/api/milestones/${id}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        
       })
       return res.json()
     },
