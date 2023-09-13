@@ -1,3 +1,5 @@
+import type { Milestone, User } from "@prisma/client"
+
 type UserSignUpData = {
   name: string
   email: string
@@ -19,16 +21,6 @@ type MilestoneFormData = {
   userEmail: string
 }
 
-type User = {
-  id: string
-  name: string
-  email: string
-  isAdmin: boolean
-  password: string | null
-  emailVerified: Date | null
-  image: string | null
-}
-
 type SignUpApiResponse = {
   success: boolean
   data: string | null
@@ -45,18 +37,6 @@ type CreateMilestoneApiResponse = {
   success: boolean
   data: string | null
   error: string | null
-}
-
-type Milestone = {
-  id: string
-  date: Date
-  createdAt: Date
-  updatedAt: Date
-  title: string
-  content: string
-  type: string
-  document: string | null
-  userId: string
 }
 
 type GetManyMilestonesResponse = {
