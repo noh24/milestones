@@ -7,6 +7,11 @@ import { useState } from 'react'
 import { createMilestoneAndRevalidate } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Add Milestones - Milestones',
+}
 
 export default function Page() {
   const { data: session, status } = useSession()
