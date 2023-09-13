@@ -1,4 +1,4 @@
-export const deleteMilestoneAndDocument = async ({ id }: { id: string }) => {
+export async function deleteMilestoneAndDocument({ id }: { id: string }) {
   const res = await fetch('/api/milestones', {
     method: 'DELETE',
     headers: {

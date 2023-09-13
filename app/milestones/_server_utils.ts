@@ -2,8 +2,7 @@ import Helper from "@/_utils/helper"
 import { headers } from 'next/headers'
 import { redirect } from "next/navigation"
 
-export const getAllMilestones = async (): Promise<GetMilestoneApiResponse | undefined> => {
-
+export async function getAllMilestones(): Promise<GetMilestoneApiResponse | undefined> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
     method: 'GET',
     headers: headers(),
