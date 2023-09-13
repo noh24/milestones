@@ -59,7 +59,7 @@ type Milestone = {
   userId: string
 }
 
-type GetMilestoneApiResponse = {
+type GetMilestoneResponse = {
   success: boolean
   data: Milestone[] | null
   error: null | string
