@@ -2,10 +2,10 @@ import './globals.css'
 import React, { ReactNode, Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import SessionProvider from '@/_providers/SessionProvider'
+import SessionProvider from './_providers/SessionProvider'
 import { Session } from 'next-auth'
-import HeaderNavBar from '../_components/HeaderNavBar'
-import QueryClientProvider from '@/_providers/QueryClientProvider'
+import HeaderNavBar from './_components/HeaderNavBar'
+import QueryClientProvider from './_providers/QueryClientProvider'
 import Loading from './loading'
 
 const inter = Inter({ subsets: ['latin'] })

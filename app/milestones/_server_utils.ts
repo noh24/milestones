@@ -1,4 +1,4 @@
-import Helper from "@/_utils/helper"
+import Helper from "../_utils/helper"
 import { headers } from 'next/headers'
 import { redirect } from "next/navigation"
 
