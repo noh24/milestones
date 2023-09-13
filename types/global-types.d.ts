@@ -65,6 +65,12 @@ type GetManyMilestonesResponse = {
   error: null | string
 }
 
+type GetOneMilestoneResponse = {
+  success: boolean
+  data: Milestone | null,
+  error: null | string
+}
+
 type DeleteMilestoneApiResponse = {
   success: boolean
   data: string | null
