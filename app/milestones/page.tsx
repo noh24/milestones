@@ -3,16 +3,24 @@ import Link from 'next/link'
 import { getAllMilestones } from './_server_utils'
 import MilestoneDeleteButton from '@/app/milestones/MilestoneDeleteButton'
 import { Metadata } from 'next'
+import CustomSession from '../_server_utils/customSession'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'All Milestones - Milestones',
 }
 
 export default async function Page() {
-  const data = await getAllMilestones()
+  const session = await CustomSession.getServerSession()
 
-  if (data?.error) return <div>{String(data.error)}</div>
-  if (data?.success && data?.data!.length === 0) {
+  if (!session) {
+    redirect('/signin?redirect=milestones')
+  }
+
+  const { success, data, error } = await getAllMilestones(session?.user?.email!)
+
+  if (error) return <div>{String(error)}</div>
+  if (success && data!.length === 0) {
     return (
       <>
         <Link href='/milestones/add'>Add Milestones</Link>
@@ -26,7 +34,7 @@ export default async function Page() {
   return (
     <>
       <div>
-        {data?.data!.map(({ id, title, content, type, date }) => (
+        {data!.map(({ id, title, content, type, date }) => (
           <div key={id}>
             <Link href={`/milestones/${id}`}>
               <h2>{title}</h2>
