@@ -1,4 +1,4 @@
-import Helper from "@/_utils/helper"
+import Helper from "./../../_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
 export const createMilestoneAndRevalidate = async ({
