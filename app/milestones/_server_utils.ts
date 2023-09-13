@@ -1,30 +1,35 @@
-import Helper from "../_utils/helper"
-import { headers } from 'next/headers'
-import { redirect } from "next/navigation"
+import prisma from "@/prisma/db"
 
-export async function getAllMilestones(): Promise<GetMilestoneApiResponse | undefined> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/milestones`, {
-    method: 'GET',
-    headers: headers(),
-    cache: 'no-cache'
-  })
+export async function getAllMilestones(userEmail: string): Promise<GetMilestoneResponse> {
+  try {
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        email: userEmail,
+      },
+      select: {
+        id: true,
+      },
+    })
 
-  const { success, data, error }: GetMilestoneApiResponse = await res.json()
+    const milestones = await prisma.milestone.findMany({
+      where: {
+        userId: user.id,
+      },
+    })
 
-  switch (res.status) {
-    case 401:
-      redirect('/signin?redirect=milestones')
-    case 400:
-      return {
-        success: false,
-        data: null,
-        error: Helper.sanitizeErrorMessage(String(error))
-      }
-    case 200:
-      return {
-        success,
-        data,
-        error
-      }
+    return {
+      success: true,
+      data: milestones,
+      error: null,
+    }
+
+  } catch (err) {
+    console.log('getAllMilestones', err)
+
+    return {
+      success: false,
+      data: null,
+      error: String(err),
+    }
   }
 }
