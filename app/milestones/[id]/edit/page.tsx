@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { createMilestoneAndRevalidate } from '../add/_utils'
+import { createMilestoneAndRevalidate } from '../../add/_utils'
 
 const MilestoneEditForm = () => {
   const { data: session, status } = useSession()

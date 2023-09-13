@@ -37,7 +37,7 @@ export default async function Milestones() {
             <MilestoneDeleteButton id={id} />
             <Link
               href={{
-                pathname: '/milestones/edit',
+                pathname: `/milestones/${id}/edit`,
                 query: { id },
               }}
             >
