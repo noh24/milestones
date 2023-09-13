@@ -1,6 +1,6 @@
 import prisma from "@/prisma/db"
 
-export async function getAllMilestones(userEmail: string): Promise<GetMilestoneResponse> {
+export async function getAllMilestones(userEmail: string): Promise<GetManyMilestonesResponse> {
   try {
     const user = await prisma.user.findFirstOrThrow({
       where: {
