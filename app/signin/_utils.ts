@@ -36,11 +36,11 @@ export const signInWithProviders = async ({
         throw new Error('You have entered the wrong email or password.')
       } else {
         setTimeout(() => {
-          router.prefetch('/milestones')
+          router.prefetch(`/${redirect}`)
           router.push(`/${redirect}`)
         }, 1500)
 
-        await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+        await fetch(`/api/revalidate?path=${redirect}&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
           method: 'POST'
         })
         return true
