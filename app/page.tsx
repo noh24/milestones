@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default async function Home() {
+export default async function Page() {
   return (
     <>
       <Link href='/milestones/add'>Add Milestones</Link>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'All Milestones - Milestones',
 }
 
-export default async function Milestones() {
+export default async function Page() {
   const data = await getAllMilestones()
 
   if (data?.error) return <div>{String(data.error)}</div>

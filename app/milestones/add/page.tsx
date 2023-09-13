@@ -8,7 +8,7 @@ import { createMilestoneAndRevalidate } from './_utils'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/app/loading'
 
-export default function MilestoneAdd() {
+export default function Page() {
   const { data: session, status } = useSession()
   const router = useRouter()
 

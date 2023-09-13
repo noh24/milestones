@@ -1,7 +1,5 @@
 import React from 'react'
 
-const MilestoneDetails = () => {
+export default function Page() {
   return <div>page</div>
 }
-
-export default MilestoneDetails

@@ -7,7 +7,7 @@ import { useRouter, useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { createMilestoneAndRevalidate } from '../../add/_utils'
 
-const MilestoneEditForm = () => {
+export default function Page() {
   const { data: session, status } = useSession()
 
   const router = useRouter()
@@ -140,5 +140,3 @@ const MilestoneEditForm = () => {
     </>
   )
 }
-
-export default MilestoneEditForm

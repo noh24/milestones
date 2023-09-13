@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Sign In - Milestones',
 }
 
-export default async function SignIn() {
+export default async function Page() {
   await CustomSession.getSessionAndRedirectIfSession()
   const providers = await getAllProviders()
   return <SignInForm providers={providers} />
