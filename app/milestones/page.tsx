@@ -38,10 +38,9 @@ export default async function Milestones() {
             <Link
               href={{
                 pathname: `/milestones/${id}/edit`,
-                query: { id },
               }}
             >
-              Update
+              Edit
             </Link>
           </div>
         ))}
