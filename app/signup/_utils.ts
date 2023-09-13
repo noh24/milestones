@@ -1,4 +1,5 @@
-import Helper from "@/_utils/helper"
+import Helper from "../_utils/helper"
+import { SignUpApiResponse, UserSignUpData } from "@/types/types"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
 export const signUpUser = async ({ userData, router }: { userData: UserSignUpData, router: AppRouterInstance }) => {

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { signInWithProviders } from './_utils'
 import { ClientSafeProvider } from 'next-auth/react'
 import Link from 'next/link'
+import { UserSignInData } from '@/types/types'
 
 type TProps = {
   providers: ClientSafeProvider[]

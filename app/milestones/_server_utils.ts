@@ -1,4 +1,5 @@
 import prisma from "@/prisma/db"
+import { GetManyMilestonesResponse } from "@/types/types"
 
 export async function getAllMilestones(userEmail: string): Promise<GetManyMilestonesResponse> {
   try {

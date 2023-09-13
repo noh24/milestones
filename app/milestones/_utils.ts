@@ -1,3 +1,5 @@
+import { DeleteMilestoneApiResponse } from "@/types/types"
+
 export async function deleteMilestoneAndDocument({ id }: { id: string }) {
   const res = await fetch('/api/milestones', {
     method: 'DELETE',

@@ -1,3 +1,4 @@
+import { UserSignInData } from '@/types/types'
 import { getProviders, signIn } from 'next-auth/react'
 import type { ClientSafeProvider } from 'next-auth/react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'

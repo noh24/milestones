@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { signUpUser } from './_utils'
 import Loading from '../loading'
 import { useRouter } from 'next/navigation'
+import { UserSignUpData } from '@/types/types'
 
 export default function SignUpForm() {
   const router = useRouter()
