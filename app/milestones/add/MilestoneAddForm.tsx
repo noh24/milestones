@@ -20,7 +20,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
     type: '',
     date: '',
     document: '',
-    userEmail: userEmail,
+    userEmail,
   })
 
   const onUpdateMilestoneData =
@@ -104,15 +104,26 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
         <label>
           Upload a document (Maximum file size: 5MB):
           <span>.pdf</span>
-          <span>.doc / .docx</span>
-          <span>.jpeg / .png </span>
+          <span>.doc/.docx</span>
+          <span>.jpeg/.png </span>
           <input
             name='document'
             type='file'
             accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
             onChange={onUpdateMilestoneDocument}
+            className={'hidden'}
           />
         </label>
+        <div>
+          <p>
+            {milestoneData.document ? 'File To Be Uploaded:' : 'No File Chosen'}
+          </p>
+          <p>
+            {milestoneData.document
+              ? (milestoneData.document as File)['name']
+              : null}
+          </p>
+        </div>
         <button
           type='submit'
           disabled={mutation.isLoading || mutation.isSuccess}
