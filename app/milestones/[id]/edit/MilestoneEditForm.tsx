@@ -4,7 +4,7 @@ import Loading from '@/app/loading'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { createMilestoneAndRevalidate } from '../../add/_utils'
+import { updateMilestoneAndRevalidate } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { MilestoneFormData } from '@/types/types'
 
@@ -20,7 +20,7 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
     title: milestone.title,
     content: milestone.content,
     type: milestone.type,
-    date: String(milestone.date),
+    date: milestone.date.toISOString().split('T')[0],
     document: milestone.document ? milestone.document : '',
     userEmail,
   })
@@ -41,7 +41,7 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
       document: event.target.files![0],
     }))
 
-  const mutation = useMutation(createMilestoneAndRevalidate)
+  const mutation = useMutation(updateMilestoneAndRevalidate)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -67,6 +67,7 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
             name='date'
             type='date'
             required
+            
             value={milestoneData.date}
             onChange={onUpdateMilestoneData('date')}
           />
@@ -82,6 +83,7 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
           <input
             name='type'
             type='radio'
+            checked={milestoneData.type ? true : false}
             required
             value='professional'
             onChange={onUpdateMilestoneData('type')}
@@ -92,6 +94,7 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
           <input
             name='type'
             type='radio'
+            checked={milestoneData.type ? true : false}
             value='personal'
             onChange={onUpdateMilestoneData('type')}
           />

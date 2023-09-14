@@ -24,18 +24,13 @@ export async function deleteMilestoneAndDocument({ id }: { id: string }) {
 }
 
 // CREATE
-export const createMilestoneAndRevalidate = async ({
-  milestoneData,
-  router
-}: {
-  milestoneData: MilestoneFormData
+export async function createMilestoneAndRevalidate({ milestoneData, router }: {
+  milestoneData: MilestoneFormData,
   router: AppRouterInstance
-}) => {
+}) {
   const formData = new FormData()
 
-  Object.entries(milestoneData).forEach((keyValuePair) => {
-    formData.set(keyValuePair[0], keyValuePair[1])
-  })
+  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]))
 
   const res = await fetch('/api/milestones', {
     method: 'POST',
@@ -58,4 +53,36 @@ export const createMilestoneAndRevalidate = async ({
   } else {
     throw new Error(Helper.sanitizeErrorMessage(error!))
   }
+}
+
+// UPDATE
+export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
+  milestoneData: MilestoneFormData,
+  router: AppRouterInstance
+}) {
+  const formData = new FormData()
+
+  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]))
+
+  const res = await fetch('/api/milestones', {
+    method: 'PUT',
+    body: formData
+  })
+
+  const { success, data, error }: UpdateMilestoneApiResponse = await res.json()
+
+  if (!res.ok) {
+    throw new Error(Helper.sanitizeErrorMessage(error))
+  }
+
+  setTimeout(() => {
+    router.prefetch('/milestones')
+    router.push('/milestones')
+  }, 1500)
+
+  await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+    method: 'POST'
+  })
+
+  return data
 }
