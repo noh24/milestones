@@ -3,17 +3,16 @@
 import Loading from '@/app/loading'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { updateMilestoneAndRevalidate } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { MilestoneFormData } from '@/types/types'
 
 type TProps = {
-  userEmail: string
   milestone: Milestone
 }
 
-export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
+export default function MilestoneEditForm({ milestone }: TProps) {
   const router = useRouter()
 
   const [milestoneData, setMilestoneData] = useState<MilestoneFormData>({
@@ -22,7 +21,8 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
     type: milestone.type,
     date: milestone.date.toISOString().split('T')[0],
     document: milestone.document ? milestone.document : '',
-    userEmail,
+    id: milestone.id,
+    userId: milestone.userId,
   })
 
   const onUpdateMilestoneData =
@@ -67,7 +67,6 @@ export default function MilestoneEditForm({ userEmail, milestone }: TProps) {
             name='date'
             type='date'
             required
-            
             value={milestoneData.date}
             onChange={onUpdateMilestoneData('date')}
           />
