@@ -18,7 +18,9 @@ type MilestoneFormData = {
   type: string
   date: string
   document: File | string
-  userEmail: string
+  userEmail?: string
+  id?: string
+  userId?: string
 }
 
 type SignUpApiResponse = {
