@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import { updateMilestoneAndRevalidate } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { MilestoneFormData } from '@/types/types'
-import { sanitizeDocumentName } from './_utils'
+import Helper from '@/app/_utils/helper'
 
 type TProps = {
   milestone: Milestone
@@ -119,7 +119,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           </p>
           <p>
             {milestoneData.document
-              ? sanitizeDocumentName(milestoneData.document as string)
+              ? Helper.sanitizeDocumentName(milestoneData.document as string)
               : null}
           </p>
         </div>
