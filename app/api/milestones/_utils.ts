@@ -82,14 +82,16 @@ const ensureUploadsDirectoryExistsAsync = async (uploadPath: string): Promise<vo
 
 const generateRandomFileName = (document: File): string => {
   const mimeTypes = {
-    'application/msword': '.doc',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
-    'application/pdf': '.pdf',
-    'image/jpeg': '.jpg',
-    'image/png': '.png',
-    'image/jpg': '.jpg'
+    'application/msword': 'doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+    'application/pdf': 'pdf',
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/jpg': 'jpg'
   }
 
-  return `${document.name}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
+  const documentName = document.name.split('.').slice(0, -1).join('')
+
+  return `${documentName}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
 }
 
