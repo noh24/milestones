@@ -8,7 +8,7 @@ export async function DELETE(req: Request) {
 
     // this will throw an exception if it fails 
     // don't need to throw on yourself
-    const { document } = await prisma.milestone.delete({
+    const deletedMilestone = await prisma.milestone.delete({
       where: {
         id,
       },
@@ -17,13 +17,13 @@ export async function DELETE(req: Request) {
       },
     })
 
-    if (document) {
-      deleteMilestoneDocumentAsync(document)
+    if (deletedMilestone.document) {
+      deleteMilestoneDocumentAsync(deletedMilestone.document)
     }
 
     return NextResponse.json({
       success: true,
-      data: 'Successfully deleted milestone!',
+      data: deletedMilestone,
       error: null
     }, {
       status: 200
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
       documentPath = await uploadDocumentHandler(milestoneData.document as unknown as File)
     }
 
-    await prisma.milestone.create({
+    const newMilestone = await prisma.milestone.create({
       data: {
         ...milestoneData,
         userId: user.id,
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      data: 'Congratulations on a new milestone!',
+      data: newMilestone,
       error: null
     }, {
       status: 200
@@ -104,30 +104,24 @@ export async function PUT(req: Request) {
       },
     })
 
-    // existing has no document -> new has new document = upload new document
-    // existing has no document -> new has no document = move on
-
-    // existing has document -> new has no document = delete old document
-    // existing has document -> new has document = delete old & update new
     let documentPath: string = ''
 
     switch (true) {
       case existingMilestone.document.length > 1:
         if (milestoneData.document) {
-          // delete then upload
           documentPath = await uploadDocumentHandler(milestoneData.document as unknown as File)
-        } else {
-          // delete old
         }
+
+        deleteMilestoneDocumentAsync(existingMilestone.document)
         break
       case existingMilestone.document.length === 0:
         if (milestoneData.document) {
-          // upload new
+          documentPath = await uploadDocumentHandler(milestoneData.document as unknown as File)
         }
         break
     }
 
-    await prisma.milestone.update({
+    const updatedMilestone = await prisma.milestone.update({
       where: {
         id: milestoneId
       },
@@ -140,7 +134,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({
       success: true,
-      data: 'Successfully updated milestone!',
+      data: updatedMilestone,
       error: null
     }, {
       status: 200

@@ -35,32 +35,8 @@ type SignInApiResponse = {
   error: string | null
 }
 
-type CreateMilestoneApiResponse = {
+type MilestoneApiResponse = {
   success: boolean
-  data: string | null
+  data: Milestone | Milestone[] | null
   error: string | null
-}
-
-type UpdateMilestoneApiResponse = {
-  success: boolean
-  data: string | null
-  error: string | null
-}
-
-type GetManyMilestonesResponse = {
-  success: boolean
-  data: Milestone[] | null
-  error: null | string
-}
-
-type GetOneMilestoneResponse = {
-  success: boolean
-  data: Milestone | null,
-  error: null | string
-}
-
-type DeleteMilestoneApiResponse = {
-  success: boolean
-  data: string | null
-  error: null | string
 }

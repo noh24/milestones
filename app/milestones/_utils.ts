@@ -1,8 +1,6 @@
-import { DeleteMilestoneApiResponse, UpdateMilestoneApiResponse } from "@/types/types"
-import { CreateMilestoneApiResponse, MilestoneFormData } from "@/types/types"
+import { MilestoneApiResponse, MilestoneFormData } from "@/types/types"
 import Helper from "./../_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
-
 
 // DELETE
 export async function deleteMilestoneAndDocument({ id }: { id: string }) {
@@ -14,7 +12,7 @@ export async function deleteMilestoneAndDocument({ id }: { id: string }) {
     body: JSON.stringify({ id }),
   })
 
-  const { success, data, error }: DeleteMilestoneApiResponse = await res.json()
+  const { success, data, error }: MilestoneApiResponse = await res.json()
 
   if (res.ok) {
     return data
@@ -37,7 +35,7 @@ export async function createMilestoneAndRevalidate({ milestoneData, router }: {
     body: formData,
   })
 
-  const { success, data, error }: CreateMilestoneApiResponse = await res.json()
+  const { success, data, error }: MilestoneApiResponse = await res.json()
 
   if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))
@@ -68,7 +66,7 @@ export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
     body: formData
   })
 
-  const { success, data, error }: UpdateMilestoneApiResponse = await res.json()
+  const { success, data, error }: MilestoneApiResponse = await res.json()
 
   if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))

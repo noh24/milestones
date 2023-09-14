@@ -1,7 +1,7 @@
 import prisma from "@/prisma/db"
-import { GetManyMilestonesResponse } from "@/types/types"
+import { MilestoneApiResponse } from "@/types/types"
 
-export async function getAllMilestones(userEmail: string): Promise<GetManyMilestonesResponse> {
+export async function getAllMilestones(userEmail: string): Promise<MilestoneApiResponse> {
   try {
     const user = await prisma.user.findFirstOrThrow({
       where: {
