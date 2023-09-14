@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { updateMilestoneAndRevalidate } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { MilestoneFormData } from '@/types/types'
+import { sanitizeDocumentName } from './_utils'
 
 type TProps = {
   milestone: Milestone
@@ -109,8 +110,19 @@ export default function MilestoneEditForm({ milestone }: TProps) {
             type='file'
             accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
             onChange={onUpdateMilestoneDocument}
+            className={'hidden'}
           />
         </label>
+        <div>
+          <p>
+            {milestoneData.document ? 'Current File: ' : 'No File Uploaded'}
+          </p>
+          <p>
+            {milestoneData.document
+              ? sanitizeDocumentName(milestoneData.document as string)
+              : null}
+          </p>
+        </div>
         <button
           type='submit'
           disabled={mutation.isLoading || mutation.isSuccess}
