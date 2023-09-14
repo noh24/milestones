@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import CustomSession from '@/app/_server_utils/customSession'
-import { getOneMilestone } from './_utils'
+import { getOneMilestone } from './_serverUtils'
 import MilestoneEditForm from './MilestoneEditForm'
 import { GetOneMilestoneResponse } from '@/types/types'
 
