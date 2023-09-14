@@ -11,13 +11,12 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect(`/signin?redirect=milestones/${params.id}/edit`)
   }
 
-  const { success, data, error }: GetOneMilestoneResponse = await getOneMilestone(params.id)
+  const { success, data, error }: GetOneMilestoneResponse =
+    await getOneMilestone(params.id)
 
   if (error) {
     return <div>{error}</div>
   }
 
-  return (
-    <MilestoneEditForm userEmail={session?.user?.email!} milestone={data!} />
-  )
+  return <MilestoneEditForm milestone={data!} />
 }
