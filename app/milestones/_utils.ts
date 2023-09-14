@@ -1,4 +1,4 @@
-import { DeleteMilestoneApiResponse } from "@/types/types"
+import { DeleteMilestoneApiResponse, UpdateMilestoneApiResponse } from "@/types/types"
 import { CreateMilestoneApiResponse, MilestoneFormData } from "@/types/types"
 import Helper from "./../_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
@@ -39,22 +39,21 @@ export async function createMilestoneAndRevalidate({ milestoneData, router }: {
 
   const { success, data, error }: CreateMilestoneApiResponse = await res.json()
 
-  if (res.ok) {
-    setTimeout(() => {
-      router.prefetch('/milestones')
-      router.push('/milestones')
-    }, 1500)
-
-    await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
-      method: 'POST'
-    })
-
-    return data
-  } else {
+  if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))
   }
-}
 
+  setTimeout(() => {
+    router.prefetch('/milestones')
+    router.push('/milestones')
+  }, 1500)
+
+  await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+    method: 'POST'
+  })
+
+  return data
+}
 // UPDATE
 export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
   milestoneData: MilestoneFormData,
@@ -72,7 +71,7 @@ export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
   const { success, data, error }: UpdateMilestoneApiResponse = await res.json()
 
   if (!res.ok) {
-    throw new Error(Helper.sanitizeErrorMessage(error))
+    throw new Error(Helper.sanitizeErrorMessage(error!))
   }
 
   setTimeout(() => {
