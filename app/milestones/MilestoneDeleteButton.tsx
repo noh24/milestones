@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { deleteMilestoneAndDocument } from './_utils'
+import Loading from '../loading'
 
 type TProps = {
   id: string
@@ -22,6 +23,9 @@ const MilestoneDeleteButton = ({ id }: TProps) => {
     router.refresh()
   }
 
+  if (mutation.isLoading) {
+    return <Loading />
+  }
   return <button onClick={onClickDelete}>Delete</button>
 }
 

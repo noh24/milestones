@@ -48,9 +48,9 @@ export default function MilestoneEditForm({ milestone }: TProps) {
     e.preventDefault()
     mutation.mutate({ milestoneData, router })
   }
-
+  
   if (mutation.isLoading) return <Loading />
-  if (mutation.isSuccess) return <div>{mutation.data}</div>
+  if (mutation.isSuccess) return <p>Successfully Updated Milestone...</p>
   return (
     <>
       <form onSubmit={onSubmit}>

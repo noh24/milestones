@@ -51,7 +51,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   }
 
   if (mutation.isSuccess) {
-    return <div>{mutation.data}</div>
+    return <p>Successfully Created Milestone...</p>
   }
 
   return (

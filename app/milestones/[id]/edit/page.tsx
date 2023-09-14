@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation'
 import CustomSession from '@/app/_server_utils/customSession'
 import { getOneMilestone } from './_serverUtils'
 import MilestoneEditForm from './MilestoneEditForm'
-import { GetOneMilestoneResponse } from '@/types/types'
+import { MilestoneApiResponse } from '@/types/types'
+import { Milestone } from '@prisma/client'
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await CustomSession.getServerSession()
@@ -11,12 +12,13 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect(`/signin?redirect=milestones/${params.id}/edit`)
   }
 
-  const { success, data, error }: GetOneMilestoneResponse =
-    await getOneMilestone(params.id)
+  const { success, data, error }: MilestoneApiResponse = await getOneMilestone(
+    params.id
+  )
 
   if (error) {
     return <div>{error}</div>
   }
 
-  return <MilestoneEditForm milestone={data!} />
+  return <MilestoneEditForm milestone={data as Milestone} />
 }

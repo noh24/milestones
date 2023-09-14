@@ -5,6 +5,8 @@ import MilestoneDeleteButton from '@/app/milestones/MilestoneDeleteButton'
 import { Metadata } from 'next'
 import CustomSession from '../_server_utils/customSession'
 import { redirect } from 'next/navigation'
+import { Milestone } from '@prisma/client'
+import { MilestoneApiResponse } from '@/types/types'
 
 export const metadata: Metadata = {
   title: 'All Milestones - Milestones',
@@ -17,10 +19,10 @@ export default async function Page() {
     redirect('/signin?redirect=milestones')
   }
 
-  const { success, data, error } = await getAllMilestones(session?.user?.email!)
+  const { success, data, error }: MilestoneApiResponse = await getAllMilestones(session?.user?.email!)
 
   if (error) return <div>{String(error)}</div>
-  if (success && data!.length === 0) {
+  if (success && (data as Milestone[]).length === 0) {
     return (
       <>
         <Link href='/milestones/add'>Add Milestones</Link>
@@ -34,7 +36,7 @@ export default async function Page() {
   return (
     <>
       <div>
-        {data!.map(({ id, title, content, type, date }) => (
+        {(data as Milestone[]).map(({ id, title, content, type, date }) => (
           <div key={id}>
             <Link href={`/milestones/${id}`}>
               <h2>{title}</h2>
