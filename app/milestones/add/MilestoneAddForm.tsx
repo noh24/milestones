@@ -2,7 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
-import { createMilestoneAndRevalidate } from './_utils'
+import { createMilestoneAndRevalidate } from '../_utils'
 import { useRouter } from 'next/navigation'
 import Loading from '@/app/loading'
 import { MilestoneFormData } from '@/types/types'
