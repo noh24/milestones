@@ -1,6 +1,7 @@
 import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
 import { deleteMilestoneDocumentAsync, parseFormData, uploadDocumentHandler } from "./_utils"
+import { Milestone } from "@prisma/client"
 
 export async function DELETE(req: Request) {
   try {
@@ -106,13 +107,37 @@ export async function PUT(req: Request) {
 
     let documentPath: string = ''
 
+    let updatedMilestone: Milestone
+
+    // milestone doc -> existing or new or none
+    // existing doc -> real file path
+    // document path -> empty or real file path
+
+    // existing doc -> new doc = upload new, delete old
+   // existing doc -> exisiting doc = nothing
+
+    // no doc -> new doc = 
+    // no doc -> no doc = do nothing
+
     switch (true) {
       case existingMilestone.document.length > 1:
-        if (milestoneData.document) {
+        if (existingMilestone.document !== milestoneData.document) {
           documentPath = await uploadDocumentHandler(milestoneData.document as unknown as File)
+          deleteMilestoneDocumentAsync(existingMilestone.document)
+        } else {
+          // wip: need to figure out how to update on different scenarios
+          // might have to make db piece optional
+          updatedMilestone = await prisma.milestone.update({
+            where: {
+              id: milestoneId
+            },
+            data: {
+              ...milestoneData,
+              userId,
+            },
+          })
         }
-
-        deleteMilestoneDocumentAsync(existingMilestone.document)
+        
         break
       case existingMilestone.document.length === 0:
         if (milestoneData.document) {
@@ -121,7 +146,7 @@ export async function PUT(req: Request) {
         break
     }
 
-    const updatedMilestone = await prisma.milestone.update({
+    updatedMilestone = await prisma.milestone.update({
       where: {
         id: milestoneId
       },
