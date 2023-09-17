@@ -12,4 +12,10 @@ export default class Helper {
     splitDocumentName = splitDocumentName.join('').split('_')
     return splitDocumentName.slice(0, -1).join('_')
   }
+
+  static async revalidatePath({ path }: { path: string }) {
+    await fetch(`/api/revalidate?path=${path}&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
+      method: 'POST'
+    })
+  }
 }

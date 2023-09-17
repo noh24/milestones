@@ -3,7 +3,10 @@ import Helper from "./../_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
 // DELETE
-export async function deleteMilestoneAndDocument({ id }: { id: string }) {
+export async function deleteMilestoneAndDocument({ id, router }: {
+  id: string,
+  router: AppRouterInstance
+}) {
   const res = await fetch('/api/milestones', {
     method: 'DELETE',
     headers: {
@@ -14,11 +17,18 @@ export async function deleteMilestoneAndDocument({ id }: { id: string }) {
 
   const { success, data, error }: MilestoneApiResponse = await res.json()
 
-  if (res.ok) {
-    return data
-  } else {
+  if (!res.ok) {
     throw new Error(error!)
   }
+
+  setTimeout(() => {
+    router.prefetch('/milestones')
+    router.push('/milestones')
+  }, 1500)
+
+  Helper.revalidatePath({ path: 'milestones' })
+
+  return data
 }
 
 // CREATE
@@ -46,9 +56,7 @@ export async function createMilestoneAndRevalidate({ milestoneData, router }: {
     router.push('/milestones')
   }, 1500)
 
-  await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
-    method: 'POST'
-  })
+  Helper.revalidatePath({ path: 'milestones' })
 
   return data
 }
@@ -77,9 +85,8 @@ export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
     router.push('/milestones')
   }, 1500)
 
-  await fetch(`/api/revalidate?path=milestones&secret=${process.env.NEXT_PUBLIC_SECRET_REVALIDATION_TOKEN}`, {
-    method: 'POST'
-  })
+  Helper.revalidatePath({ path: 'milestones' })
 
   return data
 }
+
