@@ -39,7 +39,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0],
+      document: event.target.files![0] || (milestone.document ?? ''),
     }))
 
   const mutation = useMutation(updateMilestone)
@@ -127,7 +127,8 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           </p>
           <p>
             {milestoneData.document
-              ? Helper.sanitizeDocumentName(milestoneData.document as string)
+              ? (milestoneData.document as File).name ??
+                Helper.sanitizeDocumentName(milestoneData.document as string)
               : null}
           </p>
         </div>
