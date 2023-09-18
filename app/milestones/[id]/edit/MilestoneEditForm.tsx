@@ -46,6 +46,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     mutation.mutate({ milestoneData, router })
+    router.refresh()
   }
 
   if (mutation.isLoading) {
