@@ -2,10 +2,11 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
-import { createMilestoneAndRevalidate } from '../_utils'
+import { createMilestone } from '../_utils'
 import { useRouter } from 'next/navigation'
 import Loading from '@/app/loading'
 import { MilestoneFormData } from '@/types/types'
+import Helper from '@/app/_utils/helper'
 
 type TProps = {
   userEmail: string
@@ -39,11 +40,11 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
       document: event.target.files![0],
     }))
 
-  const mutation = useMutation(createMilestoneAndRevalidate)
+  const mutation = useMutation(createMilestone)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate({ milestoneData, router })
+    mutation.mutate({ milestoneData })
   }
 
   if (mutation.isLoading) {
@@ -51,6 +52,12 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   }
 
   if (mutation.isSuccess) {
+    setTimeout(() => {
+      router.prefetch('/milestones')
+      router.push('/milestones')
+    }, 1500)
+
+    Helper.revalidatePath({ path: 'milestones' })
     return <p>Successfully Created Milestone...</p>
   }
 

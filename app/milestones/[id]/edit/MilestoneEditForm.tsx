@@ -4,7 +4,7 @@ import Loading from '@/app/loading'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { updateMilestoneAndRevalidate } from '../../_utils'
+import { updateMilestone } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { MilestoneFormData } from '@/types/types'
 import Helper from '@/app/_utils/helper'
@@ -42,15 +42,23 @@ export default function MilestoneEditForm({ milestone }: TProps) {
       document: event.target.files![0],
     }))
 
-  const mutation = useMutation(updateMilestoneAndRevalidate)
+  const mutation = useMutation(updateMilestone)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate({ milestoneData, router })
+    mutation.mutate({ milestoneData })
   }
-  
+
   if (mutation.isLoading) return <Loading />
-  if (mutation.isSuccess) return <p>Successfully Updated Milestone...</p>
+  if (mutation.isSuccess) {
+    setTimeout(() => {
+      router.prefetch('/milestones')
+      router.push('/milestones')
+    }, 1500)
+
+    Helper.revalidatePath({ path: 'milestones' })
+    return <p>Successfully Updated Milestone...</p>
+  }
   return (
     <>
       <form onSubmit={onSubmit}>

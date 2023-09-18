@@ -1,11 +1,11 @@
 import { MilestoneApiResponse, MilestoneFormData } from "@/types/types"
 import Helper from "./../_utils/helper"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
 // DELETE
-export async function deleteMilestoneAndDocument({ id, router }: {
+export async function deleteMilestoneAndDocument({
+  id
+}: {
   id: string,
-  router: AppRouterInstance
 }) {
   const res = await fetch('/api/milestones', {
     method: 'DELETE',
@@ -21,20 +21,14 @@ export async function deleteMilestoneAndDocument({ id, router }: {
     throw new Error(error!)
   }
 
-  setTimeout(() => {
-    router.prefetch('/milestones')
-    router.push('/milestones')
-  }, 1500)
-
-  Helper.revalidatePath({ path: 'milestones' })
-
   return data
 }
 
 // CREATE
-export async function createMilestoneAndRevalidate({ milestoneData, router }: {
+export async function createMilestone({
+  milestoneData
+}: {
   milestoneData: MilestoneFormData,
-  router: AppRouterInstance
 }) {
   const formData = new FormData()
 
@@ -51,19 +45,13 @@ export async function createMilestoneAndRevalidate({ milestoneData, router }: {
     throw new Error(Helper.sanitizeErrorMessage(error!))
   }
 
-  setTimeout(() => {
-    router.prefetch('/milestones')
-    router.push('/milestones')
-  }, 1500)
-
-  Helper.revalidatePath({ path: 'milestones' })
-
   return data
 }
 // UPDATE
-export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
+export async function updateMilestone({
+  milestoneData
+}: {
   milestoneData: MilestoneFormData,
-  router: AppRouterInstance
 }) {
   const formData = new FormData()
 
@@ -79,13 +67,6 @@ export async function updateMilestoneAndRevalidate({ milestoneData, router }: {
   if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))
   }
-
-  setTimeout(() => {
-    router.prefetch('/milestones')
-    router.push('/milestones')
-  }, 1500)
-
-  Helper.revalidatePath({ path: 'milestones' })
 
   return data
 }
