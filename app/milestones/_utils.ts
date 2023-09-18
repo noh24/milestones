@@ -1,5 +1,6 @@
 import { MilestoneApiResponse, MilestoneFormData } from "@/types/types"
 import Helper from "./../_utils/helper"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
 // DELETE
 export async function deleteMilestoneAndDocument({
@@ -49,9 +50,11 @@ export async function createMilestone({
 }
 // UPDATE
 export async function updateMilestone({
-  milestoneData
+  milestoneData,
+  router
 }: {
   milestoneData: MilestoneFormData,
+  router: AppRouterInstance
 }) {
   const formData = new FormData()
 
@@ -67,6 +70,15 @@ export async function updateMilestone({
   if (!res.ok) {
     throw new Error(Helper.sanitizeErrorMessage(error!))
   }
+
+  setTimeout(() => {
+    router.prefetch('/milestones')
+    router.prefetch(`/milestones/${milestoneData.id}/edit`)
+    router.push('/milestones')
+  }, 1500)
+
+  Helper.revalidatePath({ path: 'milestones' })
+  Helper.revalidatePath({ path: `milestones/${milestoneData.id}/edit` })
 
   return data
 }
