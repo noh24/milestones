@@ -37,7 +37,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0],
+      document: event.target.files![0] ?? '',
     }))
 
   const mutation = useMutation(createMilestone)
@@ -56,7 +56,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
       router.prefetch('/milestones')
       router.push('/milestones')
     }, 1500)
-
+  
     Helper.revalidatePath({ path: 'milestones' })
     return <p>Successfully Created Milestone...</p>
   }
