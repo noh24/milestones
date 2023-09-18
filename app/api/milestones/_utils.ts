@@ -3,8 +3,24 @@ import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
 import { MilestoneFormData } from '@/types/types'
+import { Milestone } from '@prisma/client'
 
-export const deleteMilestoneDocumentAsync = async (absoluteDocumentPath: string): Promise<void> => {
+export async function handleDocumentUpdate(existingMilestone: Milestone, milestoneData: MilestoneFormData): Promise<string> {
+  let documentPath: string = ''
+
+  if (existingMilestone.document && existingMilestone.document !== milestoneData.document) {
+    documentPath = await handleDocumentUpload(milestoneData.document as File)
+    handleDocumentDelete(existingMilestone.document)
+  }
+
+  if (!existingMilestone.document && milestoneData.document) {
+    documentPath = await handleDocumentUpload(milestoneData.document as File)
+  }
+
+  return documentPath
+}
+
+export async function handleDocumentDelete(absoluteDocumentPath: string): Promise<void> {
   try {
     await fs.promises.access(absoluteDocumentPath, fs.constants.F_OK)
 
@@ -17,15 +33,17 @@ export const deleteMilestoneDocumentAsync = async (absoluteDocumentPath: string)
   }
 }
 
-export const parseFormData = (formData: FormData): MilestoneFormData => ({
-  title: formData.get('title') as string,
-  content: formData.get('content') as string,
-  type: formData.get('type') as string,
-  date: new Date(formData.get('date') as string).toISOString(),
-  document: formData.get('document') as File | string
-})
+export function parseFormData(formData: FormData): MilestoneFormData {
+  return {
+    title: formData.get('title') as string,
+    content: formData.get('content') as string,
+    type: formData.get('type') as string,
+    date: new Date(formData.get('date') as string).toISOString(),
+    document: formData.get('document') as File | string
+  }
+}
 
-export const uploadDocumentHandler = async (document: File): Promise<string> => {
+export async function handleDocumentUpload(document: File): Promise<string> {
   if (!validateDocumentType(document.type)) {
     throw new Error('Document type is not acceptable MIME type.')
   }
@@ -45,7 +63,7 @@ export const uploadDocumentHandler = async (document: File): Promise<string> => 
   return documentPath
 }
 
-const validateDocumentType = (type: string): boolean => {
+function validateDocumentType(type: string): boolean {
   const lowerCaseType = type.toLowerCase()
   const mimeTypes = [
     'application/msword',
@@ -58,19 +76,20 @@ const validateDocumentType = (type: string): boolean => {
   return mimeTypes.includes(lowerCaseType)
 }
 
-const validateDocumentSize = (documentSize: number): boolean => {
+function validateDocumentSize(documentSize: number): boolean {
   return documentSize <= 5 * 1024 * 1024 //max 5mb * 1024 kilobyte in mb * 1024 byte in kilobyte
 }
-const convertByteToMb = (documentSize: number): string => {
+
+function convertByteToMb(documentSize: number): string {
   return (documentSize / 1024 / 1024).toFixed(2)
 }
 
-const generateUploadsDirectoryPath = (): string => {
+function generateUploadsDirectoryPath(): string {
   return path.join(__dirname, '..', '..', '..', '..', '..', 'uploads')
 }
 
 // if /uploads directory doesn't exist or is not a directory, create it
-const ensureUploadsDirectoryExistsAsync = async (uploadPath: string): Promise<void> => {
+async function ensureUploadsDirectoryExistsAsync(uploadPath: string): Promise<void> {
   try {
     await fs.promises.mkdir(uploadPath, { recursive: true })
 
@@ -81,7 +100,7 @@ const ensureUploadsDirectoryExistsAsync = async (uploadPath: string): Promise<vo
   }
 }
 
-const generateRandomFileName = (document: File): string => {
+function generateRandomFileName(document: File): string {
   const mimeTypes = {
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
