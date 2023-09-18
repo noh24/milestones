@@ -6,7 +6,6 @@ import { createMilestone } from '../_utils'
 import { useRouter } from 'next/navigation'
 import Loading from '@/app/loading'
 import { MilestoneFormData } from '@/types/types'
-import Helper from '@/app/_utils/helper'
 
 type TProps = {
   userEmail: string
