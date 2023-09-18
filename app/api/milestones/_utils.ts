@@ -2,6 +2,7 @@ import path from 'path'
 import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
+import { MilestoneFormData } from '@/types/types'
 
 export const deleteMilestoneDocumentAsync = async (absoluteDocumentPath: string): Promise<void> => {
   try {
@@ -16,7 +17,7 @@ export const deleteMilestoneDocumentAsync = async (absoluteDocumentPath: string)
   }
 }
 
-export const parseFormData = (formData: FormData) => ({
+export const parseFormData = (formData: FormData): MilestoneFormData => ({
   title: formData.get('title') as string,
   content: formData.get('content') as string,
   type: formData.get('type') as string,
