@@ -23,7 +23,6 @@ export default function MilestoneEditForm({ milestone }: TProps) {
     date: milestone.date.toISOString().split('T')[0],
     document: milestone.document ? milestone.document : '',
     id: milestone.id,
-    userId: milestone.userId,
   })
 
   const onUpdateMilestoneData =
@@ -46,17 +45,14 @@ export default function MilestoneEditForm({ milestone }: TProps) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate({ milestoneData })
+    mutation.mutate({ milestoneData, router })
   }
 
-  if (mutation.isLoading) return <Loading />
-  if (mutation.isSuccess) {
-    setTimeout(() => {
-      router.prefetch('/milestones')
-      router.push('/milestones')
-    }, 1500)
+  if (mutation.isLoading) {
+    return <Loading />
+  }
 
-    Helper.revalidatePath({ path: 'milestones' })
+  if (mutation.isSuccess) {
     return <p>Successfully Updated Milestone...</p>
   }
   return (
@@ -91,7 +87,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           <input
             name='type'
             type='radio'
-            checked={milestoneData.type ? true : false}
+            checked={milestoneData.type === 'professional' ? true : false}
             required
             value='professional'
             onChange={onUpdateMilestoneData('type')}
@@ -102,7 +98,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           <input
             name='type'
             type='radio'
-            checked={milestoneData.type ? true : false}
+            checked={milestoneData.type === 'personal' ? true : false}
             value='personal'
             onChange={onUpdateMilestoneData('type')}
           />
@@ -136,7 +132,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           type='submit'
           disabled={mutation.isLoading || mutation.isSuccess}
         >
-          Add Milestone
+          Update Milestone
         </button>
       </form>
       <p>{mutation.isError ? (mutation.error as Error).message : null}</p>
