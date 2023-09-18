@@ -1,9 +1,9 @@
 import prisma from "@/prisma/db"
-import { GetOneMilestoneResponse } from "@/types/types"
+import { MilestoneApiResponse } from "@/types/types"
 
 export async function getOneMilestone(
   milestoneId: string
-): Promise<GetOneMilestoneResponse> {
+): Promise<MilestoneApiResponse> {
   try {
     const milestone = await prisma.milestone.findFirstOrThrow({
       where: {
