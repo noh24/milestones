@@ -17,7 +17,7 @@ const MilestoneDeleteButton = ({ id }: TProps) => {
   const mutation = useMutation(deleteMilestoneAndDocument)
 
   const onClickDelete = () => {
-    mutation.mutate({ id })
+    mutation.mutate({ id, router })
 
     // can't call revalidation api
     // nextjs revalidatePath() only revalidates on next visit
@@ -26,13 +26,6 @@ const MilestoneDeleteButton = ({ id }: TProps) => {
 
   if (mutation.isLoading) {
     return <Loading />
-  }
-  if (mutation.isSuccess) {
-    setTimeout(() => {
-      router.prefetch('/milestones')
-      router.push('/milestones')
-    }, 1500)
-    Helper.revalidatePath({ path: 'milestones' })
   }
   return <button onClick={onClickDelete}>Delete</button>
 }

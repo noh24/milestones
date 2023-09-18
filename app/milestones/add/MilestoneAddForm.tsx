@@ -44,7 +44,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutation.mutate({ milestoneData })
+    mutation.mutate({ milestoneData, router })
   }
 
   if (mutation.isLoading) {
@@ -52,12 +52,6 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   }
 
   if (mutation.isSuccess) {
-    setTimeout(() => {
-      router.prefetch('/milestones')
-      router.push('/milestones')
-    }, 1500)
-  
-    Helper.revalidatePath({ path: 'milestones' })
     return <p>Successfully Created Milestone...</p>
   }
 
