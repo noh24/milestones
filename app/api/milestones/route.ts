@@ -102,24 +102,28 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const formData = await req.formData()
-    const milestoneId = formData.get('id') as string
     const milestoneData = parseFormData(formData)
+    milestoneData['id'] = formData.get('id') as string
 
-    const existingMilestone = await prisma.milestone.findFirstOrThrow({
+    const existingMilestone = await prisma.milestone.findFirst({
       where: {
-        id: milestoneId
+        id: milestoneData.id,
       },
     })
 
-    const documentPath = await handleDocumentUpdate(existingMilestone, { ...milestoneData, id: milestoneId })
+    if (!existingMilestone) {
+      throw Error("The Milestone Id Provided Has No Associated Milestone.")
+    }
+
+    const documentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
 
     let updatedMilestone: Milestone
 
     if (documentPath) {
       updatedMilestone = await CustomPrisma.updateMilestoneWithDocument(milestoneData, documentPath)
+    } else {
+      updatedMilestone = await CustomPrisma.updateMilestoneWithoutDocument(milestoneData)
     }
-
-    updatedMilestone = await CustomPrisma.updateMilestoneWithoutDocument(milestoneData)
 
     return NextResponse.json({
       success: true,
@@ -130,7 +134,7 @@ export async function PUT(req: Request) {
     })
 
   } catch (err) {
-    console.log('Milestone Api Route Post', err)
+    console.log('Milestone Api Route Put', err)
 
     return NextResponse.json({
       success: false,
