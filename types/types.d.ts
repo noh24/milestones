@@ -26,18 +26,27 @@ type EditMilestoneFormData = {
   content: string
   type: string
   date: string
-  documentPath?: string | null
-  documentName?: string | null
   document? : File | null
+  documentPath?: string
+  documentName?: string
   userEmail?: string
   id?: string
 }
 
-type ParsedMilestoneFormData = {
+type ParsedCreateMilestoneFormData = {
   title: string
   content: string
   type: string
   date: string
+}
+
+type ParsedEditMilestoneFormData = {
+  title: string
+  content: string
+  type: string
+  date: string
+  document? : File | null
+  documentPath?: string
 }
 
 type SignUpApiResponse = {
