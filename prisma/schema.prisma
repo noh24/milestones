@@ -66,7 +66,8 @@ model Milestone {
   title     String   @db.VarChar(255)
   content   String   @db.MediumText
   type      String   @db.VarChar(255) //professional or personal
-  document  String   @db.VarChar(255)
+  documentPath  String   @db.VarChar(255)
+  documentName  String   @db.VarChar(255)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }
