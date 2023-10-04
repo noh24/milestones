@@ -22,8 +22,8 @@ export default function MilestoneEditForm({ milestone }: TProps) {
     type: milestone.type,
     date: milestone.date.toISOString().split('T')[0],
     document: null,
-    documentPath: milestone.documentPath ?? null,
-    documentName: milestone.documentName ?? null,
+    documentPath: milestone.documentPath ?? '',
+    documentName: milestone.documentName ?? '',
     id: milestone.id,
   })
 
