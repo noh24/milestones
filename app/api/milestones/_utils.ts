@@ -2,7 +2,7 @@ import path from 'path'
 import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
-import { MilestoneFormData } from '@/types/types'
+import { MilestoneFormData, ParsedMilestoneFormData } from '@/types/types'
 import { Milestone } from '@prisma/client'
 
 export async function handleDocumentUpdate(existingMilestone: Milestone, milestoneData: MilestoneFormData): Promise<string> {
@@ -33,13 +33,12 @@ export async function handleDocumentDelete(absoluteDocumentPath: string): Promis
   }
 }
 
-export function parseFormData(formData: FormData): MilestoneFormData {
+export function parseFormData(formData: FormData): ParsedMilestoneFormData {
   return {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
     type: formData.get('type') as string,
     date: new Date(formData.get('date') as string).toISOString(),
-    document: formData.get('document') as File | string
   }
 }
 
