@@ -50,6 +50,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData()
     const userEmail = formData.get('userEmail') as string
+    const file = formData.get('document') as File | string
 
     const user = await prisma.user.findFirstOrThrow({
       where: {
@@ -68,15 +69,16 @@ export async function POST(req: Request) {
 
     let documentPath: string = ''
 
-    if (milestoneData.document) {
-      documentPath = await handleDocumentUpload(milestoneData.document as unknown as File)
+    if (file) {
+      documentPath = await handleDocumentUpload(file as unknown as File)
     }
 
     const newMilestone = await prisma.milestone.create({
       data: {
         ...milestoneData,
         userId: user.id,
-        document: documentPath
+        documentPath: documentPath,
+        documentName: (file as File).name
       },
     })
 
