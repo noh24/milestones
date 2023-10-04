@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { createMilestone } from '../_utils'
 import { useRouter } from 'next/navigation'
 import Loading from '@/app/loading'
-import { MilestoneFormData } from '@/types/types'
+import { CreateMilestoneFormData } from '@/types/types'
 
 type TProps = {
   userEmail: string
@@ -14,17 +14,17 @@ type TProps = {
 export default function MilestoneAddForm({ userEmail }: TProps) {
   const router = useRouter()
 
-  const [milestoneData, setMilestoneData] = useState<MilestoneFormData>({
+  const [milestoneData, setMilestoneData] = useState<CreateMilestoneFormData>({
     title: '',
     content: '',
     type: '',
     date: '',
-    document: '',
+    document: null,
     userEmail,
   })
 
   const onUpdateMilestoneData =
-    (type: keyof MilestoneFormData) =>
+    (type: keyof CreateMilestoneFormData) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setMilestoneData((prevState) => ({
         ...prevState,
@@ -36,7 +36,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0] ?? '',
+      document: event.target.files![0] ?? null,
     }))
 
   const mutation = useMutation(createMilestone)
