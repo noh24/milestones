@@ -1,6 +1,6 @@
 import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
-import { handleDocumentDelete, parseFormData, handleDocumentUpdate, handleDocumentUpload } from "./_utils"
+import { handleDocumentDelete, parseCreateFormData, handleDocumentUpdate, handleDocumentUpload, parseEditFormData } from "./_utils"
 import { Milestone } from "@prisma/client"
 import CustomPrisma from "@/app/_server_utils/customPrisma"
 
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       throw Error('Invalid User!')
     }
 
-    const milestoneData = parseFormData(formData)
+    const milestoneData = parseCreateFormData(formData)
 
     let documentPath: string = ''
 
@@ -105,17 +105,17 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const formData = await req.formData()
-    const milestoneData = parseFormData(formData)
-    milestoneData['id'] = formData.get('id') as string
+    const milestoneData = parseEditFormData(formData)
+    const milestoneId = formData.get('id') as string
 
     const existingMilestone = await prisma.milestone.findFirst({
       where: {
-        id: milestoneData.id,
+        id: milestoneId,
       },
     })
 
     if (!existingMilestone) {
-      throw Error("The Milestone Id Provided Has No Associated Milestone.")
+      throw Error("This Milestone does not exist.")
     }
 
     const documentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
