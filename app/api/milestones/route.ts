@@ -13,7 +13,8 @@ export async function DELETE(req: Request) {
         id,
       },
       select: {
-        document: true
+        documentName: true,
+        documentPath: true,
       },
     })
 
@@ -21,13 +22,13 @@ export async function DELETE(req: Request) {
       throw Error('No Milestone To Delete!')
     }
 
-    if (deletedMilestone.document) {
-      handleDocumentDelete(deletedMilestone.document)
+    if (deletedMilestone.documentPath) {
+      handleDocumentDelete(deletedMilestone.documentPath)
     }
 
     return NextResponse.json({
       success: true,
-      data: deletedMilestone,
+      data: deletedMilestone.documentName,
       error: null
     }, {
       status: 200
