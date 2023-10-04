@@ -2,38 +2,52 @@ import path from 'path'
 import crypto from 'crypto'
 import { writeFile } from 'fs/promises'
 import fs from 'fs'
-import { MilestoneFormData, ParsedMilestoneFormData } from '@/types/types'
+import { ParsedCreateMilestoneFormData, ParsedEditMilestoneFormData, } from '@/types/types'
 import { Milestone } from '@prisma/client'
 
-export async function handleDocumentUpdate(existingMilestone: Milestone, milestoneData: MilestoneFormData): Promise<string> {
-  let documentPath: string = ''
-
-  if (existingMilestone.document && existingMilestone.document !== milestoneData.document) {
-    documentPath = await handleDocumentUpload(milestoneData.document as File)
-    handleDocumentDelete(existingMilestone.document)
+export async function handleDocumentUpdate(
+  existingMilestone: Milestone,
+  milestoneData: ParsedEditMilestoneFormData
+): Promise<string | undefined> {
+  // If Existing Milestone has Document Path AND it's not equal to new Milestone documentPath
+  // Delete File using Existing Milestone Document Path
+  // Upload new Milestone document and return path
+  if (existingMilestone.documentPath && existingMilestone.documentPath !== milestoneData.documentPath) {
+    handleDocumentDelete(existingMilestone.documentPath)
+    return await handleDocumentUpload(milestoneData.document as File)
   }
-
-  if (!existingMilestone.document && milestoneData.document) {
-    documentPath = await handleDocumentUpload(milestoneData.document as File)
+  // If No Existing Document Path AND new Milestone document present
+  // Upload new Milestone document
+  if (!existingMilestone.documentPath && milestoneData.document) {
+    return await handleDocumentUpload(milestoneData.document as File)
   }
-
-  return documentPath
 }
 
 export async function handleDocumentDelete(absoluteDocumentPath: string): Promise<void> {
   try {
+    // Checks Accessibility of File - Resolves to Nothing or Throws Exception
     await fs.promises.access(absoluteDocumentPath, fs.constants.F_OK)
-
+    // Deletes File
     await fs.promises.unlink(absoluteDocumentPath)
 
   } catch (err) {
     console.log('deleteMilestoneDocumentAsync Error: ', err)
-
-    throw new Error(String(err))
+    throw Error(String(err))
   }
 }
 
-export function parseFormData(formData: FormData): ParsedMilestoneFormData {
+export function parseCreateFormData(formData: FormData): ParsedEditMilestoneFormData {
+  return {
+    title: formData.get('title') as string,
+    content: formData.get('content') as string,
+    type: formData.get('type') as string,
+    date: new Date(formData.get('date') as string).toISOString(),
+    document: formData.get('document') as unknown as File,
+    documentPath: formData.get('documentPath') as string,
+  }
+}
+
+export function parseEditFormData(formData: FormData): ParsedEditMilestoneFormData {
   return {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
