@@ -17,10 +17,17 @@ type MilestoneFormData = {
   content: string
   type: string
   date: string
-  document: File | string
+  document?: File | string
   userEmail?: string
   id?: string
   userId?: string
+}
+
+type ParsedMilestoneFormData = {
+  title: string
+  content: string
+  type: string
+  date: string
 }
 
 type SignUpApiResponse = {
