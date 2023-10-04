@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { updateMilestone } from '../../_utils'
 import { Milestone } from '@prisma/client'
-import { MilestoneFormData } from '@/types/types'
+import { EditMilestoneFormData } from '@/types/types'
 import Helper from '@/app/_utils/helper'
 
 type TProps = {
@@ -16,17 +16,19 @@ type TProps = {
 export default function MilestoneEditForm({ milestone }: TProps) {
   const router = useRouter()
 
-  const [milestoneData, setMilestoneData] = useState<MilestoneFormData>({
+  const [milestoneData, setMilestoneData] = useState<EditMilestoneFormData>({
     title: milestone.title,
     content: milestone.content,
     type: milestone.type,
     date: milestone.date.toISOString().split('T')[0],
-    document: milestone.document ? milestone.document : '',
+    document: null,
+    documentPath: milestone.documentPath ?? null,
+    documentName: milestone.documentName ?? null,
     id: milestone.id,
   })
 
   const onUpdateMilestoneData =
-    (type: keyof MilestoneFormData) =>
+    (type: keyof EditMilestoneFormData) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setMilestoneData((prevState) => ({
         ...prevState,
@@ -38,7 +40,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0] || (milestone.document ?? ''),
+      document: event.target.files![0] ?? null,
     }))
 
   const mutation = useMutation(updateMilestone)
@@ -119,13 +121,22 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           />
         </label>
         <div>
+          {/* Display Current File if document or documentName */}
           <p>
-            {milestoneData.document ? 'Current File: ' : 'No File Uploaded'}
+            {milestoneData.document || milestoneData.documentName
+              ? 'Current File: '
+              : 'No File Uploaded'}
           </p>
+          {/* Display Document if present */}
           <p>
             {milestoneData.document
-              ? (milestoneData.document as File).name ??
-                Helper.sanitizeDocumentName(milestoneData.document as string)
+              ? (milestoneData.document as File).name
+              : null}
+          </p>
+          {/* Display Document name if present AND no document present */}
+          <p>
+            {milestoneData.documentName && !milestoneData.document
+              ? Helper.sanitizeDocumentName(milestoneData.documentName)
               : null}
           </p>
         </div>
