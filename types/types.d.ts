@@ -12,15 +12,25 @@ type UserSignInData = {
   password: string
 }
 
-type MilestoneFormData = {
+type CreateMilestoneFormData = {
   title: string
   content: string
   type: string
   date: string
-  document?: File | string
+  document?: File | null
+  userEmail: string
+}
+
+type EditMilestoneFormData = {
+  title: string
+  content: string
+  type: string
+  date: string
+  documentPath?: string | null
+  documentName?: string | null
+  document? : File | null
   userEmail?: string
   id?: string
-  userId?: string
 }
 
 type ParsedMilestoneFormData = {
