@@ -136,7 +136,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           {/* Display Document name if present AND no document present */}
           <p>
             {milestoneData.documentName && !milestoneData.document
-              ? Helper.sanitizeDocumentName(milestoneData.documentName)
+              ? `C://Fake//Path//${milestoneData.documentName}`
               : null}
           </p>
         </div>
