@@ -1,8 +1,8 @@
 import prisma from "@/prisma/db"
-import { MilestoneFormData } from "@/types/types"
+import { EditMilestoneFormData } from "@/types/types"
 
 export default class CustomPrisma {
-  static async updateMilestoneWithDocument(milestoneData: MilestoneFormData, documentPath: string) {
+  static async updateMilestoneWithDocument(milestoneData: EditMilestoneFormData, documentPath: string) {
     return await prisma.milestone.update({
       where: {
         id: milestoneData.id
@@ -12,12 +12,12 @@ export default class CustomPrisma {
         content: milestoneData.content,
         type: milestoneData.type,
         date: milestoneData.date,
-        document: documentPath
+        documentPath: documentPath
       },
     })
   }
 
-  static async updateMilestoneWithoutDocument(milestoneData: MilestoneFormData) {
+  static async updateMilestoneWithoutDocument(milestoneData: EditMilestoneFormData) {
     return await prisma.milestone.update({
       where: {
         id: milestoneData.id
