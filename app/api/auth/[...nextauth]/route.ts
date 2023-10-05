@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/prisma/db'
 import { SignInApiResponse } from '@/types/types'
+import { User } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -36,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         if (error) {
           return null
         } else {
-          return data
+          return data as User
         }
       },
     }),
