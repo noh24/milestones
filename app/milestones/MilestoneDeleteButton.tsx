@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { deleteMilestoneAndDocument } from './_utils'
 import Loading from '../loading'
-import Helper from '../_utils/helper'
 
 type TProps = {
   id: string
