@@ -1,4 +1,4 @@
-import { MilestoneApiResponse, MilestoneFormData } from "@/types/types"
+import { CreateMilestoneFormData, EditMilestoneFormData, MilestoneApiResponse } from "@/types/types"
 import Helper from "./../_utils/helper"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 
@@ -39,12 +39,12 @@ export async function createMilestone({
   milestoneData,
   router
 }: {
-  milestoneData: MilestoneFormData,
+  milestoneData: CreateMilestoneFormData,
   router: AppRouterInstance
 }) {
   const formData = new FormData()
 
-  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]))
+  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]!))
 
   const res = await fetch('/api/milestones', {
     method: 'POST',
@@ -72,12 +72,12 @@ export async function updateMilestone({
   milestoneData,
   router
 }: {
-  milestoneData: MilestoneFormData,
+  milestoneData: EditMilestoneFormData,
   router: AppRouterInstance
 }) {
   const formData = new FormData()
 
-  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]))
+  Object.entries(milestoneData).forEach((kvp) => formData.set(kvp[0], kvp[1]!))
 
   const res = await fetch('/api/milestones', {
     method: 'PUT',
