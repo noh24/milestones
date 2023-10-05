@@ -45,7 +45,8 @@ type ParsedEditMilestoneFormData = {
   type: string
   date: string
   document : File | string
-  documentPath?: string
+  documentPath: string
+  id: string
 }
 
 type SignUpApiResponse = {
