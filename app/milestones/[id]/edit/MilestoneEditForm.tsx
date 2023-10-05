@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 import { updateMilestone } from '../../_utils'
 import { Milestone } from '@prisma/client'
 import { EditMilestoneFormData } from '@/types/types'
-import Helper from '@/app/_utils/helper'
 
 type TProps = {
   milestone: Milestone
@@ -21,7 +20,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
     content: milestone.content,
     type: milestone.type,
     date: milestone.date.toISOString().split('T')[0],
-    document: null,
+    document: '',
     documentPath: milestone.documentPath ?? '',
     documentName: milestone.documentName ?? '',
     id: milestone.id,

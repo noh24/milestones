@@ -19,7 +19,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
     content: '',
     type: '',
     date: '',
-    document: null,
+    document: '',
     userEmail,
   })
 
