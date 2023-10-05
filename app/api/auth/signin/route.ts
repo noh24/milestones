@@ -1,4 +1,5 @@
 import prisma from '@/prisma/db'
+import { UserSignInData } from '@/types/types'
 import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
 

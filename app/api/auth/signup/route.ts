@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import prisma from '@/prisma/db'
 import { NextResponse } from 'next/server'
+import { UserSignUpData } from '@/types/types'
 
 export async function POST(req: Request) {
   try {
