@@ -106,11 +106,10 @@ export async function PUT(req: Request) {
   try {
     const formData = await req.formData()
     const milestoneData = parseEditFormData(formData)
-    const milestoneId = formData.get('id') as string
 
     const existingMilestone = await prisma.milestone.findFirst({
       where: {
-        id: milestoneId,
+        id: milestoneData.id,
       },
     })
 
@@ -118,12 +117,12 @@ export async function PUT(req: Request) {
       throw Error("This Milestone does not exist.")
     }
 
-    const documentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
+    const newDocumentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
 
     let updatedMilestone: Milestone
 
-    if (documentPath) {
-      updatedMilestone = await CustomPrisma.updateMilestoneWithDocument(milestoneData, documentPath)
+    if (newDocumentPath) {
+      updatedMilestone = await CustomPrisma.updateMilestoneWithDocument(milestoneData, newDocumentPath)
     } else {
       updatedMilestone = await CustomPrisma.updateMilestoneWithoutDocument(milestoneData)
     }
