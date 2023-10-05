@@ -36,7 +36,18 @@ export async function handleDocumentDelete(absoluteDocumentPath: string): Promis
   }
 }
 
-export function parseCreateFormData(formData: FormData): ParsedEditMilestoneFormData {
+// Parse Form Data For Creating Milestone
+export function parseCreateFormData(formData: FormData): ParsedCreateMilestoneFormData {
+  return {
+    title: formData.get('title') as string,
+    content: formData.get('content') as string,
+    type: formData.get('type') as string,
+    date: new Date(formData.get('date') as string).toISOString(),
+  }
+}
+
+// Parse Form Data For Editing Milestone
+export function parseEditFormData(formData: FormData): ParsedEditMilestoneFormData {
   return {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
@@ -44,15 +55,7 @@ export function parseCreateFormData(formData: FormData): ParsedEditMilestoneForm
     date: new Date(formData.get('date') as string).toISOString(),
     document: formData.get('document') as unknown as File,
     documentPath: formData.get('documentPath') as string,
-  }
-}
-
-export function parseEditFormData(formData: FormData): ParsedEditMilestoneFormData {
-  return {
-    title: formData.get('title') as string,
-    content: formData.get('content') as string,
-    type: formData.get('type') as string,
-    date: new Date(formData.get('date') as string).toISOString(),
+    id: formData.get('id') as string
   }
 }
 
