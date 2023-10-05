@@ -29,7 +29,7 @@ export async function DELETE(req: Request) {
     return NextResponse.json({
       success: true,
       data: deletedMilestone.documentName,
-      error: null
+      error: ''
     }, {
       status: 200
     })
@@ -38,7 +38,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({
       success: false,
-      data: null,
+      data: '',
       error: String(err)
     }, {
       status: 400
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       data: newMilestone,
-      error: null
+      error: ''
     }, {
       status: 200
     })
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: false,
-      data: null,
+      data: '',
       error: String(err)
     }, {
       status: 400
@@ -131,7 +131,7 @@ export async function PUT(req: Request) {
     return NextResponse.json({
       success: true,
       data: updatedMilestone,
-      error: null
+      error: ''
     }, {
       status: 200
     })
@@ -141,7 +141,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({
       success: false,
-      data: null,
+      data: '',
       error: String(err)
     }, {
       status: 400

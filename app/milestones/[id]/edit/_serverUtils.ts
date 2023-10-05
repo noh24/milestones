@@ -14,14 +14,14 @@ export async function getOneMilestone(
     return {
       success: true,
       data: milestone,
-      error: null,
+      error: '',
     }
   } catch (err) {
     console.log('getOneMilestone: ', err)
 
     return {
       success: false,
-      data: null,
+      data: '',
       error: String(err),
     }
   }

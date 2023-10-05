@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
 
     revalidatePath(path)
 
-    return NextResponse.json({ success: true, data: `${path} has been revalidated`, error: null }, { status: 200 })
+    return NextResponse.json({ success: true, data: `${path} has been revalidated`, error: '' }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ success: false, data: null, error: String(err) }, { status: 401 })
+    return NextResponse.json({ success: false, data: '', error: String(err) }, { status: 401 })
   }
 }

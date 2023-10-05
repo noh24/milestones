@@ -21,7 +21,7 @@ export async function getAllMilestones(userEmail: string): Promise<MilestoneApiR
     return {
       success: true,
       data: milestones,
-      error: null,
+      error: '',
     }
 
   } catch (err) {
@@ -29,7 +29,7 @@ export async function getAllMilestones(userEmail: string): Promise<MilestoneApiR
 
     return {
       success: false,
-      data: null,
+      data: '',
       error: String(err),
     }
   }
