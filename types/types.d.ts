@@ -17,7 +17,7 @@ type CreateMilestoneFormData = {
   content: string
   type: string
   date: string
-  document?: File | null
+  document: File | string
   userEmail: string
 }
 
@@ -26,11 +26,10 @@ type EditMilestoneFormData = {
   content: string
   type: string
   date: string
-  document? : File | null
-  documentPath?: string
-  documentName?: string
-  userEmail?: string
-  id?: string
+  document: File | string
+  documentPath: string
+  documentName: string
+  id: string
 }
 
 type ParsedCreateMilestoneFormData = {
@@ -45,24 +44,24 @@ type ParsedEditMilestoneFormData = {
   content: string
   type: string
   date: string
-  document? : File | null
+  document : File | string
   documentPath?: string
 }
 
 type SignUpApiResponse = {
   success: boolean
-  data: string | null
-  error: string | null
+  data: string
+  error: string
 }
 
 type SignInApiResponse = {
   success: boolean
-  data: User | null
-  error: string | null
+  data: User | string
+  error: string
 }
 
 type MilestoneApiResponse = {
   success: boolean
-  data: Milestone | Milestone[] | null
-  error: string | null
+  data: Milestone | Milestone[] | string
+  error: string
 }
