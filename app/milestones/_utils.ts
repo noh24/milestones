@@ -60,6 +60,7 @@ export async function createMilestone({
   setTimeout(() => {
     router.prefetch('/milestones')
     router.push('/milestones')
+    router.refresh()
   }, 1500)
 
   Helper.revalidatePath({ path: 'milestones' })
@@ -94,6 +95,7 @@ export async function updateMilestone({
     router.prefetch('/milestones')
     router.prefetch(`/milestones/${milestoneData.id}/edit`)
     router.push('/milestones')
+    router.refresh()
   }, 1500)
 
   Helper.revalidatePath({ path: 'milestones' })
