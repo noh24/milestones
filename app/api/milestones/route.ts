@@ -1,8 +1,6 @@
 import prisma from "@/prisma/db"
 import { NextResponse } from 'next/server'
 import { handleDocumentDelete, parseCreateFormData, handleDocumentUpdate, handleDocumentUpload, parseEditFormData } from "./_utils"
-import { Milestone } from "@prisma/client"
-import CustomPrisma from "@/app/_server_utils/customPrisma"
 
 export async function DELETE(req: Request) {
   try {
@@ -114,16 +112,25 @@ export async function PUT(req: Request) {
     if (!existingMilestone) {
       throw Error("This Milestone does not exist.")
     }
-
-    const newDocumentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
-
-    let updatedMilestone: Milestone
-
-    if (newDocumentPath) {
-      updatedMilestone = await CustomPrisma.updateMilestoneWithDocument(milestoneData, newDocumentPath)
-    } else {
-      updatedMilestone = await CustomPrisma.updateMilestoneWithoutDocument(milestoneData)
+    // If New Document present, update Existing Milestone's document data
+    if (milestoneData.document) {
+      milestoneData.documentPath = await handleDocumentUpdate(existingMilestone, milestoneData)
+      milestoneData.documentName = (milestoneData.document as File).name
     }
+
+    const updatedMilestone = await prisma.milestone.update({
+      where: {
+        id: milestoneData.id
+      },
+      data: {
+        title: milestoneData.title,
+        content: milestoneData.content,
+        type: milestoneData.type,
+        date: milestoneData.date,
+        documentPath: milestoneData.documentPath ?? '',
+        documentName: milestoneData.documentName ?? ''
+      },
+    })
 
     return NextResponse.json({
       success: true,
