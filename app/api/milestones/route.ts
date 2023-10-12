@@ -49,8 +49,10 @@ export async function DELETE(req: Request) {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData()
+    const milestoneData = parseCreateFormData(formData)
     const userEmail = formData.get('userEmail') as string
     const file = formData.get('document') as File | string
+    let documentPath: string = ''
 
     const user = await prisma.user.findFirstOrThrow({
       where: {
@@ -64,10 +66,6 @@ export async function POST(req: Request) {
     if (!user) {
       throw Error('Invalid User!')
     }
-
-    const milestoneData = parseCreateFormData(formData)
-
-    let documentPath: string = ''
 
     if (file) {
       documentPath = await handleDocumentUpload(file as unknown as File)
