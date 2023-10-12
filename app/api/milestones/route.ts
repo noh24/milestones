@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         ...milestoneData,
         userId: user.id,
         documentPath: documentPath,
-        documentName: (file as File).name
+        documentName: (file as File).name ?? ""
       },
     })
 
