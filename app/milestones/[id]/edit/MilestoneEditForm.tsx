@@ -47,7 +47,6 @@ export default function MilestoneEditForm({ milestone }: TProps) {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     mutation.mutate({ milestoneData, router })
-    router.refresh()
   }
 
   if (mutation.isLoading) {
@@ -120,19 +119,19 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           />
         </label>
         <div>
-          {/* Display Current File if document or documentName */}
+          {/* Display Current File if New Document or Old Document Name present */}
           <p>
             {milestoneData.document || milestoneData.documentName
               ? 'Current File: '
               : 'No File Uploaded'}
           </p>
-          {/* Display Document if present */}
+          {/* Display If New Document present */}
           <p>
             {milestoneData.document
               ? (milestoneData.document as File).name
               : null}
           </p>
-          {/* Display Document name if present AND no document present */}
+          {/* Display If Old Document Name present AND Old Document NOT present */}
           <p>
             {milestoneData.documentName && !milestoneData.document
               ? `C://Fake//Path//${milestoneData.documentName}`
