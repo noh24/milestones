@@ -8,7 +8,7 @@ import { Milestone } from '@prisma/client'
 export async function handleDocumentUpdate(
   existingMilestone: Milestone,
   milestoneData: ParsedEditMilestoneFormData
-): Promise<string | undefined> {
+): Promise<string> {
   // If Existing Milestone has Document Path AND it's not equal to new Milestone documentPath
   // Delete File using Existing Milestone Document Path
   // Upload new Milestone document and return path
@@ -21,6 +21,8 @@ export async function handleDocumentUpdate(
   if (!existingMilestone.documentPath && milestoneData.document) {
     return await handleDocumentUpload(milestoneData.document as File)
   }
+
+  return ''
 }
 
 export async function handleDocumentDelete(absoluteDocumentPath: string): Promise<void> {
