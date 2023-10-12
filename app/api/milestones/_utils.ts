@@ -9,10 +9,10 @@ export async function handleDocumentUpdate(
   existingMilestone: Milestone,
   milestoneData: ParsedEditMilestoneFormData
 ): Promise<string> {
-  // If Existing Milestone has Document Path AND it's not equal to new Milestone documentPath
-  // Delete File using Existing Milestone Document Path
+  // If Existing Milestone has Document Path AND Existing Milestone Document Name NOT EQUAL New Milestone Document Name
+  // Delete File - Existing Milestone Document Path
   // Upload new Milestone document and return path
-  if (existingMilestone.documentPath && existingMilestone.documentPath !== milestoneData.documentPath) {
+  if (existingMilestone.documentPath && existingMilestone.documentName !== (milestoneData.document as File).name) {
     handleDocumentDelete(existingMilestone.documentPath)
     return await handleDocumentUpload(milestoneData.document as File)
   }
@@ -57,6 +57,7 @@ export function parseEditFormData(formData: FormData): ParsedEditMilestoneFormDa
     date: new Date(formData.get('date') as string).toISOString(),
     document: formData.get('document') as unknown as File,
     documentPath: formData.get('documentPath') as string,
+    documentName: formData.get('documentName') as string,
     id: formData.get('id') as string
   }
 }
