@@ -46,6 +46,7 @@ type ParsedEditMilestoneFormData = {
   date: string
   document : File | string
   documentPath: string
+  documentName: string
   id: string
 }
 
