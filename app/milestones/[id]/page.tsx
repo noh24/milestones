@@ -3,6 +3,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import prisma from '@/prisma/db'
 import { Milestone } from '@prisma/client'
+import Image from 'next/image'
 
 type TProps = {
   params: {
@@ -35,9 +36,30 @@ export default async function Page({ params }: TProps) {
       <p>{content}</p>
       <span>{type}</span>
       <h4>{documentName}</h4>
-      <div>{documentPath}</div>
+      <h4>{documentPath}</h4>
+      {/* <iframe src={documentPath}></iframe> */}
+      {/* <iframe
+        className=''
+        width='100%'
+        height='600'
+        src={`https://docs.google.com/gview?url=${documentPath}&embedded=true`}
+      ></iframe> */}
+      <p>{parsePath(documentPath)}</p>
+      <Image
+        src={parsePath(documentPath)}
+        alt={documentName}
+        width={300}
+        height={500}
+      ></Image>
     </article>
   )
+}
+
+function parsePath(documentPath) {
+  const path = documentPath.split('uploads').slice(-1).toString().substring(1)
+  console.log(path)
+  // return path
+  return '/../../uploads/' + path
 }
 
 export async function findMilestone({
