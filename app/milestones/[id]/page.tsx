@@ -17,7 +17,27 @@ export default async function Page({ params }: TProps) {
     redirect(`/signin?redirect=milestones/${params.id}`)
   }
 
-  return <div>page</div>
+  const { success, data, error } = await findMilestone({
+    milestoneId: params.id,
+  })
+
+  if (error) {
+    return <p>{error}</p>
+  }
+
+  const { id, date, title, content, type, documentPath, documentName } =
+    data as Milestone
+
+  return (
+    <article>
+      <h2>{title}</h2>
+      <h5>{date.toDateString()}</h5>
+      <p>{content}</p>
+      <span>{type}</span>
+      <h4>{documentName}</h4>
+      <div>{documentPath}</div>
+    </article>
+  )
 }
 
 export async function findMilestone({
