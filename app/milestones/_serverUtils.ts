@@ -16,6 +16,9 @@ export async function getAllMilestones(userEmail: string): Promise<MilestoneApiR
       where: {
         userId: user.id,
       },
+      orderBy: {
+        createdAt: 'desc'
+      }
     })
 
     return {
