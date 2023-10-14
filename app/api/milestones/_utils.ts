@@ -21,7 +21,6 @@ export async function handleDocumentUpdate(
   if (!existingMilestone.documentPath && milestoneData.document) {
     return await handleDocumentUpload(milestoneData.document as File)
   }
-
   return ''
 }
 
@@ -31,7 +30,6 @@ export async function handleDocumentDelete(absoluteDocumentPath: string): Promis
     await fs.promises.access(absoluteDocumentPath, fs.constants.F_OK)
     // Deletes File
     await fs.promises.unlink(absoluteDocumentPath)
-
   } catch (err) {
     console.log('deleteMilestoneDocumentAsync Error: ', err)
     throw Error(String(err))
@@ -66,20 +64,17 @@ export async function handleDocumentUpload(document: File): Promise<string> {
   if (!validateDocumentType(document.type)) {
     throw new Error('Document type is not acceptable MIME type.')
   }
-
   if (!validateDocumentSize(document.size)) {
     throw new Error(`File is too large: ${convertByteToMb(document.size)} MB. Maximum file size is 5 MB.`)
   }
-
   const arrayBuffer = await document.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
-
   const uploadsDirectoryPath = generateUploadsDirectoryPath()
   ensureUploadsDirectoryExistsAsync(uploadsDirectoryPath)
-  const documentPath = path.join(uploadsDirectoryPath, generateRandomFileName(document))
-
+  const newFileName = generateRandomFileName(document)
+  const documentPath = path.join(uploadsDirectoryPath, newFileName)
   await writeFile(documentPath, buffer)
-  return documentPath
+  return newFileName
 }
 
 function validateDocumentType(type: string): boolean {
@@ -111,10 +106,8 @@ function generateUploadsDirectoryPath(): string {
 async function ensureUploadsDirectoryExistsAsync(uploadPath: string): Promise<void> {
   try {
     await fs.promises.mkdir(uploadPath, { recursive: true })
-
   } catch (err) {
     console.log('Ensure Uploads Directory Exists Error:', err)
-
     throw new Error(String(err))
   }
 }
@@ -128,9 +121,7 @@ function generateRandomFileName(document: File): string {
     'image/png': 'png',
     'image/jpg': 'jpg'
   }
-
   const documentName = document.name.split('.').slice(0, -1).join('')
-
   return `${documentName}_${crypto.randomUUID()}.${mimeTypes[document.type as keyof typeof mimeTypes]}`
 }
 
