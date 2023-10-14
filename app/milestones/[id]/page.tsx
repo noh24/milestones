@@ -36,30 +36,20 @@ export default async function Page({ params }: TProps) {
       <p>{content}</p>
       <span>{type}</span>
       <h4>{documentName}</h4>
-      <h4>{documentPath}</h4>
-      {/* <iframe src={documentPath}></iframe> */}
-      {/* <iframe
-        className=''
-        width='100%'
-        height='600'
-        src={`https://docs.google.com/gview?url=${documentPath}&embedded=true`}
-      ></iframe> */}
-      <p>{parsePath(documentPath)}</p>
       <Image
         src={parsePath(documentPath)}
         alt={documentName}
         width={300}
         height={500}
+        priority
       ></Image>
+      <iframe src={parsePath(documentPath)} width={500} height={700}></iframe>
     </article>
   )
 }
 
-function parsePath(documentPath) {
-  const path = documentPath.split('uploads').slice(-1).toString().substring(1)
-  console.log(path)
-  // return path
-  return '/../../uploads/' + path
+function parsePath(documentPath: string): string {
+  return '/uploads/' + documentPath
 }
 
 export async function findMilestone({
