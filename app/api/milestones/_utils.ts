@@ -104,7 +104,7 @@ function convertByteToMb(documentSize: number): string {
 }
 
 function generateUploadsDirectoryPath(): string {
-  return path.join(__dirname, '..', '..', '..', '..', '..', 'uploads')
+  return path.join(__dirname, '..', '..', '..', '..', '..', 'public', 'uploads')
 }
 
 // if /uploads directory doesn't exist or is not a directory, create it
