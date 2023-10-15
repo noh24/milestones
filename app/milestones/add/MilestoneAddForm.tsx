@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createMilestone } from '../_utils'
 import { useRouter } from 'next/navigation'
 import Loading from '@/app/loading'
@@ -36,7 +36,7 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0] ?? null,
+      document: event.target.files![0] ?? '',
     }))
 
   const mutation = useMutation(createMilestone)
@@ -104,26 +104,15 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
         <label>
           Upload a document (Maximum file size: 5MB):
           <span>.pdf</span>
-          <span>.doc/.docx</span>
           <span>.jpeg/.png </span>
           <input
             name='document'
             type='file'
-            accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
+            accept='.pdf,.jpeg,.png,.jpg'
             onChange={onUpdateMilestoneDocument}
-            className={'hidden'}
+            className='block'
           />
         </label>
-        <div>
-          <p>
-            {milestoneData.document ? 'File To Be Uploaded:' : 'No File Chosen'}
-          </p>
-          <p>
-            {milestoneData.document
-              ? (milestoneData.document as File)['name']
-              : null}
-          </p>
-        </div>
         <button
           type='submit'
           disabled={mutation.isLoading || mutation.isSuccess}

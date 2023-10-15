@@ -39,7 +39,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
   ) =>
     setMilestoneData((prevState) => ({
       ...prevState,
-      document: event.target.files![0] ?? null,
+      document: event.target.files![0] ?? '',
     }))
 
   const mutation = useMutation(updateMilestone)
@@ -105,39 +105,30 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           />
           Personal
         </label>
+        <div>
+          <p>Current File: </p>
+          {/* Display If Old Document Name present AND Old Document NOT present */}
+          <p>
+            {milestoneData.documentName
+              ? `C://Fake//Path//${milestoneData.documentName}`
+              : 'No File Uploaded'}
+          </p>
+        </div>
         <label>
-          Upload a document (Maximum file size: 5MB):
-          <span>.pdf</span>
-          <span>.doc / .docx</span>
-          <span>.jpeg / .png </span>
+          Upload new document:
+          <span className='block'>(Maximum file size: 5MB)</span>
+          <div>
+            <span>.pdf</span>
+            <span>.jpeg/.png </span>
+          </div>
           <input
             name='document'
             type='file'
-            accept='.doc,.docx,.pdf,.jpeg,.png,.jpg'
+            accept='.pdf,.jpeg,.png,.jpg'
             onChange={onUpdateMilestoneDocument}
-            className={'hidden'}
+            className='block'
           />
         </label>
-        <div>
-          {/* Display Current File if New Document or Old Document Name present */}
-          <p>
-            {milestoneData.document || milestoneData.documentName
-              ? 'Current File: '
-              : 'No File Uploaded'}
-          </p>
-          {/* Display If New Document present */}
-          <p>
-            {milestoneData.document
-              ? (milestoneData.document as File).name
-              : null}
-          </p>
-          {/* Display If Old Document Name present AND Old Document NOT present */}
-          <p>
-            {milestoneData.documentName && !milestoneData.document
-              ? `C://Fake//Path//${milestoneData.documentName}`
-              : null}
-          </p>
-        </div>
         <button
           type='submit'
           disabled={mutation.isLoading || mutation.isSuccess}
