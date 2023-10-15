@@ -119,7 +119,7 @@ export default function MilestoneEditForm({ milestone }: TProps) {
           <span className='block'>(Maximum file size: 5MB)</span>
           <div>
             <span>.pdf</span>
-            <span>.jpeg/.png </span>
+            <span>.jpeg/.jpg/.png </span>
           </div>
           <input
             name='document'

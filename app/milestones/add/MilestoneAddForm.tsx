@@ -102,9 +102,12 @@ export default function MilestoneAddForm({ userEmail }: TProps) {
           Personal
         </label>
         <label>
-          Upload a document (Maximum file size: 5MB):
-          <span>.pdf</span>
-          <span>.jpeg/.png </span>
+          Upload a document
+          <span className='block'>(Maximum file size: 5MB)</span>
+          <div>
+            <span>.pdf</span>
+            <span>.jpeg/.jpg/.png </span>
+          </div>
           <input
             name='document'
             type='file'
