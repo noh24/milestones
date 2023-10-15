@@ -24,16 +24,33 @@ export async function handleDocumentUpdate(
   return ''
 }
 
-export async function handleDocumentDelete(absoluteDocumentPath: string): Promise<void> {
+export async function handleDocumentDelete(documentPath: string): Promise<void> {
   try {
     // Checks Accessibility of File - Resolves to Nothing or Throws Exception
-    await fs.promises.access(absoluteDocumentPath, fs.constants.F_OK)
+    await fs.promises.access(pathToPublicUploadsDir() + '/' + documentPath, fs.constants.F_OK)
     // Deletes File
-    await fs.promises.unlink(absoluteDocumentPath)
+    await fs.promises.unlink(pathToPublicUploadsDir() + '/' + documentPath)
   } catch (err) {
     console.log('deleteMilestoneDocumentAsync Error: ', err)
     throw Error(String(err))
   }
+}
+
+export async function handleDocumentUpload(document: File): Promise<string> {
+  if (!validateDocumentType(document.type)) {
+    throw new Error('Document type is not acceptable MIME type.')
+  }
+  if (!validateDocumentSize(document.size)) {
+    throw new Error(`File is too large: ${convertByteToMb(document.size)} MB. Maximum file size is 5 MB.`)
+  }
+  const arrayBuffer = await document.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+  const uploadsDirectoryPath = pathToPublicUploadsDir()
+  ensureUploadsDirectoryExistsAsync(uploadsDirectoryPath)
+  const newFileName = fileNameWithCUID(document)
+  const documentPath = path.join(uploadsDirectoryPath, newFileName)
+  await writeFile(documentPath, buffer)
+  return newFileName
 }
 
 // Parse Form Data For Creating Milestone
@@ -60,23 +77,6 @@ export function parseEditFormData(formData: FormData): ParsedEditMilestoneFormDa
   }
 }
 
-export async function handleDocumentUpload(document: File): Promise<string> {
-  if (!validateDocumentType(document.type)) {
-    throw new Error('Document type is not acceptable MIME type.')
-  }
-  if (!validateDocumentSize(document.size)) {
-    throw new Error(`File is too large: ${convertByteToMb(document.size)} MB. Maximum file size is 5 MB.`)
-  }
-  const arrayBuffer = await document.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-  const uploadsDirectoryPath = generateUploadsDirectoryPath()
-  ensureUploadsDirectoryExistsAsync(uploadsDirectoryPath)
-  const newFileName = generateRandomFileName(document)
-  const documentPath = path.join(uploadsDirectoryPath, newFileName)
-  await writeFile(documentPath, buffer)
-  return newFileName
-}
-
 function validateDocumentType(type: string): boolean {
   const lowerCaseType = type.toLowerCase()
   const mimeTypes = [
@@ -98,7 +98,7 @@ function convertByteToMb(documentSize: number): string {
   return (documentSize / 1024 / 1024).toFixed(2)
 }
 
-function generateUploadsDirectoryPath(): string {
+function pathToPublicUploadsDir(): string {
   return path.join(__dirname, '..', '..', '..', '..', '..', 'public', 'uploads')
 }
 
@@ -112,7 +112,7 @@ async function ensureUploadsDirectoryExistsAsync(uploadPath: string): Promise<vo
   }
 }
 
-function generateRandomFileName(document: File): string {
+function fileNameWithCUID(document: File): string {
   const mimeTypes = {
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
