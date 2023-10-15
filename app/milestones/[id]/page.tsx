@@ -35,15 +35,23 @@ export default async function Page({ params }: TProps) {
       <h5>{date.toDateString()}</h5>
       <p>{content}</p>
       <span>{type}</span>
-      <h4>{documentName}</h4>
-      <Image
-        src={parsePath(documentPath)}
-        alt={documentName}
-        width={300}
-        height={500}
-        priority
-      ></Image>
-      <iframe src={parsePath(documentPath)} width={500} height={700}></iframe>
+      {<h4>{documentName}</h4> ?? ''}
+      {documentPath.endsWith('.pdf') ? (
+        <iframe src={parsePath(documentPath)} width={500} height={700}></iframe>
+      ) : (
+        ''
+      )}
+      {documentPath.endsWith('.jpeg') || documentPath.endsWith('.png') || documentPath.endsWith('.jpg') ? (
+        <Image
+          src={parsePath(documentPath)}
+          alt={documentName}
+          width={300}
+          height={500}
+          priority
+        ></Image>
+      ) : (
+        ''
+      )}
     </article>
   )
 }
