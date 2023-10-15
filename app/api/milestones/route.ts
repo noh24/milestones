@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       throw Error('Invalid User!')
     }
 
-    if (file) {
+    if (file && typeof file !== 'string') {
       documentPath = await handleDocumentUpload(file as unknown as File)
     }
 
